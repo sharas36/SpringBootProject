@@ -49,13 +49,14 @@ public class AdminService extends MainService {
         companyRepository.save(company);
     }
 
-    public void updateCompanyDetails(String password, String email, Company company) throws CouponSystemException {
+    public void updateCompanyDetails(Company company) throws CouponSystemException {
 
-        if (!isEmailExist(company.getEmail())) {
+        if (companyRepository.findById(company.getCompanyId()).isEmpty()) {
             throw new CouponSystemException("This company name isn't  exist");
+        } else if (companyRepository.findByEmail(company.getEmail()).get(0).getCompanyId() != company.getCompanyId()) {
+            throw new CouponSystemException("This company email is already in use");
         }
-        company.setEmail(email);
-        company.setPassword(password);
+
         companyRepository.save(company);
     }
 
@@ -70,11 +71,14 @@ public class AdminService extends MainService {
         return companyRepository.findAll();
     }
 
-    public Company getOneCompany(int companyId) {
+    public Company getOneCompany(int companyId) throws CouponSystemException {
+        if (companyRepository.findById(companyId).isEmpty()) {
+            throw new CouponSystemException("This company isn't exist");
+        }
         return companyRepository.findById(companyId).get();
     }
 
-    public void AddCustomer(Customer customer) throws CouponSystemException {
+    public void addCustomer(Customer customer) throws CouponSystemException {
 
         if (!customerRepository.findByEmail(customer.getEmail()).isEmpty()) {
             throw new CouponSystemException("this email belong to another  customer");
@@ -82,27 +86,26 @@ public class AdminService extends MainService {
         customerRepository.save(customer);
     }
 
-    public void updateCustomerDetails(String email, String password, int customerId) throws CouponSystemException {
-        Customer customer = customerRepository.findById(customerId).get();
+    public void updateCustomerDetails(Customer customer) throws CouponSystemException {
 
-        if (customerRepository.findById(customerId).isEmpty()) {
+        if (customerRepository.findById(customer.getCustomerId()).isEmpty()) {
             throw new CouponSystemException("This customer isn't exist");
-        } else if (!customerRepository.findByEmail(email).isEmpty()) {
-            throw new CouponSystemException("this email is already exist");
+        }
+        if (!customerRepository.findByEmail(customer.getEmail()).isEmpty()
+                && customerRepository.findByEmail(customer.getEmail()).get(0).getCustomerId() != customer.getCustomerId()) {
+            throw new CouponSystemException("This customer email is already in use");
         }
 
-        customer.setEmail(email);
-        customer.setPassword(password);
         customerRepository.save(customer);
     }
 
-    public void deleteCustomer(Customer customer) throws CouponSystemException {
+    public void deleteCustomer(int customerId) throws CouponSystemException {
 
-        if (!customerRepository.findByEmail(customer.getEmail()).isEmpty()) {
+        if (customerRepository.findById(customerId).isEmpty()) {
             throw new CouponSystemException("this customer is not exist");
         }
 
-        customerRepository.delete(customer);
+        customerRepository.deleteById(customerId);
 
     }
 

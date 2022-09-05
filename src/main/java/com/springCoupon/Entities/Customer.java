@@ -27,7 +27,7 @@ public class Customer {
     private String email;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonIgnoreProperties("customers")
     private List<Coupon> coupons = new ArrayList<Coupon>();
 

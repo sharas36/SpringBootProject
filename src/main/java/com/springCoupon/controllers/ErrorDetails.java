@@ -12,6 +12,7 @@ public class ErrorDetails {
         this.key = key;
         this.value = value;
     }
+
     public String getKey() {
         return key;
     }

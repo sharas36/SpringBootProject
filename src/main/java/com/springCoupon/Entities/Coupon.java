@@ -31,7 +31,7 @@ public class Coupon {
     private String couponName;
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_Id")
     @JsonIgnoreProperties("coupons")
     private Company company;
