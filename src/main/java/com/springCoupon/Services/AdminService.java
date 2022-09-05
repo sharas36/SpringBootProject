@@ -5,7 +5,7 @@ import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Coupon;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.exception.CouponSystemException;
-import com.springCoupon.repositories.CouponRepository;
+import com.springCoupon.Repositories.CouponRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

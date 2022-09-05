@@ -1,5 +1,6 @@
 package com.springCoupon.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class Company {
     private LocalDateTime dateCreated;
 
     @OneToMany(orphanRemoval = true, mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("company")
     private List<Coupon> coupons = new ArrayList<Coupon>();
 
     public void addCoupon(Coupon coupon) {

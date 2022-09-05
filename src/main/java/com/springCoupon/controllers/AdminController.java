@@ -23,7 +23,7 @@ public class AdminController {
     @PostMapping("/addCompany")
     @ResponseBody
     public ResponseEntity<?> addCompany(@RequestBody Company company) { // http://localhost:8080/admin/addCompany
-        System.out.println("Got: "+company);
+        System.out.println("Got: " + company);
         try {
             adminService.addCompany(company);
             return new ResponseEntity<>(company, HttpStatus.OK);
@@ -33,4 +33,15 @@ public class AdminController {
             return new ResponseEntity<String>(e.toString(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/getCompanies") // http://localhost:8080/admin/getCompanies
+    @ResponseBody
+    public ResponseEntity<?> getCompanies() throws Exception {
+        List<Company> res = adminService.getAllCompany();
+        System.out.println("getCompanies: ");
+        ResponseEntity<List<Company>> responseWrapper = new ResponseEntity<>(res, HttpStatus.OK);
+        return responseWrapper;
+    }
+
+
 }

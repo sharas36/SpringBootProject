@@ -1,6 +1,7 @@
 package com.springCoupon.Entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,6 +28,7 @@ public class Customer {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JsonIgnoreProperties("customers")
     private List<Coupon> coupons = new ArrayList<Coupon>();
 
     public Customer(String firstName, String lastName, String email, String password) {

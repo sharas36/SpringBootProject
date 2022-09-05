@@ -1,5 +1,6 @@
 package com.springCoupon.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,10 +33,12 @@ public class Coupon {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_Id")
+    @JsonIgnoreProperties("coupons")
     private Company company;
 
 
-    @ManyToMany(mappedBy = "coupons",fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "coupons", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JsonIgnoreProperties("coupons")
     List<Customer> customers = new ArrayList<>();
 
     private int amount;
