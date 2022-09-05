@@ -1,4 +1,4 @@
-package com.springCoupon.repositories;
+package com.springCoupon.Repositories;
 
 import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Coupon;
