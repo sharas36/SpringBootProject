@@ -15,7 +15,16 @@ public class CustomerService extends MainService {
 
     int customerId = 4;
 
-    public void addPurchase(int couponId) {
+    public void loginCustomer(String email, String password) throws CouponSystemException {
+
+        if (!customerRepository.findByEmailAndPassword(email, password).isPresent()) {
+            throw new CouponSystemException("your email or password not match");
+        }
+
+        setCustomerId(customerRepository.findByEmailAndPassword(email, password).get().getCustomerId());
+    }
+
+    public void addPurchase(int couponId) throws CouponSystemException {
 
         if (!customerRepository.findById(this.customerId).isPresent() || !couponRepository.findById(couponId).isPresent()) {
             try {
@@ -29,13 +38,10 @@ public class CustomerService extends MainService {
         Coupon coupon = couponRepository.getById(couponId);
 
         if (coupon.getAmount() <= 0) {
-            try {
-                throw new CouponSystemException("this coupon is sold out");
-            } catch (CouponSystemException e) {
-                e.printStackTrace();
-            }
 
+            throw new CouponSystemException("this coupon is sold out");
         }
+        ;
 
         customer.addCoupon(coupon);
         customerRepository.save(customer);
@@ -59,7 +65,14 @@ public class CustomerService extends MainService {
     }
 
     public String getCustomerDetails() {
-        return customerRepository.findById(this.customerId).toString();
+
+        String customerDetails = "";
+        Customer customer = customerRepository.findById(this.customerId).get();
+
+        customerDetails = "first Name: " + customer.getFirstName() + " \n Last Name:  " +
+                customer.getLastName() + "\n Email: " + customer.getEmail();
+
+        return customerDetails;
     }
 
     public void saveByCoupon(int couponId) {

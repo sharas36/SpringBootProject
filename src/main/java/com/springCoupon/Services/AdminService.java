@@ -92,7 +92,7 @@ public class AdminService extends MainService {
             throw new CouponSystemException("This customer isn't exist");
         }
         if (!customerRepository.findByEmail(customer.getEmail()).isEmpty()
-                && customerRepository.findByEmail(customer.getEmail()).get(0).getCustomerId() != customer.getCustomerId()) {
+                && customerRepository.findByEmail(customer.getEmail()).get().getCustomerId() != customer.getCustomerId()) {
             throw new CouponSystemException("This customer email is already in use");
         }
 

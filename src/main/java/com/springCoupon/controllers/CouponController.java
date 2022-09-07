@@ -12,16 +12,5 @@ import java.util.List;
 @Controller
 public class CouponController {
 
-    @RequestMapping("/hey")
-    @ResponseBody
-    public List<Coupon> greet() {
-        return new ArrayList<Coupon>();
-    }
-
-    @RequestMapping("/hey2")
-    @ResponseBody
-    public void greet2() {
-    }
-
 
 }
