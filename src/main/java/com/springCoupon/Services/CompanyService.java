@@ -22,11 +22,11 @@ public class CompanyService extends MainService {
         return false;
     }
 
-    public List<Coupon> getCouponsOfCompany(int companyId) {
+    public List<Coupon> getCouponsOfCompany() {
         return couponRepository.findByCompany(companyRepository.getById(companyId));
     }
 
-    public List<Coupon> findByCompanyIdAndCategoryId(int categoryId, int companyId) {
+    public List<Coupon> findByCompanyIdAndCategoryId(int categoryId) {
 
         return couponRepository.findByCompanyAndCategoryId(companyRepository.getById(companyId), categoryId);
     }
@@ -40,26 +40,25 @@ public class CompanyService extends MainService {
         return couponRepository.save(coupon);
     }
 
-    public void deletedCoupon(Coupon coupon) {
+    public void deletedCoupon(int couponId) throws CouponSystemException {
 
-        if (couponRepository.findById(coupon.getCouponId()).isEmpty()) {
-            System.out.println("this coupons is not exist");
+        if (couponRepository.findById(couponId).isEmpty()) {
+            throw new CouponSystemException("this coupons is not exist");
         } else {
             System.out.println("deleted");
-            couponRepository.deleteById(coupon.getCouponId());
+            couponRepository.deleteById(couponId);
         }
     }
 
-    public void updateCouponPrice(Coupon coupon, int price)  {
+    public Coupon updateCoupon(Coupon coupon) throws CouponSystemException {
 
         if (couponRepository.findById(coupon.getCouponId()).isEmpty()) {
-            System.out.println("this coupons is not exist");
-            return;
+            throw new CouponSystemException("this coupons is not exist");
         }
 
-        coupon.setPrice(price);
         couponRepository.save(coupon);
 
+        return coupon;
     }
 
     public String getCompanyDetails() {

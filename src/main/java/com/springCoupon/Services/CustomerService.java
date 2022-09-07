@@ -44,6 +44,8 @@ public class CustomerService extends MainService {
         ;
 
         customer.addCoupon(coupon);
+        couponRepository.findById(couponId).get().setAmount(couponRepository.findById(couponId).get().getAmount() - 1);
+        couponRepository.save(couponRepository.getById(couponId));
         customerRepository.save(customer);
     }
 

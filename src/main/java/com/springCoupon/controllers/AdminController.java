@@ -4,6 +4,7 @@ import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.exception.CouponSystemException;
+import com.springCoupon.utilities.Admin;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,12 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @SneakyThrows
+    @PostMapping("/loginAdmin")
+    public void loginCustomer(@RequestBody Admin admin) { //http://localhost:8080/customers/adminCustomer
+        adminService.adminLogin(admin.getEmail(), admin.getPassword());
+    }
 
     @PostMapping("/addCompany")
     @SneakyThrows
@@ -85,7 +92,6 @@ public class AdminController {
     public void updateCustomer(@RequestBody Customer customer) {
 
         adminService.updateCustomerDetails(customer);
-//        return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteCustomer/{id}") // http://localhost:8080/admin/deleteCustomer/{id}
