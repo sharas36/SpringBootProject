@@ -32,14 +32,13 @@ public class SpringCouponApplication {
 
         ConfigurableApplicationContext ctx = SpringApplication.run(SpringCouponApplication.class, args);
 
-
         DailyJob dailyJob = ctx.getBean(DailyJob.class);
-//        dailyJob.startDailyJob();
+        dailyJob.startDailyJob();
 
         LoginManager loginManager = ctx.getBean(LoginManager.class);
 
         int type = 0;
-        while (true) {
+        while(true) {
             while (type < 1 || type > 3) {
                 System.out.println("1. Admin \n" +
                         "2. Company \n" +
@@ -67,6 +66,9 @@ public class SpringCouponApplication {
 
 
     }
+
+
+
 
 
     public static Company getCompany(int i) {
@@ -111,6 +113,7 @@ public class SpringCouponApplication {
         //  coupon.getCompany().addCoupon(coupon);
         return coupon;
     }
+
 
 
 }

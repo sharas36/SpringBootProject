@@ -24,11 +24,14 @@ public class DailyJob {
         while (true) {
 
             List<Coupon> couponList = couponRepository.findAll();
+
             List<Coupon> couponsToDelete = couponList.stream().filter(coupon -> {
-                return coupon.getEndDate().isBefore(LocalDateTime.now());}).collect(Collectors.toList());
+                return coupon.getEndDate().isAfter(LocalDateTime.now());
+            }).collect(Collectors.toList());
+
 
             couponsToDelete.forEach(coupon -> {
-                couponRepository.deleteById(coupon.getCouponId());
+                couponRepository.delete(coupon);
             });
 
 
