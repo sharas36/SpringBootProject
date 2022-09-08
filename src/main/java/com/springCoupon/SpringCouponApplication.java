@@ -7,6 +7,8 @@ import com.springCoupon.Services.AdminService;
 import com.springCoupon.Services.CompanyService;
 import com.springCoupon.Services.CustomerService;
 import com.springCoupon.exception.CouponSystemException;
+import com.springCoupon.utilities.DailyJob;
+import com.springCoupon.utilities.LoginManager;
 import lombok.SneakyThrows;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,21 +26,14 @@ public class SpringCouponApplication {
 
         ConfigurableApplicationContext ctx = SpringApplication.run(SpringCouponApplication.class, args);
 
-        CompanyService companyService = ctx.getBean(CompanyService.class);
-        CustomerService customerService = ctx.getBean(CustomerService.class);
-        AdminService adminService = ctx.getBean(AdminService.class);
+        DailyJob dailyJob = ctx.getBean(DailyJob.class);
 
-        Company company = new Company();
-
-        company.setCompanyId(175);
-
-        Coupon coupon = new Coupon();
-        coupon.setCompany(company);
-
-        Customer customer = adminService.getOneCustomer(304);
-        customer.addCoupon(coupon);
 
     }
+
+
+
+
 
     public static Company getCompany(int i) {
 
@@ -81,6 +76,36 @@ public class SpringCouponApplication {
 
         //  coupon.getCompany().addCoupon(coupon);
         return coupon;
+    }
+
+    public MainFacade login(ClientType clientType, String email, String password) {
+
+        switch (clientType) {
+
+            case ADMINISTRATOR:
+                if (new AdminFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO()).login(email, password)) {
+                    return new AdminFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO());
+                }
+                break;
+
+            case COMPANY:
+                if (new CompanyFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO()).login(email, password)) {
+                    return new CompanyFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO());
+                }
+                break;
+            case CUSTOMER:
+                if (new CustomerFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO()).login(email, password)) {
+                    return new CustomerFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO());
+                }
+                break;
+            default: {
+                System.out.println("please try again");
+                break;
+            }
+
+        }
+
+        return null;
     }
 
 

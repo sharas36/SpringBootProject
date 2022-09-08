@@ -60,15 +60,15 @@ public class AdminService extends MainService {
         companyRepository.save(company);
     }
 
-    public void updateCompanyInfo(String email, int companyId) throws CouponSystemException {
+    public Company updateCompanyInfo(String email, String password, int companyId) throws CouponSystemException {
 
         if (companyRepository.findByEmail(email).isPresent()) {
             throw new CouponSystemException("this email already in use in our system");
         }
-        Company company = companyRepository.getById(companyId);
 
+        Company company = companyRepository.getById(companyId);
         company.setEmail(email);
-        companyRepository.save(company);
+        return companyRepository.save(company);
     }
 
     public void deleteCompany(int companyId) throws SQLException, CouponSystemException {

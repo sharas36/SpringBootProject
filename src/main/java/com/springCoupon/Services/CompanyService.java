@@ -33,8 +33,8 @@ public class CompanyService extends MainService {
 
     public Coupon addCoupon(Coupon coupon) throws CouponSystemException {
         if (!couponRepository.findByCouponNameAndCompany(coupon.getCouponName(), companyRepository.getById(companyId)).isEmpty()) {
-                System.out.println("this name already in use");
-                throw new CouponSystemException("the same name belongs to the same company");
+            System.out.println("this name already in use");
+            throw new CouponSystemException("the same name belongs to the same company");
         }
         coupon.setCompany(companyRepository.getById(companyId));
         return couponRepository.save(coupon);
@@ -50,7 +50,7 @@ public class CompanyService extends MainService {
         }
     }
 
-    public Coupon updateCoupon(Coupon coupon) throws CouponSystemException {
+    public void updateCoupon(Coupon coupon) throws CouponSystemException {
 
         if (couponRepository.findById(coupon.getCouponId()).isEmpty()) {
             throw new CouponSystemException("this coupons is not exist");
@@ -58,7 +58,6 @@ public class CompanyService extends MainService {
 
         couponRepository.save(coupon);
 
-        return coupon;
     }
 
     public String getCompanyDetails() {
@@ -66,7 +65,7 @@ public class CompanyService extends MainService {
     }
 
     public List<Coupon> getByMaxPrice(int price) {
-        return couponRepository.findByCompany(companyRepository.getById(companyId)).stream().filter(coupon -> coupon.getPrice()<=price).collect(Collectors.toList());
+        return couponRepository.findByCompany(companyRepository.getById(companyId)).stream().filter(coupon -> coupon.getPrice() <= price).collect(Collectors.toList());
     }
 
     public List<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end) {
