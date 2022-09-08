@@ -15,7 +15,7 @@ public abstract class MainService {
     CustomerRepository customerRepository;
 
     @Autowired
-    com.springCoupon.repositories.CompanyRepository companyRepository;
+    com.springCoupon.Repositories.CompanyRepository companyRepository;
 
 
 }

@@ -73,7 +73,6 @@ public class CompanyService extends MainService {
         return couponRepository.findByCompany(companyRepository.getById(companyId)).stream().filter(coupon -> coupon.getEndDate().isBefore(end) && coupon.getStartDate().isAfter(start)).collect(Collectors.toList());
     }
 
-
     public void setCompanyId(int company_Id) {
         companyId = company_Id;
     }

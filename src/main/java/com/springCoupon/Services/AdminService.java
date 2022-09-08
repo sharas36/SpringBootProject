@@ -53,10 +53,21 @@ public class AdminService extends MainService {
 
         if (companyRepository.findById(company.getCompanyId()).isEmpty()) {
             throw new CouponSystemException("This company name isn't  exist");
-        } else if (companyRepository.findByEmail(company.getEmail()).get(0).getCompanyId() != company.getCompanyId()) {
+        } else if (companyRepository.findByEmail(company.getEmail()).get().getCompanyId() != company.getCompanyId()) {
             throw new CouponSystemException("This company email is already in use");
         }
 
+        companyRepository.save(company);
+    }
+
+    public void updateCompanyInfo(String email, int companyId) throws CouponSystemException {
+
+        if (companyRepository.findByEmail(email).isPresent()) {
+            throw new CouponSystemException("this email already in use in our system");
+        }
+        Company company = companyRepository.getById(companyId);
+
+        company.setEmail(email);
         companyRepository.save(company);
     }
 
