@@ -73,20 +73,20 @@ public class CompanyMenu extends Menu{
     }
 
     private void menu(){
-        System.out.println("1. add new coupon /n" +
-                "2. update existing coupon /n" +
-                "3. delete coupon /n" +
-                "4. get all your coupons /n" +
-                "5. get all coupons by category /n" +
-                "6. get all coupons by max price /n" +
+        System.out.println("1. add new coupon \n" +
+                "2. update existing coupon \n" +
+                "3. delete coupon \n" +
+                "4. get all your coupons \n" +
+                "5. get all coupons by category \n" +
+                "6. get all coupons by max price \n" +
                 "7. get your details");
     }
 
     private Coupon addCoupon(){
         System.out.println("What's coupon name?");
-        String name = scanner.nextLine();
+        String name = scanner.next();
         System.out.println("whats coupon description");
-        String description = scanner.nextLine();
+        String description = scanner.next();
         System.out.println("whats the amount?");
         int amount = scanner.nextInt();
         System.out.println("whats the price?");
@@ -107,9 +107,9 @@ public class CompanyMenu extends Menu{
 
     private Coupon updateCoupon(){
         System.out.println("What's coupon name?");
-        String name = scanner.nextLine();
+        String name = scanner.next();
         System.out.println("whats coupon description");
-        String description = scanner.nextLine();
+        String description = scanner.next();
         System.out.println("whats the amount?");
         int amount = scanner.nextInt();
         System.out.println("whats the price?");
@@ -121,15 +121,15 @@ public class CompanyMenu extends Menu{
     }
 
     private int categoryList(){
-        System.out.println("1. travel /n" +
-                "2. clothing /n" +
-                "3. transportation /n" +
-                "4. kitchen /n" +
-                "5. garden /n" +
-                "6. sport /n" +
-                "7. car /n" +
-                "8. computer /n" +
-                "9. construction /n" +
+        System.out.println("1. travel \n" +
+                "2. clothing \n" +
+                "3. transportation \n" +
+                "4. kitchen \n" +
+                "5. garden \n" +
+                "6. sport \n" +
+                "7. car \n" +
+                "8. computer \n" +
+                "9. construction \n" +
                 "10. food");
         return scanner.nextInt();
 

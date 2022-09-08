@@ -57,23 +57,23 @@ public class CustomerMenu extends Menu{
     }
 
     private void menu(){
-        System.out.println("1. purchase coupon /n" +
-                "2. get all your coupons /n" +
-                "3. get coupons by category /n" +
-                "4. get coupons by max price /n" +
+        System.out.println("1. purchase coupon \n" +
+                "2. get all your coupons \n" +
+                "3. get coupons by category \n" +
+                "4. get coupons by max price \n" +
                 "5. get your details");
     }
 
     private int categoryList(){
-        System.out.println("1. travel /n" +
-                "2. clothing /n" +
-                "3. transportation /n" +
-                "4. kitchen /n" +
-                "5. garden /n" +
-                "6. sport /n" +
-                "7. car /n" +
-                "8. computer /n" +
-                "9. construction /n" +
+        System.out.println("1. travel \n" +
+                "2. clothing \n" +
+                "3. transportation \n" +
+                "4. kitchen \n" +
+                "5. garden \n" +
+                "6. sport \n" +
+                "7. car \n" +
+                "8. computer \n" +
+                "9. construction \n" +
                 "10. food");
         return scanner.nextInt();
 

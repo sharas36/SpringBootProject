@@ -34,7 +34,7 @@ public class LoginManager {
         switch (clientType) {
 
             case ADMINISTRATOR:
-                    if (adminService.adminLogin(email, password)){
+                    if (this.adminService.adminLogin(email, password)){
                         return new AdminMenu();
                     }
                 break;

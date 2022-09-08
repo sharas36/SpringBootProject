@@ -54,11 +54,9 @@ public class SpringCouponApplication {
                 clientType = ClientType.CUSTOMER;
             }
             System.out.println("email: ");
-            String email = scanner.nextLine();
-            scanner.next();
+            String email = scanner.next();
             System.out.println("password: ");
-            String password = scanner.nextLine();
-            scanner.next();
+            String password = scanner.next();
             try {
                 loginManager.login(clientType, email, password);
             } catch (CouponSystemException e) {
