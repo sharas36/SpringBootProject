@@ -21,7 +21,6 @@ import java.util.List;
 
 public class Company {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int companyId;
@@ -31,7 +30,7 @@ public class Company {
     private String password;
     private LocalDateTime dateCreated;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "company", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true, mappedBy = "company", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JsonIgnoreProperties("company")
     private List<Coupon> coupons = new ArrayList<Coupon>();
 

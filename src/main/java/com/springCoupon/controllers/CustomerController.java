@@ -36,11 +36,15 @@ public class CustomerController {
 
     @GetMapping("/getAllCustomerCoupon")
     public ResponseEntity<?> getAllCustomersCoupons() {  //http://localhost:8080/customers/getAllCustomerCoupon
-        return new ResponseEntity<>(customerService.getAllCustomersCoupons(), HttpStatus.OK);
+        List<Coupon> coupons = customerService.getAllCustomersCoupons();
+        for (Coupon coupon : coupons) {
+            System.out.println(coupon);
+        }
+       return new ResponseEntity<>(coupons, HttpStatus.OK);
     }
 
     @GetMapping("/getCustomerCouponByCategory/{categoryId}")
-    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}
+    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
         return customerService.getAllCustomersCouponsByCategory(categoryId);
     }
 
@@ -51,7 +55,7 @@ public class CustomerController {
 
     @PostMapping("addCouponPurchase/{couponId}")
     public void saveByCoupon(@PathVariable int couponId) {  //http://localhost:8080/customers/aaddCouponPurchase/{couponId}
-         customerService.saveByCoupon(couponId);
+        customerService.saveByCoupon(couponId);
     }
 
 

@@ -6,6 +6,7 @@ import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.Services.CompanyService;
 import com.springCoupon.Services.CustomerService;
+import com.springCoupon.exception.CouponSystemException;
 import lombok.SneakyThrows;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,8 +20,7 @@ import java.util.Random;
 @SpringBootApplication
 public class SpringCouponApplication {
 
-    @SneakyThrows
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CouponSystemException {
 
         ConfigurableApplicationContext ctx = SpringApplication.run(SpringCouponApplication.class, args);
 
@@ -28,7 +28,15 @@ public class SpringCouponApplication {
         CustomerService customerService = ctx.getBean(CustomerService.class);
         AdminService adminService = ctx.getBean(AdminService.class);
 
+        Company company = new Company();
 
+        company.setCompanyId(175);
+
+        Coupon coupon = new Coupon();
+        coupon.setCompany(company);
+
+        Customer customer = adminService.getOneCustomer(304);
+        customer.addCoupon(coupon);
 
     }
 
@@ -73,23 +81,6 @@ public class SpringCouponApplication {
 
         //  coupon.getCompany().addCoupon(coupon);
         return coupon;
-    }
-
-    public static List<?> getSomething(int oneToThree) {
-
-        switch (oneToThree) {
-
-            case 1:
-                return new ArrayList<String>();
-            case 2:
-                return new ArrayList<Integer>();
-            case 3:
-                return new ArrayList<Coupon>();
-            default:
-                return new ArrayList<Company>();
-
-        }
-
     }
 
 

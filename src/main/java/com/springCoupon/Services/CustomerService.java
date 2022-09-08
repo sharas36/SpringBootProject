@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerService extends MainService {
 
-    int customerId = 4;
+    int customerId = 7;
 
     public void loginCustomer(String email, String password) throws CouponSystemException {
 
@@ -51,7 +51,9 @@ public class CustomerService extends MainService {
 
     public List<Coupon> getAllCustomersCoupons() {
         Customer customer = customerRepository.getById(customerId);
-        return customer.getCoupons();
+        List<Coupon> couponsList = customer.getCoupons();
+
+        return couponsList;
     }
 
     public List<Coupon> getAllCustomersCouponsByCategory(int categoryId) {

@@ -27,7 +27,8 @@ public class Customer {
     private String email;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Singular
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JsonIgnoreProperties("customers")
     private List<Coupon> coupons = new ArrayList<Coupon>();
 
@@ -39,7 +40,8 @@ public class Customer {
     }
 
     public void addCoupon(Coupon coupon) {
-        this.coupons.add(coupon);
+        coupon.addCustomer(this);
+        coupons.add(coupon);
     }
 
 
