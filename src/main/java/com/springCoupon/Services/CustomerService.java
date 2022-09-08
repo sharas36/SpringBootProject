@@ -15,13 +15,14 @@ public class CustomerService extends MainService {
 
     int customerId = 7;
 
-    public void loginCustomer(String email, String password) throws CouponSystemException {
+    public boolean loginCustomer(String email, String password) throws CouponSystemException {
 
         if (!customerRepository.findByEmailAndPassword(email, password).isPresent()) {
             throw new CouponSystemException("your email or password not match");
         }
 
         setCustomerId(customerRepository.findByEmailAndPassword(email, password).get().getCustomerId());
+        return true;
     }
 
     public void addPurchase(int couponId) throws CouponSystemException {

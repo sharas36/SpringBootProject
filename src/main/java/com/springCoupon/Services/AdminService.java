@@ -21,20 +21,12 @@ import java.util.Optional;
 @Service
 public class AdminService extends MainService {
 
-    public boolean adminLogin(String email, String password) {
+    public boolean adminLogin(String email, String password) throws CouponSystemException {
         if (!(email.equals("admin@admin.com"))) {
-            try {
                 throw new CouponSystemException("This email is wrong");
-            } catch (CouponSystemException e) {
-                e.getException();
-            }
-        } else if (!(password.equals("admin"))) {
 
-            try {
-                throw new CouponSystemException("This password is wrong");
-            } catch (CouponSystemException e) {
-                e.getException();
-            }
+        } else if (!(password.equals("admin"))) {
+            throw new CouponSystemException("This password is wrong");
         }
         return true;
     }

@@ -6,10 +6,13 @@ import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.Services.CompanyService;
 import com.springCoupon.Services.CustomerService;
+import com.springCoupon.controllers.AdminController;
 import com.springCoupon.exception.CouponSystemException;
+import com.springCoupon.utilities.ClientType;
 import com.springCoupon.utilities.DailyJob;
 import com.springCoupon.utilities.LoginManager;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -18,15 +21,50 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 @SpringBootApplication
 public class SpringCouponApplication {
 
-    public static void main(String[] args) throws CouponSystemException {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
 
         ConfigurableApplicationContext ctx = SpringApplication.run(SpringCouponApplication.class, args);
 
         DailyJob dailyJob = ctx.getBean(DailyJob.class);
+        dailyJob.startDailyJob();
+
+        LoginManager loginManager = LoginManager.getInstance();
+
+        int type = 0;
+        while(true) {
+            while (type < 1 || type > 3) {
+                System.out.println("1. Admin \n" +
+                        "2. Company \n" +
+                        "3. Customer \n");
+                type = scanner.nextInt();
+            }
+            ClientType clientType;
+            if (type == 1) {
+                clientType = ClientType.ADMINISTRATOR;
+            } else if (type == 2) {
+                clientType = ClientType.COMPANY;
+            } else {
+                clientType = ClientType.CUSTOMER;
+            }
+            System.out.println("email: ");
+            String email = scanner.nextLine();
+            scanner.next();
+            System.out.println("password: ");
+            String password = scanner.nextLine();
+            scanner.next();
+            try {
+                loginManager.login(clientType, email, password);
+            } catch (CouponSystemException e) {
+                e.getMessage();
+            }
+        }
 
 
     }
@@ -78,35 +116,6 @@ public class SpringCouponApplication {
         return coupon;
     }
 
-    public MainFacade login(ClientType clientType, String email, String password) {
-
-        switch (clientType) {
-
-            case ADMINISTRATOR:
-                if (new AdminFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO()).login(email, password)) {
-                    return new AdminFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO());
-                }
-                break;
-
-            case COMPANY:
-                if (new CompanyFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO()).login(email, password)) {
-                    return new CompanyFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO());
-                }
-                break;
-            case CUSTOMER:
-                if (new CustomerFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO()).login(email, password)) {
-                    return new CustomerFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO());
-                }
-                break;
-            default: {
-                System.out.println("please try again");
-                break;
-            }
-
-        }
-
-        return null;
-    }
 
 
 }

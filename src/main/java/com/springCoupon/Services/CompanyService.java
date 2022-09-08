@@ -13,13 +13,13 @@ public class CompanyService extends MainService {
 
     private int companyId = 1;
 
-    public boolean loginCheck(String email, String password) {
+    public boolean loginCheck(String email, String password) throws CouponSystemException {
 
         if (!companyRepository.findByEmailAndPassword(email, password).isEmpty()) {
             companyId = companyRepository.findByEmailAndPassword(email, password).get(0).getCompanyId();
             return true;
         }
-        return false;
+        throw new CouponSystemException("Something wrong. Please try again");
     }
 
     public List<Coupon> getCouponsOfCompany() {

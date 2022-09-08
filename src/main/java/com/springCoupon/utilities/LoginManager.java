@@ -1,7 +1,26 @@
 package com.springCoupon.utilities;
 
+import com.springCoupon.Entities.Customer;
+import com.springCoupon.Services.AdminService;
+import com.springCoupon.Services.CompanyService;
+import com.springCoupon.Services.CustomerService;
+import com.springCoupon.exception.CouponSystemException;
+import com.springCoupon.menus.AdminMenu;
+import com.springCoupon.menus.CompanyMenu;
+import com.springCoupon.menus.CustomerMenu;
+import com.springCoupon.menus.Menu;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class LoginManager {
 
+    @Autowired
+    private AdminService adminService;
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private CustomerService customerService;
 
     private static LoginManager instance = new LoginManager();
 
@@ -10,25 +29,25 @@ public class LoginManager {
         return instance;
     }
 
-    public MainFacade login(ClientType clientType, String email, String password) {
+    public Menu login(ClientType clientType, String email, String password) throws CouponSystemException {
 
         switch (clientType) {
 
             case ADMINISTRATOR:
-                if (new AdminFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO()).login(email, password)) {
-                    return new AdminFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO());
-                }
+                    if (adminService.adminLogin(email, password)){
+                        return new AdminMenu();
+                    }
                 break;
 
             case COMPANY:
-                if (new CompanyFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO()).login(email, password)) {
-                    return new CompanyFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO());
-                }
+                    if (companyService.loginCheck(email, password)) {
+                        return new CompanyMenu();
+                    }
                 break;
             case CUSTOMER:
-                if (new CustomerFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO()).login(email, password)) {
-                    return new CustomerFacade(new CompaniesDBDAO(), new CouponsDBDAO(), new CustomersDBDAO());
-                }
+                    if (customerService.loginCustomer(email, password)) {
+                        return new CustomerMenu();
+                    }
                 break;
             default: {
                 System.out.println("please try again");
@@ -42,8 +61,3 @@ public class LoginManager {
 
 
 }
-
-
-    }
-
-            }

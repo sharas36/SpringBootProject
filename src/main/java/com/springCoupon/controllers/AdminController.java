@@ -26,8 +26,8 @@ public class AdminController {
 
     @SneakyThrows
     @PostMapping("/loginAdmin")
-    public void loginCustomer(@RequestBody Admin admin) { //http://localhost:8080/customers/adminCustomer
-        adminService.adminLogin(admin.getEmail(), admin.getPassword());
+    public void loginAdmin(@RequestBody String email, String password) { //http://localhost:8080/customers/adminCustomer
+        adminService.adminLogin(email, password);
     }
 
     @PostMapping("/addCompany")
