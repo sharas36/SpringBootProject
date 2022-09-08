@@ -5,14 +5,22 @@ import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.exception.CouponSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
+import org.springframework.data.repository.cdi.Eager;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
+@Primary
+@Component
+@Scope("prototype")
 public class AdminMenu extends Menu {
 
     private Scanner scanner= new Scanner(System.in);
+
 
     @Autowired
     private AdminService adminService;
@@ -27,7 +35,9 @@ public class AdminMenu extends Menu {
             switch (choice) {
                 case 1:
                     try {
-                        adminService.addCompany(addCompany());
+                        Company company = addCompany();
+                        System.out.println(company.getCompanyName());
+                        this.adminService.addCompany(company);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     } catch (CouponSystemException e) {
@@ -128,7 +138,9 @@ public class AdminMenu extends Menu {
         String email = scanner.next();
         System.out.println("whats the password?");
         String password = scanner.next();
+
         Company company = Company.builder().companyName(name).dateCreated(LocalDateTime.now()).email(email).password(password).build();
+        System.out.println(company == null);
         return company;
     }
 

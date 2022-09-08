@@ -5,10 +5,13 @@ import com.springCoupon.Entities.Coupon;
 import com.springCoupon.Services.CompanyService;
 import com.springCoupon.exception.CouponSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Scanner;
-
+@Component
+@Scope("prototype")
 public class CompanyMenu extends Menu{
 
     private Scanner scanner= new Scanner(System.in);

@@ -10,7 +10,12 @@ import com.springCoupon.menus.CompanyMenu;
 import com.springCoupon.menus.CustomerMenu;
 import com.springCoupon.menus.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+@Component
+@Scope("singleton")
 public class LoginManager {
 
     @Autowired
@@ -22,32 +27,27 @@ public class LoginManager {
     @Autowired
     private CustomerService customerService;
 
-    private static LoginManager instance = new LoginManager();
 
-
-    public static LoginManager getInstance() {
-        return instance;
-    }
 
     public Menu login(ClientType clientType, String email, String password) throws CouponSystemException {
 
         switch (clientType) {
 
             case ADMINISTRATOR:
-                    if (this.adminService.adminLogin(email, password)){
-                        return new AdminMenu();
-                    }
+                if (this.adminService.adminLogin(email, password)) {
+                    return new AdminMenu();
+                }
                 break;
 
             case COMPANY:
-                    if (companyService.loginCheck(email, password)) {
-                        return new CompanyMenu();
-                    }
+                if (companyService.loginCheck(email, password)) {
+                    return new CustomerMenu();
+                }
                 break;
             case CUSTOMER:
-                    if (customerService.loginCustomer(email, password)) {
-                        return new CustomerMenu();
-                    }
+                if (customerService.loginCustomer(email, password)) {
+                   return new CustomerMenu();
+                }
                 break;
             default: {
                 System.out.println("please try again");
@@ -61,3 +61,5 @@ public class LoginManager {
 
 
 }
+
+
