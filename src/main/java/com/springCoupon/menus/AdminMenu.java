@@ -5,6 +5,7 @@ import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.exception.CouponSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.repository.cdi.Eager;
@@ -17,6 +18,7 @@ import java.util.Scanner;
 @Primary
 @Component
 @Scope("prototype")
+@Lazy
 public class AdminMenu extends Menu {
 
     private Scanner scanner= new Scanner(System.in);

@@ -3,19 +3,23 @@ package com.springCoupon.menus;
 import com.springCoupon.Services.CustomerService;
 import com.springCoupon.exception.CouponSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 @Component
 @Scope("prototype")
+@Lazy
 public class CustomerMenu extends Menu{
 
     private Scanner scanner= new Scanner(System.in);
+
     @Autowired
     private CustomerService customerService;
 
     public CustomerMenu(){
+
         while (true){
             System.out.println("Please choose your action: ");
             menu();

@@ -8,6 +8,9 @@ import com.springCoupon.Services.CompanyService;
 import com.springCoupon.Services.CustomerService;
 import com.springCoupon.controllers.AdminController;
 import com.springCoupon.exception.CouponSystemException;
+import com.springCoupon.menus.AdminMenu;
+import com.springCoupon.menus.CompanyMenu;
+import com.springCoupon.menus.CustomerMenu;
 import com.springCoupon.utilities.ClientType;
 import com.springCoupon.utilities.DailyJob;
 import com.springCoupon.utilities.LoginManager;
@@ -16,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,7 +35,9 @@ public class SpringCouponApplication {
 
         Scanner scanner = new Scanner(System.in);
 
+
         ConfigurableApplicationContext ctx = SpringApplication.run(SpringCouponApplication.class, args);
+
 
         DailyJob dailyJob = ctx.getBean(DailyJob.class);
         dailyJob.startDailyJob();
@@ -38,7 +45,7 @@ public class SpringCouponApplication {
         LoginManager loginManager = ctx.getBean(LoginManager.class);
 
         int type = 0;
-        while(true) {
+        while (true) {
             while (type < 1 || type > 3) {
                 System.out.println("1. Admin \n" +
                         "2. Company \n" +
@@ -67,11 +74,7 @@ public class SpringCouponApplication {
 
     }
 
-
-
-
-
-    public static Company getCompany(int i) {
+    public static Company GetCompany(int i) {
 
         int year = new Random().nextInt(22) + 2000;
         int month = new Random().nextInt(11) + 1;
@@ -88,12 +91,12 @@ public class SpringCouponApplication {
         return company;
     }
 
-    public static Customer getCustomer(int i) {
+    public static Customer GetCustomer(int i) {
         return Customer.builder().email("email" + i).password("password" + i).firstName("firstName" + i).lastName("lastName" + i).build();
 
     }
 
-    public static Coupon getCoupon(int i, Company company) {
+    public static Coupon GetCoupon(int i, Company company) {
 
         int year = new Random().nextInt(22) + 2000;
         int month = new Random().nextInt(11) + 1;
@@ -113,7 +116,6 @@ public class SpringCouponApplication {
         //  coupon.getCompany().addCoupon(coupon);
         return coupon;
     }
-
 
 
 }
