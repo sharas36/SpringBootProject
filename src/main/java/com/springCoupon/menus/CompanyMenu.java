@@ -1,10 +1,10 @@
 package com.springCoupon.menus;
 
-import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Coupon;
 import com.springCoupon.Services.CompanyService;
 import com.springCoupon.exception.CouponSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -12,69 +12,23 @@ import java.time.LocalDateTime;
 import java.util.Scanner;
 @Component
 @Scope("prototype")
-public class CompanyMenu extends Menu{
+@Primary
+public class CompanyMenu {
 
     private Scanner scanner= new Scanner(System.in);
     @Autowired
     private CompanyService companyService;
 
     public CompanyMenu(){
-        while (true) {
-            System.out.println("Please choose your action: ");
-            menu();
-            int choice = scanner.nextInt();
 
-            switch (choice) {
-                case 1:
-                    try {
-                        companyService.addCoupon(addCoupon());
-                    } catch (CouponSystemException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2:
-                    try {
-                        companyService.updateCoupon(updateCoupon());
-                    } catch (CouponSystemException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 3:
-                    System.out.println("Whats the id of the coupon you want to delete?");
-                    int id = scanner.nextInt();
-                    try {
-                        companyService.deletedCoupon(id);
-                    } catch (CouponSystemException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 4:
-                    System.out.println(companyService.getCouponsOfCompany());
-                    break;
-                case 5:
-                    System.out.println("whats the category?");
-                    int categoryId = 0;
-                    while (categoryId < 1 || categoryId > 10) {
-                        categoryId = categoryList();
-                        if (categoryId < 1 || categoryId > 10) {
-                            System.out.println("wrong choice. please try again");
-                        }
-                    }
-                    System.out.println(companyService.findByCompanyIdAndCategoryId(categoryId));
-                    break;
-                case 6:
-                    System.out.println("whats the price?");
-                    int price = scanner.nextInt();
-                    System.out.println(companyService.getByMaxPrice(price));
-                case 7:
-                    companyService.getCompanyDetails();
-                    break;
-                default:
-                    System.out.println("wrong choice. please try again");
-            }
-        }
     }
 
+    public int getChoice(){
+        System.out.println("Please choose your action: ");
+        menu();
+        int choice = scanner.nextInt();
+        return choice;
+    }
     private void menu(){
         System.out.println("1. add new coupon \n" +
                 "2. update existing coupon \n" +
@@ -85,7 +39,7 @@ public class CompanyMenu extends Menu{
                 "7. get your details");
     }
 
-    private Coupon addCoupon(){
+    public Coupon addCoupon(){
         System.out.println("What's coupon name?");
         String name = scanner.next();
         System.out.println("whats coupon description");
@@ -108,7 +62,7 @@ public class CompanyMenu extends Menu{
         return coupon;
     }
 
-    private Coupon updateCoupon(){
+    public Coupon updateCoupon(){
         System.out.println("What's coupon name?");
         String name = scanner.next();
         System.out.println("whats coupon description");
@@ -123,7 +77,7 @@ public class CompanyMenu extends Menu{
         return coupon;
     }
 
-    private int categoryList(){
+    public int categoryList(){
         System.out.println("1. travel \n" +
                 "2. clothing \n" +
                 "3. transportation \n" +

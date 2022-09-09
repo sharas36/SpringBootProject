@@ -4,6 +4,7 @@ import com.springCoupon.Services.CustomerService;
 import com.springCoupon.exception.CouponSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,8 @@ import java.util.Scanner;
 @Component
 @Scope("prototype")
 @Lazy
-public class CustomerMenu extends Menu{
+@Primary
+public class CustomerMenu {
 
     private Scanner scanner= new Scanner(System.in);
 
@@ -20,47 +22,13 @@ public class CustomerMenu extends Menu{
 
     public CustomerMenu(){
 
-        while (true){
-            System.out.println("Please choose your action: ");
-            menu();
-            int choice = scanner.nextInt();
+    }
 
-            switch (choice){
-                case 1:
-                    System.out.println("whats the id of the coupon?");
-                    int couponId = scanner.nextInt();
-                    try {
-                        customerService.addPurchase(couponId);
-                    } catch (CouponSystemException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2:
-                    System.out.println(customerService.getAllCustomersCoupons());
-                    break;
-                case 3:
-                    System.out.println("whats the category?");
-                    int categoryId = 0;
-                    while (categoryId < 1 || categoryId > 10) {
-                        categoryId = categoryList();
-                        if (categoryId < 1 || categoryId > 10) {
-                            System.out.println("wrong choice. please try again");
-                        }
-                    }
-                    System.out.println(customerService.getAllCustomersCouponsByCategory(categoryId));
-                    break;
-                case 4:
-                    System.out.println("whats the price?");
-                    int price = scanner.nextInt();
-                    customerService.getAllCustomersCouponsByMaxPrice(price);
-                    break;
-                case 5:
-                    customerService.getCustomerDetails();
-                    break;
-                default:
-                    System.out.println("wrong choice. please try again");
-            }
-        }
+    public int getChoice(){
+        System.out.println("Please choose your action: ");
+        menu();
+        int choice = scanner.nextInt();
+        return choice;
     }
 
     private void menu(){
@@ -71,7 +39,7 @@ public class CustomerMenu extends Menu{
                 "5. get your details");
     }
 
-    private int categoryList(){
+    public int categoryList(){
         System.out.println("1. travel \n" +
                 "2. clothing \n" +
                 "3. transportation \n" +
