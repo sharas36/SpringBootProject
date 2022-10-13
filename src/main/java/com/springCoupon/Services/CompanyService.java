@@ -1,5 +1,6 @@
 package com.springCoupon.Services;
 
+import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Coupon;
 import com.springCoupon.exception.CouponSystemException;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class CompanyService extends MainService {
 
-    private int companyId = 1;
+    private int companyId = 2;
 
     public boolean loginCheck(String email, String password) throws CouponSystemException {
 
@@ -33,7 +34,6 @@ public class CompanyService extends MainService {
 
     public Coupon addCoupon(Coupon coupon) throws CouponSystemException {
         if (!couponRepository.findByCouponNameAndCompany(coupon.getCouponName(), companyRepository.getById(companyId)).isEmpty()) {
-            System.out.println("this name already in use");
             throw new CouponSystemException("the same name belongs to the same company");
         }
         coupon.setCompany(companyRepository.getById(companyId));
@@ -45,8 +45,11 @@ public class CompanyService extends MainService {
         if (couponRepository.findById(couponId).isEmpty()) {
             throw new CouponSystemException("this coupons is not exist");
         } else {
-            System.out.println("deleted");
-            couponRepository.deleteById(couponId);
+//            Company company = companyRepository.getById(this.companyId);
+//            company.getCoupons().remove(couponRepository.findById(couponId).get());
+//            companyRepository.save(company);
+            couponRepository.deleteCoupon(couponId);
+
         }
     }
 
@@ -79,5 +82,8 @@ public class CompanyService extends MainService {
     public int getCompanyId() {
         return this.companyId;
     }
+
+
+
 
 }

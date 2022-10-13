@@ -16,8 +16,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
 
-@Controller
-@RequestMapping("admin")
+@CrossOrigin
+@RestController
+@RequestMapping("/admin")
 @ResponseStatus(value = HttpStatus.OK)
 public class AdminController {
 
@@ -32,8 +33,8 @@ public class AdminController {
 
     @PostMapping("/addCompany")
     @SneakyThrows
-    public void addCompany(@RequestBody Company company) { // http://localhost:8080/admin/addCompany
-
+    public void addCompany(@RequestBody Company company, @RequestHeader String token) { // http://localhost:8080/admin/addCompany
+        System.out.println("your token is:" +token);
         System.out.println("Got: " + company);
         adminService.addCompany(company);
 

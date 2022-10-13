@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.sql.SQLException;
+
 @Component
 @Scope("singleton")
 public class LoginManager {
@@ -23,17 +25,18 @@ public class LoginManager {
 
 
 
-    public Boolean login(ClientType clientType, String email, String password) {
+    public Boolean login(ClientType clientType, String email, String password) throws CouponSystemException, SQLException {
 
         switch (clientType) {
 
             case ADMINISTRATOR:
                 try {
+
                     if (this.adminService.adminLogin(email, password)) {
                         return true;
                     }
                 } catch (CouponSystemException e) {
-                    System.out.println(e.getException());
+                    System.out.println(e.getMessage());
                 }
                 return false;
 

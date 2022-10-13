@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class DailyJob {
+ // annotation @scheduler - spring boot to check
 
     @Autowired
     CouponRepository couponRepository;
@@ -26,7 +27,7 @@ public class DailyJob {
             List<Coupon> couponList = couponRepository.findAll();
 
             List<Coupon> couponsToDelete = couponList.stream().filter(coupon -> {
-                return coupon.getEndDate().isAfter(LocalDateTime.now());
+                return coupon.getEndDate().isBefore(LocalDateTime.now());
             }).collect(Collectors.toList());
 
 

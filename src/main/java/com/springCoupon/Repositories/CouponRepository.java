@@ -3,8 +3,10 @@ package com.springCoupon.Repositories;
 import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Coupon;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,18 +33,19 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 //    @Query(value = "select * from coupons c where c.price <= :price and company_id = :companyId ", nativeQuery = true)
 //    List<Coupon> getCouponByMaxPrice(@Param("price") int price, @Param("companyId") int company_id);
 
+
+//    void deleteCoupon(@Param("coupon_id") Integer coupon_id);
+
     List<Coupon> findByCompany(Company company);
+
     List<Coupon> findByCompanyAndCategoryId(Company company, int categoryId);
+
     List<Coupon> findByCouponNameAndCompany(String couponName, Company company);
 
-
-
-
-//    @Transactional
-//    @Query(value = "delete * from coupons c where c.coupon_id = :coupon_id", nativeQuery = true)
-//    List<Coupon> deleteCoupon(@Param("coupon_id") int coupon_id);
-
-    // List<Coupon> findByCompany_id(Integer company_id);
+    @Transactional
+    @Modifying
+    @Query(value = "delete from coupons where coupon_id =:coupon_id", nativeQuery = true)
+    void deleteCoupon(@Param("coupon_id") int coupon_id);
 
 
 //    @Query(value = "select * from coupons c where c.companyId = :companyId and c.price <= :price", nativeQuery = true)

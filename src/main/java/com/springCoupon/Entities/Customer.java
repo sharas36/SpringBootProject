@@ -27,7 +27,6 @@ public class Customer {
     private String email;
     private String password;
 
-    @Singular
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JsonIgnoreProperties("customers")
     private List<Coupon> coupons = new ArrayList<Coupon>();

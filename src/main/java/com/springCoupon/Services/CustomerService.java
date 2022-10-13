@@ -42,7 +42,6 @@ public class CustomerService extends MainService {
 
             throw new CouponSystemException("this coupon is sold out");
         }
-        ;
 
         customer.addCoupon(coupon);
         couponRepository.findById(couponId).get().setAmount(couponRepository.findById(couponId).get().getAmount() - 1);

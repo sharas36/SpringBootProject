@@ -6,16 +6,21 @@ import com.springCoupon.Services.CustomerService;
 import com.springCoupon.exception.CouponSystemException;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-@Controller
-@RequestMapping("customers")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
+@RestController
+@RequestMapping("/customers")
 @ResponseStatus(value = HttpStatus.OK)
 public class CustomerController {
 
@@ -24,10 +29,10 @@ public class CustomerController {
 
     @SneakyThrows
     @PostMapping("/loginCustomer")
-    public void loginCustomer(@RequestBody Customer customer) { //http://localhost:8080/customers/loginCustomer
-        customerService.loginCustomer(customer.getEmail(), customer.getPassword());
+    public boolean loginCustomer(@RequestBody Customer customer) { //http://localhost:8080/customers/loginCustomer
+       return customerService.loginCustomer(customer.getEmail(), customer.getPassword());
     }
-
+    @CrossOrigin(origins = "*",allowedHeaders = "*")
     @SneakyThrows
     @PostMapping("/addCustomerPurchase/{couponId}")
     public void addPurchaseByCustomer(@PathVariable int couponId) {  //http://localhost:8080/customers/addCustomerPurchase/{couponId}
@@ -64,3 +69,4 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.getCustomerDetails(), HttpStatus.OK);
     }
 }
+

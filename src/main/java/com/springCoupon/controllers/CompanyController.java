@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-@Controller
-@RequestMapping("company")
+@CrossOrigin
+@RestController
+@RequestMapping("/company")
 @ResponseStatus(value = HttpStatus.OK)
 public class CompanyController {
 
@@ -52,7 +52,7 @@ public class CompanyController {
 
     }
 
-    @GetMapping("/getAllCoupons") // http://localhost:8080/admin/getAllCoupons
+    @GetMapping("/getAllCoupons") // http://localhost:8080/company/getAllCoupons
     public ResponseEntity<?> getAllCoupons() {
         List<Coupon> res = companyService.getCouponsOfCompany();
         ResponseEntity<List<Coupon>> responseWrapper = new ResponseEntity<>(res, HttpStatus.OK);
@@ -73,4 +73,9 @@ public class CompanyController {
     public ResponseEntity<?> getCompanyDetails() {  //http://localhost:8080/company/getCompanyDetails
         return new ResponseEntity<>(companyService.getCompanyDetails(), HttpStatus.OK);
     }
+    @ResponseBody
+    @GetMapping("/hello")
+    public String hello() {  //http://localhost:8080/company/hello
+        return "hello world";
+    } //http://localhost:8080/company/hello
 }
