@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerService extends MainService {
 
-    int customerId = 7;
+    int customerId = 8;
 
     public boolean loginCustomer(String email, String password) throws CouponSystemException {
 
@@ -27,16 +27,22 @@ public class CustomerService extends MainService {
 
     public void addPurchase(int couponId) throws CouponSystemException {
 
-        if (!customerRepository.findById(this.customerId).isPresent() || !couponRepository.findById(couponId).isPresent()) {
+        if (!couponRepository.findById(couponId).isPresent()) {
             try {
-                throw new CouponSystemException("coupon or customer are not exist");
+                throw new CouponSystemException("Coupon is not exist");
             } catch (CouponSystemException e) {
                 e.printStackTrace();
             }
         }
 
         Customer customer = customerRepository.getById(customerId);
+
         Coupon coupon = couponRepository.getById(couponId);
+
+
+        if (customer.getCoupons().contains(coupon)) {
+            throw new CouponSystemException("this coupon has been purchased already ");
+        }
 
         if (coupon.getAmount() <= 0) {
 
@@ -44,15 +50,16 @@ public class CustomerService extends MainService {
         }
 
         customer.addCoupon(coupon);
-        couponRepository.findById(couponId).get().setAmount(couponRepository.findById(couponId).get().getAmount() - 1);
-        couponRepository.save(couponRepository.getById(couponId));
+        coupon.setAmount(coupon.getAmount()-1);
+        couponRepository.save(coupon);
+
         customerRepository.save(customer);
+
     }
 
     public List<Coupon> getAllCustomersCoupons() {
         Customer customer = customerRepository.getById(customerId);
         List<Coupon> couponsList = customer.getCoupons();
-
         return couponsList;
     }
 

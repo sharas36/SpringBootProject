@@ -1,5 +1,6 @@
 package com.springCoupon.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -39,6 +40,7 @@ public class Coupon {
 
     @ManyToMany(mappedBy = "coupons", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JsonIgnoreProperties("coupons")
+    @JsonIgnore
     List<Customer> customers = new ArrayList<>();
 
     private int amount;
@@ -51,8 +53,6 @@ public class Coupon {
     public void addCustomer(Customer customer) {
         this.customers.add(customer);
     }
-
-
 
 
 }

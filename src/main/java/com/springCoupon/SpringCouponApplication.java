@@ -25,6 +25,10 @@ import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,10 +50,10 @@ public class SpringCouponApplication {
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
 
-//        for (int i=0;i<=30;i++){
-//            Company company = new Company();
-//            company.setCompanyId(new Random().nextInt(10) +4);
-//            companyService.addCoupon(getCoupon(i,company));
+
+//        for (int i=1;i<=30;i++){
+//            Company company = getCompany(i);
+//            adminService.addCompany(company);
 //        }
 
     }

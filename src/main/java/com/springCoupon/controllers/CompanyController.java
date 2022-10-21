@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RestController
 @RequestMapping("/company")
-@ResponseStatus(value = HttpStatus.OK)
 public class CompanyController {
 
     @Autowired
@@ -74,8 +73,9 @@ public class CompanyController {
         return new ResponseEntity<>(companyService.getCompanyDetails(), HttpStatus.OK);
     }
     @ResponseBody
-    @GetMapping("/hello")
-    public String hello() {  //http://localhost:8080/company/hello
-        return "hello world";
+    @PostMapping("/hello")
+    public Customer hello(@RequestHeader String token) {  //http://localhost:8080/company/hello
+        System.out.println(token);
+        return new Customer();
     } //http://localhost:8080/company/hello
 }

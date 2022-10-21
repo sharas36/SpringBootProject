@@ -16,12 +16,13 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-@CrossOrigin(origins = "*",allowedHeaders = "*")
+
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/customers")
-@ResponseStatus(value = HttpStatus.OK)
 public class CustomerController {
 
     @Autowired
@@ -30,22 +31,22 @@ public class CustomerController {
     @SneakyThrows
     @PostMapping("/loginCustomer")
     public boolean loginCustomer(@RequestBody Customer customer) { //http://localhost:8080/customers/loginCustomer
-       return customerService.loginCustomer(customer.getEmail(), customer.getPassword());
+        return customerService.loginCustomer(customer.getEmail(), customer.getPassword());
     }
-    @CrossOrigin(origins = "*",allowedHeaders = "*")
+
     @SneakyThrows
     @PostMapping("/addCustomerPurchase/{couponId}")
-    public void addPurchaseByCustomer(@PathVariable int couponId) {  //http://localhost:8080/customers/addCustomerPurchase/{couponId}
+    public void addPurchaseByCustomer(@PathVariable int couponId, @RequestHeader String token) {  //http://localhost:8080/customers/addCustomerPurchase/{couponId}
+        System.out.println("is working!");
         customerService.addPurchase(couponId);
     }
 
     @GetMapping("/getAllCustomerCoupon")
-    public ResponseEntity<?> getAllCustomersCoupons() {  //http://localhost:8080/customers/getAllCustomerCoupon
+    public ResponseEntity<?> getAllCustomersCoupons(@RequestHeader String token) {  //http://localhost:8080/customers/getAllCustomerCoupon
+
         List<Coupon> coupons = customerService.getAllCustomersCoupons();
-        for (Coupon coupon : coupons) {
-            System.out.println(coupon);
-        }
-       return new ResponseEntity<>(coupons, HttpStatus.OK);
+
+        return new ResponseEntity<>(coupons, HttpStatus.OK);
     }
 
     @GetMapping("/getCustomerCouponByCategory/{categoryId}")
@@ -62,7 +63,6 @@ public class CustomerController {
     public void saveByCoupon(@PathVariable int couponId) {  //http://localhost:8080/customers/aaddCouponPurchase/{couponId}
         customerService.saveByCoupon(couponId);
     }
-
 
     @GetMapping("/getCustomerDetails")
     public ResponseEntity<?> getCustomerDetails() {  //http://localhost:8080/customers/getCustomerDetails

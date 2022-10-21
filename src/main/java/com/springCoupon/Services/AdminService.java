@@ -23,7 +23,7 @@ public class AdminService extends MainService {
 
     public boolean adminLogin(String email, String password) throws CouponSystemException {
         if (!(email.equals("admin@admin.com"))) {
-                throw new CouponSystemException("This email is wrong");
+            throw new CouponSystemException("This email is wrong");
 
         } else if (!(password.equals("admin"))) {
             throw new CouponSystemException("This password is wrong");
@@ -43,13 +43,19 @@ public class AdminService extends MainService {
 
     public void updateCompanyDetails(Company company) throws CouponSystemException {
 
-        if (companyRepository.findById(company.getCompanyId()).isEmpty()) {
-            throw new CouponSystemException("This company name isn't  exist");
-        } else if (companyRepository.findByEmail(company.getEmail()).get().getCompanyId() != company.getCompanyId()) {
-            throw new CouponSystemException("This company email is already in use");
+        Company companyFromDb = companyRepository.getById(company.getCompanyId());
+        companyFromDb.setCompanyName(company.getCompanyName());
+        companyFromDb.setPassword(company.getPassword());
+        companyFromDb.setEmail(company.getEmail());
+
+        if (companyRepository.findByEmail(companyFromDb.getEmail()).isPresent()) {
+            if (companyRepository.findByEmail(companyFromDb.getEmail()).get().getCompanyId() != company.getCompanyId()) {
+                throw new CouponSystemException("This company email is already in use");
+            }
         }
 
-        companyRepository.save(company);
+        companyRepository.save(companyFromDb);
+
     }
 
     public Company updateCompanyInfo(String email, String password, int companyId) throws CouponSystemException {
