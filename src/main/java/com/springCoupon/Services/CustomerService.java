@@ -3,17 +3,17 @@ package com.springCoupon.Services;
 import com.springCoupon.Entities.Coupon;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.exception.CouponSystemException;
-import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.List;
+import java.awt.print.Pageable;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CustomerService extends MainService {
 
-    int customerId = 8;
+    int customerId = 7;
 
     public boolean loginCustomer(String email, String password) throws CouponSystemException {
 
@@ -27,51 +27,47 @@ public class CustomerService extends MainService {
 
     public void addPurchase(int couponId) throws CouponSystemException {
 
-        if (!couponRepository.findById(couponId).isPresent()) {
+        if (!customerRepository.findById(this.customerId).isPresent() || !couponRepository.findById(couponId).isPresent()) {
             try {
-                throw new CouponSystemException("Coupon is not exist");
+                throw new CouponSystemException("coupon or customer are not exist");
             } catch (CouponSystemException e) {
                 e.printStackTrace();
             }
         }
 
         Customer customer = customerRepository.getById(customerId);
-
         Coupon coupon = couponRepository.getById(couponId);
-
-
-        if (customer.getCoupons().contains(coupon)) {
-            throw new CouponSystemException("this coupon has been purchased already ");
-        }
 
         if (coupon.getAmount() <= 0) {
 
             throw new CouponSystemException("this coupon is sold out");
         }
+        ;
 
         customer.addCoupon(coupon);
-        coupon.setAmount(coupon.getAmount()-1);
-        couponRepository.save(coupon);
-
+        couponRepository.findById(couponId).get().setAmount(couponRepository.findById(couponId).get().getAmount() - 1);
+        couponRepository.save(couponRepository.getById(couponId));
         customerRepository.save(customer);
-
     }
 
-    public List<Coupon> getAllCustomersCoupons() {
-        Customer customer = customerRepository.getById(customerId);
-        List<Coupon> couponsList = customer.getCoupons();
+    public Optional<Coupon> getCouponById(int couponId){
+        return couponRepository.findById(couponId);
+    }
+
+    public Page<Coupon> getAllCustomersCoupons(Pageable pageable) {
+        Page<Coupon> couponsList = couponRepository.findPurchasesOfCustomer(customerId, pageable);
+
         return couponsList;
     }
 
-    public List<Coupon> getAllCustomersCouponsByCategory(int categoryId) {
-        List<Coupon> couponByCategory = customerRepository.getById(customerId).getCoupons();
-        couponByCategory = couponByCategory.stream().filter(c -> c.getCategoryId() == categoryId).collect(Collectors.toList());
-        return couponByCategory;
+    public Page<Coupon> getAllCustomersCouponsByCategory(int categoryId, Pageable pageable) {
+        Page<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId ,pageable);
+        return couponList.stream().filter(c -> c.getCategoryId() == categoryId).collect(Collectors.toCollection());
     }
 
-    public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice) {
-        List<Coupon> couponByMaxPrice = customerRepository.getById(customerId).getCoupons();
-        couponByMaxPrice = couponByMaxPrice.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
+    public Page<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice, Pageable pageable) {
+        Page<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId ,pageable);
+        Page<Coupon>couponByMaxPrice = couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toCollection());
         return couponByMaxPrice;
     }
 
