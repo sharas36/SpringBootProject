@@ -7,11 +7,13 @@ import com.springCoupon.Entities.Customer;
 import com.springCoupon.exception.CouponSystemException;
 import com.springCoupon.Repositories.CouponRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.SystemException;
 import javax.transaction.Transactional;
+import java.awt.print.Pageable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,9 +99,7 @@ public class AdminService extends MainService {
 
     public void updateCustomerDetails(Customer customer) throws CouponSystemException {
 
-        if (customerRepository.findById(customer.getCustomerId()).isEmpty()) {
-            throw new CouponSystemException("This customer isn't exist");
-        }
+
         if (!customerRepository.findByEmail(customer.getEmail()).isEmpty()
                 && customerRepository.findByEmail(customer.getEmail()).get().getCustomerId() != customer.getCustomerId()) {
             throw new CouponSystemException("This customer email is already in use");
@@ -110,11 +110,8 @@ public class AdminService extends MainService {
 
     public void deleteCustomer(int customerId) throws CouponSystemException {
 
-        if (customerRepository.findById(customerId).isEmpty()) {
-            throw new CouponSystemException("this customer is not exist");
-        }
-
-        customerRepository.deleteById(customerId);
+        Customer customer = customerRepository.getById(customerId);
+        customerRepository.deleteCustomer(customerId);
 
     }
 
