@@ -15,13 +15,12 @@ import java.util.Optional;
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
 
-    List<Company> findByName();
+    Optional<Company> findByCompanyName(String name);
 
     List<Company> findByEmailAndPassword(String email, String password);
 
     Optional<Company> findByEmail(String email);
 
-    Optional<Company> findByCompanyName(String company_Name);
 
 
 }

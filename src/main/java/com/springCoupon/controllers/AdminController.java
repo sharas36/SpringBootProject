@@ -78,6 +78,7 @@ public class AdminController {
     @ResponseBody
     @SneakyThrows
     public void addCustomer(@RequestBody Customer customer) { // http://localhost:8080/admin/addCustomer
+        System.out.println(" i am here");
         adminService.addCustomer(customer);
     }
 
@@ -91,7 +92,7 @@ public class AdminController {
     @PostMapping("/updateCustomer") //http://localhost:8080/admin/updateCustomer
     @SneakyThrows
     public void updateCustomer(@RequestBody Customer customer) {
-
+        System.out.println(customer.getCustomerId());
         adminService.updateCustomerDetails(customer);
     }
 

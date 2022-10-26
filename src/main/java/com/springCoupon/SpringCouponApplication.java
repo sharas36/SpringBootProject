@@ -49,6 +49,8 @@ public class SpringCouponApplication {
         AdminService adminService = ctx.getBean(AdminService.class);
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
+        adminService.deleteCustomer(5);
+
 
 
 //        for (int i=1;i<=30;i++){

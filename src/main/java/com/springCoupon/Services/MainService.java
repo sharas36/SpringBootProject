@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public abstract class MainService {
 
+
     @Autowired
     com.springCoupon.Repositories.CouponRepository couponRepository;
 

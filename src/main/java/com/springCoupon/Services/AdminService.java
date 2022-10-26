@@ -104,7 +104,7 @@ public class AdminService extends MainService {
                 && customerRepository.findByEmail(customer.getEmail()).get().getCustomerId() != customer.getCustomerId()) {
             throw new CouponSystemException("This customer email is already in use");
         }
-
+        System.out.println(customer);
         customerRepository.save(customer);
     }
 
