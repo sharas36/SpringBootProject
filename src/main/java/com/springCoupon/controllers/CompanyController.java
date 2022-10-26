@@ -7,11 +7,14 @@ import com.springCoupon.Services.CompanyService;
 import com.springCoupon.utilities.Admin;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @CrossOrigin(origins = "*",allowedHeaders = "*")
@@ -52,20 +55,22 @@ public class CompanyController {
     }
 
     @GetMapping("/getAllCoupons") // http://localhost:8080/company/getAllCoupons
-    public ResponseEntity<?> getAllCoupons() {
-        List<Coupon> res = companyService.getCouponsOfCompany();
-        ResponseEntity<List<Coupon>> responseWrapper = new ResponseEntity<>(res, HttpStatus.OK);
-        return responseWrapper;
+    public ResponseEntity<?> getAllCoupons(@RequestParam int page, @RequestParam int size) {
+        Pageable paging = (Pageable) PageRequest.of(page, size);
+        Page<Coupon> res = companyService.getCouponsOfCompany(paging);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/getCompanyCouponByCategory/{categoryId}")
-    public List<Coupon> getAllCompanyCouponsByCategory(@PathVariable int categoryId) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
-        return companyService.findByCompanyIdAndCategoryId(categoryId);
+    public Page<Coupon> getAllCompanyCouponsByCategory(@PathVariable int categoryId, @RequestParam int page, @RequestParam int size) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
+        Pageable paging = (Pageable) PageRequest.of(page, size);
+        return companyService.findByCompanyIdAndCategoryId(categoryId, paging);
     }
 
     @GetMapping("/getCompanyCouponByMaxPrice/{maxPrice}")
-    public List<Coupon> getAllCompanyCouponsByMaxPrice(@PathVariable int maxPrice) {  //http://localhost:8080/customers//getCompanyCouponByMaxPrice/{maxPrice}
-        return companyService.getByMaxPrice(maxPrice);
+    public Page<Coupon> getAllCompanyCouponsByMaxPrice(@PathVariable int maxPrice, @RequestParam int page, @RequestParam int size) {  //http://localhost:8080/customers//getCompanyCouponByMaxPrice/{maxPrice}
+        Pageable paging = (Pageable) PageRequest.of(page, size);
+        return companyService.getByMaxPrice(maxPrice, paging);
     }
 
     @GetMapping("/getCompanyDetails")

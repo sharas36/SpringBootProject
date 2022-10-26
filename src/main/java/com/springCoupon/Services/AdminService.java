@@ -78,8 +78,8 @@ public class AdminService extends MainService {
         companyRepository.deleteById(companyId);
     }
 
-    public List<Company> getAllCompany() {
-        return companyRepository.findAll();
+    public Page<Company> getAllCompany(Pageable pageable) {
+        return companyRepository.findAll(pageable);
     }
 
     public Company getOneCompany(int companyId) throws CouponSystemException {
@@ -115,8 +115,8 @@ public class AdminService extends MainService {
 
     }
 
-    public List<Customer> getAllCustomer() {
-        return customerRepository.findAll();
+    public Page<Customer> getAllCustomer(Pageable pageable) {
+        return customerRepository.findAll(pageable);
     }
 
     public Customer getOneCustomer(int customerId) throws CouponSystemException {

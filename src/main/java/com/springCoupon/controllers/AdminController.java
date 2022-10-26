@@ -7,11 +7,15 @@ import com.springCoupon.exception.CouponSystemException;
 import com.springCoupon.utilities.Admin;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
@@ -42,10 +46,10 @@ public class AdminController {
 
     @GetMapping("/getAllCompanies") // http://localhost:8080/admin/getAllCompanies
     @SneakyThrows
-    public ResponseEntity<?> getAllCompanies() {
-        List<Company> res = adminService.getAllCompany();
-        ResponseEntity<List<Company>> responseWrapper = new ResponseEntity<>(res, HttpStatus.OK);
-        return responseWrapper;
+    public ResponseEntity<?> getAllCompanies(@RequestParam int page, @RequestParam int size) {
+        Pageable paging = (Pageable) PageRequest.of(page, size);
+        Page<Company> res = adminService.getAllCompany(paging);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @SneakyThrows
@@ -83,10 +87,10 @@ public class AdminController {
     }
 
     @GetMapping("/getAllCustomers") // http://localhost:8080/admin/getAllCustomers
-    public ResponseEntity<?> getAllCustomers() {
-        List<Customer> res = adminService.getAllCustomer();
-        ResponseEntity<List<Customer>> responseWrapper = new ResponseEntity<>(res, HttpStatus.OK);
-        return responseWrapper;
+    public ResponseEntity<?> getAllCustomers(@RequestParam int page, @RequestParam int size) {
+        Pageable paging = (Pageable) PageRequest.of(page, size);
+        Page<Customer> res = adminService.getAllCustomer(paging);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PostMapping("/updateCustomer") //http://localhost:8080/admin/updateCustomer

@@ -2,12 +2,14 @@ package com.springCoupon.Repositories;
 
 import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Coupon;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -36,11 +38,24 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
 //    void deleteCoupon(@Param("coupon_id") Integer coupon_id);
 
-    List<Coupon> findByCompany(Company company);
+    Page<Coupon> findAll(Pageable pageable);
 
-    List<Coupon> findByCompanyAndCategoryId(Company company, int categoryId);
+    Page<Coupon> findByCategoryId(int categoryId, Pageable pageable);
+
+    Page<Coupon> findByMaxPrice(int maxPrice, Pageable pageable);
+
+    Page<Coupon> findByMaxPriceAndCompany(int maxPrice, Company company, Pageable pageable);
+    Page<Coupon> findByCompany(Company company, Pageable pageable);
+
+    Page<Coupon> findByCompanyAndCategoryId(Company company, int categoryId, Pageable pageable);
 
     List<Coupon> findByCouponNameAndCompany(String couponName, Company company);
+
+    @Query(value = "select * from customers_coupons where customerId =: customer_id", nativeQuery = true)
+    Page<Coupon> findPurchasesOfCustomer(@Param("customer_id") int customer_id, Pageable pageable);
+
+    @Query( value = "select * from customers_coupons where customerId =: customer_id AND coupon_id = ")
+    Page<Coupon> findPurchasesOfCustomerByCategoryId(@Param("customer_id") int customer_id, @Param("category_id") int category_id, Pageable pageable);
 
     @Transactional
     @Modifying
