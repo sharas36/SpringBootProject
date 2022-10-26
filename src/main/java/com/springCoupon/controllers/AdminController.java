@@ -46,9 +46,8 @@ public class AdminController {
 
     @GetMapping("/getAllCompanies") // http://localhost:8080/admin/getAllCompanies
     @SneakyThrows
-    public ResponseEntity<?> getAllCompanies(@RequestParam int page, @RequestParam int size) {
-        Pageable paging = (Pageable) PageRequest.of(page, size);
-        Page<Company> res = adminService.getAllCompany(paging);
+    public ResponseEntity<?> getAllCompanies() {
+        List<Company> res = adminService.getAllCompany();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -87,9 +86,8 @@ public class AdminController {
     }
 
     @GetMapping("/getAllCustomers") // http://localhost:8080/admin/getAllCustomers
-    public ResponseEntity<?> getAllCustomers(@RequestParam int page, @RequestParam int size) {
-        Pageable paging = (Pageable) PageRequest.of(page, size);
-        Page<Customer> res = adminService.getAllCustomer(paging);
+    public ResponseEntity<?> getAllCustomers() {
+        List<Customer> res = adminService.getAllCustomer();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
