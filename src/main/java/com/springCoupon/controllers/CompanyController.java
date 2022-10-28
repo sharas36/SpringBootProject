@@ -55,28 +55,26 @@ public class CompanyController {
     }
 
     @GetMapping("/getAllCoupons") // http://localhost:8080/company/getAllCoupons
-    public ResponseEntity<?> getAllCoupons(@RequestParam int page, @RequestParam int size) {
-        Pageable paging = (Pageable) PageRequest.of(page, size);
-        Page<Coupon> res = companyService.getCouponsOfCompany(paging);
+    public ResponseEntity<?> getAllCoupons() {
+        List<Coupon> res = companyService.getCouponsOfCompany();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/getCompanyCouponByCategory/{categoryId}")
-    public Page<Coupon> getAllCompanyCouponsByCategory(@PathVariable int categoryId, @RequestParam int page, @RequestParam int size) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
-        Pageable paging = (Pageable) PageRequest.of(page, size);
-        return companyService.findByCompanyIdAndCategoryId(categoryId, paging);
+    public List<Coupon> getAllCompanyCouponsByCategory(@PathVariable int categoryId) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
+        return companyService.findByCompanyIdAndCategoryId(categoryId);
     }
 
     @GetMapping("/getCompanyCouponByMaxPrice/{maxPrice}")
-    public Page<Coupon> getAllCompanyCouponsByMaxPrice(@PathVariable int maxPrice, @RequestParam int page, @RequestParam int size) {  //http://localhost:8080/customers//getCompanyCouponByMaxPrice/{maxPrice}
-        Pageable paging = (Pageable) PageRequest.of(page, size);
-        return companyService.getByMaxPrice(maxPrice, paging);
+    public List<Coupon> getAllCompanyCouponsByMaxPrice(@PathVariable int maxPrice) {  //http://localhost:8080/customers//getCompanyCouponByMaxPrice/{maxPrice}
+        return companyService.getByMaxPrice(maxPrice);
     }
 
     @GetMapping("/getCompanyDetails")
     public ResponseEntity<?> getCompanyDetails() {  //http://localhost:8080/company/getCompanyDetails
         return new ResponseEntity<>(companyService.getCompanyDetails(), HttpStatus.OK);
     }
+
     @ResponseBody
     @PostMapping("/hello")
     public Customer hello(@RequestHeader String token) {  //http://localhost:8080/company/hello

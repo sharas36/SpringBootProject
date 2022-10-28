@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -50,24 +51,24 @@ public class CustomerService extends MainService {
         customerRepository.save(customer);
     }
 
-    public Optional<Coupon> getCouponById(int couponId){
+    public Optional<Coupon> getCouponById(int couponId) {
         return couponRepository.findById(couponId);
     }
 
-    public Page<Coupon> getAllCustomersCoupons(Pageable pageable) {
-        Page<Coupon> couponsList = couponRepository.findPurchasesOfCustomer(customerId, pageable);
+    public List<Coupon> getAllCustomersCoupons() {
+        List<Coupon> couponsList = couponRepository.findPurchasesOfCustomer(customerId);
 
         return couponsList;
     }
 
-    public Page<Coupon> getAllCustomersCouponsByCategory(int categoryId, Pageable pageable) {
-        Page<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId ,pageable);
-        return couponList.stream().filter(c -> c.getCategoryId() == categoryId).collect(Collectors.toCollection());
+    public List<Coupon> getAllCustomersCouponsByCategory(int categoryId) {
+        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
+        return couponList.stream().filter(c -> c.getCategoryId() == categoryId).collect(Collectors.toList());
     }
 
-    public Page<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice, Pageable pageable) {
-        Page<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId ,pageable);
-        Page<Coupon>couponByMaxPrice = couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toCollection());
+    public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice) {
+        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
+        List<Coupon> couponByMaxPrice = couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
         return couponByMaxPrice;
     }
 

@@ -25,13 +25,13 @@ public class CompanyService extends MainService {
         throw new CouponSystemException("Something wrong. Please try again");
     }
 
-    public Page<Coupon> getCouponsOfCompany(Pageable pageable) {
-        return couponRepository.findByCompany(companyRepository.getById(companyId), pageable);
+    public List<Coupon> getCouponsOfCompany() {
+        return couponRepository.findByCompany(companyRepository.getById(companyId));
     }
 
-    public Page<Coupon> findByCompanyIdAndCategoryId(int categoryId, Pageable pageable) {
+    public List<Coupon> findByCompanyIdAndCategoryId(int categoryId) {
 
-        return couponRepository.findByCompanyAndCategoryId(companyRepository.getById(companyId), categoryId, pageable);
+        return couponRepository.findById(this.companyId).stream().filter(coupon -> coupon.getCategoryId() == categoryId).collect(Collectors.toList());
     }
 
     public Coupon addCoupon(Coupon coupon) throws CouponSystemException {
@@ -69,12 +69,13 @@ public class CompanyService extends MainService {
         return companyRepository.findById(companyId).toString();
     }
 
-    public Page<Coupon> getByMaxPrice(int price, Pageable pageable) {
-        return couponRepository.findByCompany(companyRepository.getById(companyId), pageable).stream().filter(coupon -> coupon.getPrice() <= price).collect(Collectors.toCollection());
+    public List<Coupon> getByMaxPrice(int price) {
+        return couponRepository.getCompanyCouponsByMaxPrice(this.companyId, price);
     }
 
-    public Page<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end, Pageable pageable) {
-        return couponRepository.findByCompany(companyRepository.getById(companyId), pageable).stream().filter(coupon -> coupon.getEndDate().isBefore(end) && coupon.getStartDate().isAfter(start)).collect(Collectors.toCollection());
+    public List<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end) {
+        return couponRepository.findByCompany(companyRepository.getById(companyId)).stream().filter
+                (coupon -> coupon.getEndDate().isBefore(end) && coupon.getStartDate().isAfter(start)).collect(Collectors.toList());
     }
 
     public void setCompanyId(int company_Id) {

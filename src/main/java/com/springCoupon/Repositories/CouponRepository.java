@@ -38,24 +38,21 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
 //    void deleteCoupon(@Param("coupon_id") Integer coupon_id);
 
-    Page<Coupon> findAll(Pageable pageable);
+    List<Coupon> findAll();
 
-    Page<Coupon> findByCategoryId(int categoryId, Pageable pageable);
+    List<Coupon> findByCategoryId(int categoryId);
 
-    Page<Coupon> findByMaxPrice(int maxPrice, Pageable pageable);
+    List<Coupon> findByCompany(Company company);
 
-    Page<Coupon> findByMaxPriceAndCompany(int maxPrice, Company company, Pageable pageable);
-    Page<Coupon> findByCompany(Company company, Pageable pageable);
-
-    Page<Coupon> findByCompanyAndCategoryId(Company company, int categoryId, Pageable pageable);
+    List<Coupon> findByCompanyAndCategoryId(Company company, int categoryId);
 
     List<Coupon> findByCouponNameAndCompany(String couponName, Company company);
 
-    @Query(value = "select * from customers_coupons where customerId =: customer_id", nativeQuery = true)
-    Page<Coupon> findPurchasesOfCustomer(@Param("customer_id") int customer_id, Pageable pageable);
+    @Query(value = "select from customers_coupons where customerId =: customer_id", nativeQuery = true)
+    List<Coupon> findPurchasesOfCustomer(@Param("customer_id") int customer_id);
 
-    @Query( value = "select * from customers_coupons where customerId =: customer_id AND coupon_id = ")
-    Page<Coupon> findPurchasesOfCustomerByCategoryId(@Param("customer_id") int customer_id, @Param("category_id") int category_id, Pageable pageable);
+    @Query(value = "select  from customers_coupons where customerId =: customer_id AND coupon_id = ", nativeQuery = true)
+    List<Coupon> findPurchasesOfCustomerByCategoryId(@Param("customer_id") int customer_id, @Param("category_id") int category_id);
 
     @Transactional
     @Modifying
@@ -63,7 +60,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
     void deleteCoupon(@Param("coupon_id") int coupon_id);
 
 
-//    @Query(value = "select * from coupons c where c.companyId = :companyId and c.price <= :price", nativeQuery = true)
-//    List<Company> getCompanyCouponsByMaxPrice(@Param("companyId") int couponId, @Param("price") String password);
+    @Query(value = "select  from coupons c where c.companyId = :companyId and c.price <= :price", nativeQuery = true)
+    List<Coupon> getCompanyCouponsByMaxPrice(@Param("companyId") int companyId, @Param("price") int price);
 
 }

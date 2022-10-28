@@ -46,22 +46,19 @@ public class CustomerController {
 
     @GetMapping("/getAllCustomerCoupon")
     public ResponseEntity<?> getAllCustomersCoupons(@RequestHeader String token, @RequestParam int page, @RequestParam int size) {  //http://localhost:8080/customers/getAllCustomerCoupon
-        Pageable paging = (Pageable) PageRequest.of(page, size);
-        Page<Coupon> coupons = customerService.getAllCustomersCoupons(paging);
+        List<Coupon> coupons = customerService.getAllCustomersCoupons();
 
         return new ResponseEntity<>(coupons, HttpStatus.OK);
     }
 
     @GetMapping("/getCustomerCouponByCategory/{categoryId}")
-    public Page<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId, @RequestParam int page, @RequestParam int size) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
-        Pageable paging = (Pageable) PageRequest.of(page, size);
-        return customerService.getAllCustomersCouponsByCategory(categoryId, paging);
+    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
+        return customerService.getAllCustomersCouponsByCategory(categoryId);
     }
 
     @GetMapping("/getCustomerCouponByMaxPrice/{maxPrice}")
-    public Page<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestParam int page, @RequestParam int size) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
-        Pageable paging = (Pageable) PageRequest.of(page, size);
-        return customerService.getAllCustomersCouponsByMaxPrice(maxPrice, paging);
+    public List<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestParam int page, @RequestParam int size) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
+        return customerService.getAllCustomersCouponsByMaxPrice(maxPrice);
     }
 
     @PostMapping("addCouponPurchase/{couponId}")
