@@ -5,6 +5,10 @@ import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.exception.CouponSystemException;
 import com.springCoupon.utilities.Admin;
+import com.springCoupon.utilities.ClientType;
+import com.springCoupon.utilities.Token;
+import com.springCoupon.utilities.TokensList;
+import io.jsonwebtoken.Jwts;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,10 +32,18 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private TokensList tokensList;
+
     @SneakyThrows
     @PostMapping("/loginAdmin")
-    public void loginAdmin(@RequestBody String email, String password) { //http://localhost:8080/customers/adminCustomer
+    public String loginAdmin(@RequestBody String email, @RequestBody String password) { //http://localhost:8080/admin/loginAdmin
         adminService.adminLogin(email, password);
+
+        Token token = new Token(email, password, ClientType.ADMINISTRATOR);
+        System.out.println(token.getToken());
+        tokensList.addToken(token);
+        return token.getToken();
     }
 
     @PostMapping("/addCompany")
@@ -98,14 +110,14 @@ public class AdminController {
         adminService.updateCustomerDetails(customer);
     }
 
-    @DeleteMapping("/deleteCustomer/{id}") // http://localhost:8080/admin/deleteCustomer/{id}
-    @ResponseBody
-    @SneakyThrows
-    public void deleteCustomer(@PathVariable int id) {
-
-        adminService.deleteCustomer(id);
-
-    }
+//    @DeleteMapping("/deleteCustomer/{id}") // http://localhost:8080/admin/deleteCustomer/{id}
+//    @ResponseBody
+//    @SneakyThrows
+//    public void deleteCustomer(@PathVariable int id) {
+//
+//        adminService.deleteCustomer(id);
+//
+//    }
 
 
 }

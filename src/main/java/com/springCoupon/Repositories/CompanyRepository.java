@@ -19,7 +19,7 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
     Optional<Company> findByCompanyName(String name);
 
-    Page<Company> findAll(Pageable pageable);
+    List<Company> findAll();
 
     List<Company> findByEmailAndPassword(String email, String password);
 

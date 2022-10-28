@@ -38,25 +38,25 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
 //    void deleteCoupon(@Param("coupon_id") Integer coupon_id);
 
-    Page<Coupon> findAll(Pageable pageable);
+    List<Coupon> findAll();
 
-    Page<Coupon> findByCategoryId(int categoryId, Pageable pageable);
+    List<Coupon> findByCategoryId(int categoryId);
 
-    Page<Coupon> findByMaxPrice(int maxPrice, Pageable pageable);
+    List<Coupon> findByPriceLessThan(int maxPrice);
 
-    Page<Coupon> findByMaxPriceAndCompany(int maxPrice, Company company, Pageable pageable);
-    Page<Coupon> findByCompany(Company company, Pageable pageable);
+    List<Coupon> findByPriceLessThanAndCompany(int maxPrice, Company company);
+    List<Coupon> findByCompany(Company company);
 
-    Page<Coupon> findByCompanyAndCategoryId(Company company, int categoryId, Pageable pageable);
+    List<Coupon> findByCompanyAndCategoryId(Company company, int categoryId);
 
     List<Coupon> findByCouponNameAndCompany(String couponName, Company company);
 
-    @Query(value = "select * from customers_coupons where customerId =: customer_id", nativeQuery = true)
-    Page<Coupon> findPurchasesOfCustomer(@Param("customer_id") int customer_id, Pageable pageable);
-
-    @Query( value = "select * from customers_coupons where customerId =: customer_id AND coupon_id = ")
-    Page<Coupon> findPurchasesOfCustomerByCategoryId(@Param("customer_id") int customer_id, @Param("category_id") int category_id, Pageable pageable);
-
+//    @Query(value = "select * from customers_coupons where customerId =: customer_id", nativeQuery = true)
+//    List<Coupon> findPurchasesOfCustomer(@Param("customer_id") int customer_id);
+//
+//    @Query( value = "select * from customers_coupons where customerId =: customer_id AND coupon_id = ")
+//    List<Coupon> findPurchasesOfCustomerByCategoryId(@Param("customer_id") int customer_id, @Param("category_id") int category_id);
+//
     @Transactional
     @Modifying
     @Query(value = "delete from coupons where coupon_id =:coupon_id", nativeQuery = true)

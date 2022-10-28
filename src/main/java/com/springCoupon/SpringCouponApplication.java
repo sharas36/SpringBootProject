@@ -14,10 +14,13 @@ import com.springCoupon.menus.CustomerMenu;
 import com.springCoupon.utilities.ClientType;
 import com.springCoupon.utilities.DailyJob;
 import com.springCoupon.utilities.LoginManager;
+import io.jsonwebtoken.*;
+import lombok.Data;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
@@ -25,18 +28,19 @@ import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Key;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
 public class SpringCouponApplication {
 
     public static void main(String[] args) throws CouponSystemException, SQLException, InterruptedException {
@@ -49,7 +53,30 @@ public class SpringCouponApplication {
         AdminService adminService = ctx.getBean(AdminService.class);
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
-        adminService.deleteCustomer(5);
+//        String algorithm = "HmacSHA256AA";
+//        algorithm = SignatureAlgorithm.HS256.getJcaName();
+//        byte[] secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();
+//        byte[] secretKeyDecoded = Base64.getDecoder().decode(secretKeyEncoded);
+//        Key key = new SecretKeySpec(secretKeyDecoded, algorithm);
+//        Instant now = Instant.now();
+//        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
+//        String token = Jwts.builder()
+//                .signWith(key)
+//                .setIssuedAt(Date.from(now))
+//                .setExpiration(Date.from(now.plus(30, ChronoUnit.SECONDS)))
+//                .setId("101")
+//                .setSubject("vfv")
+//                .claim("clientType", "admin")
+//                .claim("clientPassword", "vfvd")
+//        .compact();
+//        Jws<Claims> expandedJwt = jwtParser.parseClaimsJws(token);
+//        System.out.println(expandedJwt);
+//        System.out.println("header");
+//        System.out.println(expandedJwt.getHeader());
+//        System.out.println("body");
+//        System.out.println(expandedJwt.getBody());
+//        System.out.println("signature");
+//        System.out.println(expandedJwt.getSignature());
 
 
 
