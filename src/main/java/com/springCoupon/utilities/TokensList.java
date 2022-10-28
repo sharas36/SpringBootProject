@@ -22,11 +22,13 @@ public class TokensList {
         Thread tokensWork = new Thread(() -> {
             while (true) {
                 HashMap<String, Date> existTokens = this.tokenList;
-                existTokens.forEach((s, date) -> {
-                    if (date.after(Date.from(Instant.now()))) {
-                        tokenList.remove(s);
-                    }
-                });
+                if(!existTokens.isEmpty()) {
+                    existTokens.forEach((s, date) -> {
+                        if (date.after(Date.from(Instant.now()))) {
+                            tokenList.remove(s);
+                        }
+                    });
+                }
                 try {
                     Thread.sleep(60*1000);
                 } catch (InterruptedException e) {

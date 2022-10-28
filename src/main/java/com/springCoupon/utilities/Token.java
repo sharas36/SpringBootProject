@@ -15,7 +15,6 @@ import java.util.Base64;
 import java.util.Date;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Data
 @Component
@@ -28,8 +27,12 @@ public class Token {
     private final Instant now = Instant.now();
     private final Date expirationTime = Date.from(now.plus(30, ChronoUnit.MINUTES));
     private String token;
-    private final JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
-    private final Jws<Claims> expandedJwt = jwtParser.parseClaimsJws(token);
+    private JwtParser jwtParser;
+    private Jws<Claims> expandedJwt;
+
+    public Token(){
+
+    }
 
     public Token(String email, String password, ClientType clientType) {
         token = Jwts.builder()
@@ -42,6 +45,8 @@ public class Token {
                 .claim("clientPassword", password)
                 .compact();
 
+        jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
+        expandedJwt = jwtParser.parseClaimsJws(token);
 
     }
 }
