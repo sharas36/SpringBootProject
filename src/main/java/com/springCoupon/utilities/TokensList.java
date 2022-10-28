@@ -42,4 +42,7 @@ public class TokensList {
         tokenList.put(token.getToken(), token.getExpirationTime());
     }
 
+    public boolean isThisTokenExist(String token){
+        return tokenList.containsKey(token);
+    }
 }

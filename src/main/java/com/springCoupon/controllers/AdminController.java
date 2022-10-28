@@ -49,6 +49,9 @@ public class AdminController {
     @PostMapping("/addCompany")
     @SneakyThrows
     public void addCompany(@RequestBody Company company, @RequestHeader String token) { // http://localhost:8080/admin/addCompany
+        if(tokensList.isThisTokenExist(token)){
+            throw new CouponSystemException("your time is expired");
+        }
         System.out.println("your token is:" + token);
         System.out.println("Got: " + company);
         adminService.addCompany(company);
@@ -58,15 +61,20 @@ public class AdminController {
 
     @GetMapping("/getAllCompanies") // http://localhost:8080/admin/getAllCompanies
     @SneakyThrows
-    public ResponseEntity<?> getAllCompanies() {
+    public ResponseEntity<?> getAllCompanies(@RequestHeader String token) {
+        if(tokensList.isThisTokenExist(token)){
+            throw new CouponSystemException("your time is expired");
+        }
         List<Company> res = adminService.getAllCompany();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @SneakyThrows
     @PostMapping("/updateCompany") //http://localhost:8080/admin/updateCompany
-    public void updateCompany(@RequestBody Company company) {
-
+    public void updateCompany(@RequestBody Company company, @RequestHeader String token) {
+        if(tokensList.isThisTokenExist(token)){
+            throw new CouponSystemException("your time is expired");
+        }
         System.out.println(company);
         adminService.updateCompanyDetails(company);
     }
@@ -74,7 +82,10 @@ public class AdminController {
     @DeleteMapping("/deleteCompany/{id}") // http://localhost:8080/admin/deleteCompany/{id}
     @ResponseBody
     @SneakyThrows
-    public void deleteCompany(@PathVariable int id) {
+    public void deleteCompany(@PathVariable int id, @RequestHeader String token) {
+        if(tokensList.isThisTokenExist(token)){
+            throw new CouponSystemException("your time is expired");
+        }
         adminService.deleteCompany(id);
         System.out.println("deleteCompany: " + id);
     }
@@ -82,7 +93,10 @@ public class AdminController {
     @GetMapping("/getOneCompany/{id}") // http://localhost:8080/admin/getOneCompany/{id}
     @ResponseBody
     @SneakyThrows
-    public ResponseEntity<?> getOneCompany(@PathVariable int id) {
+    public ResponseEntity<?> getOneCompany(@PathVariable int id, @RequestHeader String token) {
+        if(tokensList.isThisTokenExist(token)){
+            throw new CouponSystemException("your time is expired");
+        }
         Company res = adminService.getOneCompany(id);
         ResponseEntity<Company> responseWrapper = new ResponseEntity<>(res, HttpStatus.OK);
         return responseWrapper;
@@ -92,20 +106,30 @@ public class AdminController {
     @PostMapping("/addCustomer")
     @ResponseBody
     @SneakyThrows
-    public void addCustomer(@RequestBody Customer customer) { // http://localhost:8080/admin/addCustomer
+    public void addCustomer(@RequestBody Customer customer, @RequestHeader String token) { // http://localhost:8080/admin/addCustomer
+        if(tokensList.isThisTokenExist(token)){
+            throw new CouponSystemException("your time is expired");
+        }
         System.out.println(" i am here");
         adminService.addCustomer(customer);
     }
 
-    @GetMapping("/getAllCustomers") // http://localhost:8080/admin/getAllCustomers
-    public ResponseEntity<?> getAllCustomers() {
+    @GetMapping("/getAllCustomers")
+    @SneakyThrows
+    public ResponseEntity<?> getAllCustomers(@RequestHeader String token) {   // http://localhost:8080/admin/getAllCustomers
+        if(tokensList.isThisTokenExist(token)){
+            throw new CouponSystemException("your time is expired");
+        }
         List<Customer> res = adminService.getAllCustomer();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PostMapping("/updateCustomer") //http://localhost:8080/admin/updateCustomer
     @SneakyThrows
-    public void updateCustomer(@RequestBody Customer customer) {
+    public void updateCustomer(@RequestBody Customer customer, @RequestHeader String token) {
+        if(tokensList.isThisTokenExist(token)){
+            throw new CouponSystemException("your time is expired");
+        }
         System.out.println(customer.getCustomerId());
         adminService.updateCustomerDetails(customer);
     }
@@ -113,7 +137,10 @@ public class AdminController {
 //    @DeleteMapping("/deleteCustomer/{id}") // http://localhost:8080/admin/deleteCustomer/{id}
 //    @ResponseBody
 //    @SneakyThrows
-//    public void deleteCustomer(@PathVariable int id) {
+//    public void deleteCustomer(@PathVariable int id, @RequestHeader String token) {
+//    if(tokensList.isThisTokenExist(token)){
+//        throw new CouponSystemException("your time is expired");
+//    }
 //
 //        adminService.deleteCustomer(id);
 //
