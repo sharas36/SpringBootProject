@@ -20,21 +20,28 @@ import java.util.Date;
 @Component
 public class Token {
 
-    private final byte[] secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();
-    private final byte[] secretKeyDecoded = Base64.getDecoder().decode(secretKeyEncoded);
-    private final String algorithm = SignatureAlgorithm.HS256.getJcaName();
-    private final Key key = new SecretKeySpec(secretKeyDecoded, algorithm);
-    private final Instant now = Instant.now();
-    private final Date expirationTime = Date.from(now.plus(30, ChronoUnit.MINUTES));
+    private byte[] secretKeyEncoded;
+    private byte[] secretKeyDecoded;
+    private String algorithm;
+    private Key key;
+    private Date expirationTime;
     private String token;
     private JwtParser jwtParser;
     private Jws<Claims> expandedJwt;
+    private ClientType clientType;
 
     public Token(){
 
     }
 
     public Token(String email, String password, ClientType clientType) {
+        this.clientType = clientType;
+        this.secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();
+        this.secretKeyDecoded = Base64.getDecoder().decode(secretKeyEncoded);
+        this.algorithm = SignatureAlgorithm.HS256.getJcaName();
+        this.key = new SecretKeySpec(secretKeyDecoded, algorithm);
+        Instant now = Instant.now();
+        this.expirationTime = Date.from(now.plus(30, ChronoUnit.MINUTES));
         token = Jwts.builder()
                 .signWith(key)
                 .setIssuedAt(Date.from(now))
@@ -49,4 +56,6 @@ public class Token {
         expandedJwt = jwtParser.parseClaimsJws(token);
 
     }
+
+
 }

@@ -51,12 +51,16 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
     List<Coupon> findByCouponNameAndCompany(String couponName, Company company);
 
-//    @Query(value = "select * from customers_coupons where customerId =: customer_id", nativeQuery = true)
+//    @Transactional
+//    @Modifying
+//    @Query(value = "select from customers_coupons where customerId =: customer_id", nativeQuery = true)
 //    List<Coupon> findPurchasesOfCustomer(@Param("customer_id") int customer_id);
 //
-//    @Query( value = "select * from customers_coupons where customerId =: customer_id AND coupon_id = ")
-//    List<Coupon> findPurchasesOfCustomerByCategoryId(@Param("customer_id") int customer_id, @Param("category_id") int category_id);
-//
+//    @Transactional
+//    @Modifying
+//    @Query( value = "select from customers_coupons where customerId =: customer_id AND coupon_id =: coupon_id ")
+//    List<Coupon> findPurchasesOfCustomerByCategoryId(@Param("customer_id") int customer_id, @Param("category_id") int category_id, @Param("coupon_id") int coupon_id);
+
     @Transactional
     @Modifying
     @Query(value = "delete from coupons where coupon_id =:coupon_id", nativeQuery = true)

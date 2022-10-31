@@ -14,6 +14,7 @@ import com.springCoupon.menus.CustomerMenu;
 import com.springCoupon.utilities.ClientType;
 import com.springCoupon.utilities.DailyJob;
 import com.springCoupon.utilities.LoginManager;
+import com.springCoupon.utilities.TokensList;
 import io.jsonwebtoken.*;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -53,6 +54,7 @@ public class SpringCouponApplication {
         AdminService adminService = ctx.getBean(AdminService.class);
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
+        TokensList tokensList = ctx.getBean(TokensList.class);
 //        String algorithm = "HmacSHA256AA";
 //        algorithm = SignatureAlgorithm.HS256.getJcaName();
 //        byte[] secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();

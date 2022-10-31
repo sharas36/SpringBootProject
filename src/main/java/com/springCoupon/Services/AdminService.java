@@ -108,12 +108,12 @@ public class AdminService extends MainService {
         customerRepository.save(customer);
     }
 
-//    public void deleteCustomer(int customerId) throws CouponSystemException {
-//
-//        Customer customer = customerRepository.getById(customerId);
-//        customerRepository.deleteCustomer(customerId);
-//
-//    }
+    public void deleteCustomer(int customerId) throws CouponSystemException {
+
+        Customer customer = customerRepository.getById(customerId);
+        customerRepository.deleteCustomer(customerId);
+
+    }
 
     public List<Customer> getAllCustomer() {
         return customerRepository.findAll();

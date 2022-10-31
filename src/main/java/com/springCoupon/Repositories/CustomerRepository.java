@@ -16,8 +16,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     Optional<Customer> findByEmailAndPassword(String email, String password);
     Optional<Customer> findByEmail(String email);
-//    @Transactional
-//    @Modifying
-//    @Query(value = "delete from customers where customer_id =:customer_id", nativeQuery = true)
-//    void deleteCustomer(@Param("customer_id") int customer_id);
+    @Transactional
+    @Modifying
+    @Query(value = "delete from customers where customer_id =:customer_id", nativeQuery = true)
+    void deleteCustomer(@Param("customer_id") int customer_id);
 }

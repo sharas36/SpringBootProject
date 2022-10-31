@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,17 +16,17 @@ import java.util.stream.Collectors;
 @Scope("singleton")
 public class TokensList {
 
-    private HashMap<String, Date> tokenList;
+    private final ArrayList<Token> tokenList = new ArrayList<>();
 
     public TokensList() {
 
         Thread tokensWork = new Thread(() -> {
             while (true) {
-                HashMap<String, Date> existTokens = this.tokenList;
+                ArrayList<Token> existTokens = this.tokenList;
                 if(!existTokens.isEmpty()) {
-                    existTokens.forEach((s, date) -> {
-                        if (date.after(Date.from(Instant.now()))) {
-                            tokenList.remove(s);
+                    existTokens.forEach(token -> {
+                        if(token.getExpirationTime().before(Date.from(Instant.now()))){
+                            tokenList.remove(token);
                         }
                     });
                 }
@@ -39,10 +40,19 @@ public class TokensList {
         tokensWork.start();
     }
     public void addToken(Token token){
-        tokenList.put(token.getToken(), token.getExpirationTime());
+        tokenList.add(token);
     }
 
     public boolean isThisTokenExist(String token){
-        return tokenList.containsKey(token);
+        return tokenList.contains(getToken(token));
+    }
+
+    public Token getToken(String token){
+        for (Token t: tokenList) {
+            if(t.getToken().equals(token)){
+                return t;
+            }
+        }
+        return null;
     }
 }
