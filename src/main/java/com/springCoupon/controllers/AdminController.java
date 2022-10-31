@@ -88,8 +88,9 @@ public class AdminController {
 
     @GetMapping("/getAllCustomers") // http://localhost:8080/admin/getAllCustomers
     public ResponseEntity<?> getAllCustomers() {
-        List<Customer> res = adminService.getAllCustomer();
+        List<Customer> res = adminService.getAllCustomers();
         return new ResponseEntity<>(res, HttpStatus.OK);
+
     }
 
     @PostMapping("/updateCustomer") //http://localhost:8080/admin/updateCustomer
@@ -102,9 +103,12 @@ public class AdminController {
     @DeleteMapping("/deleteCustomer/{id}") // http://localhost:8080/admin/deleteCustomer/{id}
     @ResponseBody
     @SneakyThrows
-    public void deleteCustomer(@PathVariable int id) {
+    public ResponseEntity<?> deleteCustomer(@PathVariable int id) {
 
         adminService.deleteCustomer(id);
+        boolean isExist = adminService.isCustomerExist(id);
+        return new ResponseEntity<>(isExist, HttpStatus.OK);
+
 
     }
 

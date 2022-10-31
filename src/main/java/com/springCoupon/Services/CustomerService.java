@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerService extends MainService {
 
-    int customerId = 7;
+    int customerId = 13;
 
     public boolean loginCustomer(String email, String password) throws CouponSystemException {
 
@@ -43,12 +43,27 @@ public class CustomerService extends MainService {
 
             throw new CouponSystemException("this coupon is sold out");
         }
-        ;
+
+        if (customer.getCoupons().contains(coupon)) {
+            throw new CouponSystemException("this coupon is already been purchased-");
+
+        }
+
 
         customer.addCoupon(coupon);
-        couponRepository.findById(couponId).get().setAmount(couponRepository.findById(couponId).get().getAmount() - 1);
-        couponRepository.save(couponRepository.getById(couponId));
+        coupon.setAmount(coupon.getAmount() - 1);
+
+        couponRepository.save(coupon);
         customerRepository.save(customer);
+
+    }
+
+    public void deletePurchase(int couponId) throws CouponSystemException {
+        Customer customer = customerRepository.getById(this.customerId);
+        Coupon coupon = couponRepository.getById(couponId);
+        customerRepository.save(customer);
+
+
     }
 
     public Optional<Coupon> getCouponById(int couponId) {

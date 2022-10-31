@@ -115,7 +115,7 @@ public class AdminService extends MainService {
 
     }
 
-    public List<Customer> getAllCustomer() {
+    public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
 
@@ -130,6 +130,9 @@ public class AdminService extends MainService {
         return !companyRepository.findByEmail(email).isEmpty();
     }
 
+    public boolean isCustomerExist(int customerId) {
+        return customerRepository.findById(customerId).isPresent();
+    }
 }
 
 

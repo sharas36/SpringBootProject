@@ -49,8 +49,17 @@ public class SpringCouponApplication {
         AdminService adminService = ctx.getBean(AdminService.class);
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
-        adminService.deleteCustomer(5);
 
+//        for (int i = 1; i <= 200; i++) {
+//            for (int y = 1; y <= 5; y++) {
+//                Company company = new Company();
+//                company.setCompanyId(i);
+//                companyService.setCompanyId(i);
+//                companyService.addCoupon(getCoupon(i +"" +y,company));
+//
+//            }
+
+        }
 
 
 //        for (int i=1;i<=30;i++){
@@ -58,9 +67,9 @@ public class SpringCouponApplication {
 //            adminService.addCompany(company);
 //        }
 
-    }
 
-    public static Company getCompany(int i) {
+
+    public static Company getCompany(String i) {
 
         int year = new Random().nextInt(22) + 2000;
         int month = new Random().nextInt(11) + 1;
@@ -77,12 +86,12 @@ public class SpringCouponApplication {
         return company;
     }
 
-    public static Customer getCustomer(int i) {
+    public static Customer getCustomer(String i) {
         return Customer.builder().email("email" + i).password("password" + i).firstName("firstName" + i).lastName("lastName" + i).build();
 
     }
 
-    public static Coupon getCoupon(int i, Company company) {
+    public static Coupon getCoupon(String i, Company company) {
 
         int year = new Random().nextInt(22) + 2000;
         int month = new Random().nextInt(11) + 1;
