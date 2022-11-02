@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerService extends MainService {
 
-    int customerId = 13;
+    int customerId = 11;
 
     public boolean loginCustomer(String email, String password) throws CouponSystemException {
 
@@ -60,10 +60,13 @@ public class CustomerService extends MainService {
 
     public void deletePurchase(int couponId) throws CouponSystemException {
         Customer customer = customerRepository.getById(this.customerId);
+
         Coupon coupon = couponRepository.getById(couponId);
+        customer.removeCoupon(coupon);
+
+        coupon.setAmount(coupon.getAmount() + 1);
         customerRepository.save(customer);
-
-
+        couponRepository.save(coupon);
     }
 
     public Optional<Coupon> getCouponById(int couponId) {

@@ -40,6 +40,8 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
     List<Coupon> findAll();
 
+    List<Coupon> findByEndDateLessThan(LocalDateTime localDateTime);
+    List<Coupon> findByEndDateGreaterThan(LocalDateTime localDateTime);
     List<Coupon> findByCategoryId(int categoryId);
 
     List<Coupon> findByCompany(Company company);
@@ -48,8 +50,9 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
     List<Coupon> findByCouponNameAndCompany(String couponName, Company company);
 
-    @Query(value = "select from customers_coupons where customerId =: customer_id", nativeQuery = true)
+    @Query(value = "select from customers_coupons where customerId =:customer_id", nativeQuery = true)
     List<Coupon> findPurchasesOfCustomer(@Param("customer_id") int customer_id);
+
 
     @Query(value = "select  from customers_coupons where customerId =: customer_id AND coupon_id = ", nativeQuery = true)
     List<Coupon> findPurchasesOfCustomerByCategoryId(@Param("customer_id") int customer_id, @Param("category_id") int category_id);

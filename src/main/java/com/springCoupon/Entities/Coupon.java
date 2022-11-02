@@ -54,5 +54,11 @@ public class Coupon {
         this.customers.add(customer);
     }
 
+    public void removeCustomer(Customer customer) {
+        customers.remove(customer);
+    }
 
+    public void removeCustomers(List<Customer> customers) {
+        customers.removeAll(customers);
+    }
 }

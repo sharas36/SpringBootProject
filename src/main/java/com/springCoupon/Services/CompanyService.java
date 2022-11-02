@@ -2,6 +2,7 @@ package com.springCoupon.Services;
 
 import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Coupon;
+import com.springCoupon.Entities.Customer;
 import com.springCoupon.exception.CouponSystemException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class CompanyService extends MainService {
+
 
     private int companyId = 2;
 
@@ -85,5 +87,14 @@ public class CompanyService extends MainService {
     public int getCompanyId() {
         return this.companyId;
     }
+
+    public void deleteAllCustomers(int couponId) {
+
+        Coupon coupon = couponRepository.getById(couponId);
+        List<Customer> customerList = coupon.getCustomers();
+        couponRepository.save(coupon);
+
+    }
+
 
 }

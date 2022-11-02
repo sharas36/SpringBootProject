@@ -24,10 +24,11 @@ import java.util.Optional;
 public class AdminService extends MainService {
 
     public boolean adminLogin(String email, String password) throws CouponSystemException {
+
         if (!(email.equals("admin@admin.com"))) {
             throw new CouponSystemException("This email is wrong");
 
-        } else if (!(password.equals("admin"))) {
+        } else if (!(password.equals("admin12345"))) {
             throw new CouponSystemException("This password is wrong");
         }
         return true;
@@ -133,6 +134,8 @@ public class AdminService extends MainService {
     public boolean isCustomerExist(int customerId) {
         return customerRepository.findById(customerId).isPresent();
     }
+
+
 }
 
 

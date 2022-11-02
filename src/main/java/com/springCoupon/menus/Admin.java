@@ -1,4 +1,4 @@
-package com.springCoupon.utilities;
+package com.springCoupon.menus;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;

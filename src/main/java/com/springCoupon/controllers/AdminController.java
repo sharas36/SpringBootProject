@@ -3,22 +3,14 @@ package com.springCoupon.controllers;
 import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
-import com.springCoupon.exception.CouponSystemException;
-import com.springCoupon.utilities.Admin;
+import com.springCoupon.utilities.LoginInfo;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Random;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -31,8 +23,16 @@ public class AdminController {
 
     @SneakyThrows
     @PostMapping("/loginAdmin")
-    public void loginAdmin(@RequestBody String email, String password) { //http://localhost:8080/customers/adminCustomer
-        adminService.adminLogin(email, password);
+    public boolean loginAdmin(@RequestBody LoginInfo loginInfo) { //http://localhost:8080/admin/loginAdmin
+        System.out.println("i got here");
+        return adminService.adminLogin(loginInfo.getEmail(), loginInfo.getPassword());
+    }
+
+    @SneakyThrows
+    @GetMapping("/getLoginAdmin")
+    public LoginInfo getLoginAdmin() { //http://localhost:8080/admin/getLoginAdmin
+
+        return LoginInfo.builder().email("rgtrr").password("fewfgerhrth").build();
     }
 
     @PostMapping("/addCompany")
@@ -109,12 +109,11 @@ public class AdminController {
         boolean isExist = adminService.isCustomerExist(id);
         return new ResponseEntity<>(isExist, HttpStatus.OK);
 
-
     }
 
 
-}
 
+}
 
 
 

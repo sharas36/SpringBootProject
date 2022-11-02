@@ -6,33 +6,14 @@ import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.Services.CompanyService;
 import com.springCoupon.Services.CustomerService;
-import com.springCoupon.controllers.AdminController;
 import com.springCoupon.exception.CouponSystemException;
-import com.springCoupon.menus.AdminMenu;
-import com.springCoupon.menus.CompanyMenu;
-import com.springCoupon.menus.CustomerMenu;
-import com.springCoupon.utilities.ClientType;
 import com.springCoupon.utilities.DailyJob;
-import com.springCoupon.utilities.LoginManager;
-import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.scheduling.annotation.Schedules;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -50,6 +31,20 @@ public class SpringCouponApplication {
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
 
+
+//        dailyJob.startDailyJob();
+
+//        for (int i = 10; i <= 30; i++) {
+//
+//            customerService.setCustomerId(i);
+//
+//            for (int y = 11; y <= 15; y++) {
+//
+//             customerService.addPurchase(y);
+//            }
+//
+//        }
+
 //        for (int i = 1; i <= 200; i++) {
 //            for (int y = 1; y <= 5; y++) {
 //                Company company = new Company();
@@ -59,14 +54,13 @@ public class SpringCouponApplication {
 //
 //            }
 
-        }
+    }
 
 
 //        for (int i=1;i<=30;i++){
 //            Company company = getCompany(i);
 //            adminService.addCompany(company);
 //        }
-
 
 
     public static Company getCompany(String i) {

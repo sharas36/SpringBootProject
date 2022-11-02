@@ -1,4 +1,4 @@
-package com.springCoupon.utilities;
+package com.springCoupon.menus;
 
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.Services.CompanyService;
