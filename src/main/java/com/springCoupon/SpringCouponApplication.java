@@ -30,9 +30,11 @@ public class SpringCouponApplication {
         AdminService adminService = ctx.getBean(AdminService.class);
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
+        customerService.setCustomerId(26);
+        adminService.deleteCoupon(994,27);
 
 
-//        dailyJob.startDailyJob();
+       dailyJob.startDailyJob();
 
 //        for (int i = 10; i <= 30; i++) {
 //

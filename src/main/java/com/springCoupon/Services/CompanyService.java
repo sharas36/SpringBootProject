@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,7 +73,7 @@ public class CompanyService extends MainService {
     }
 
     public List<Coupon> getByMaxPrice(int price) {
-        return couponRepository.getCompanyCouponsByMaxPrice(this.companyId, price);
+        return new ArrayList<>();
     }
 
     public List<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end) {
@@ -88,13 +89,7 @@ public class CompanyService extends MainService {
         return this.companyId;
     }
 
-    public void deleteAllCustomers(int couponId) {
 
-        Coupon coupon = couponRepository.getById(couponId);
-        List<Customer> customerList = coupon.getCustomers();
-        couponRepository.save(coupon);
-
-    }
 
 
 }

@@ -59,6 +59,9 @@ public class Coupon {
     }
 
     public void removeCustomers(List<Customer> customers) {
-        customers.removeAll(customers);
+        for (Customer customer :
+                customers) {
+            removeCustomer(customer);
+        }
     }
 }

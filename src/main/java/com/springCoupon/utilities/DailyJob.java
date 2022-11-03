@@ -33,9 +33,9 @@ public class DailyJob {
     Thread thread = new Thread(() -> {
         List<Coupon> couponList = couponRepository.findByEndDateLessThan(LocalDateTime.now());
 
-
-
-
+        for (Coupon coupon : couponList) {
+        couponRepository.deleteCoupon(coupon.getCouponId());
+        }
         try {
             Thread.sleep(timeToSleep);
         } catch (InterruptedException e) {

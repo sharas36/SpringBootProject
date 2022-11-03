@@ -135,6 +135,18 @@ public class AdminService extends MainService {
         return customerRepository.findById(customerId).isPresent();
     }
 
+    public void deleteCoupon(int couponId, int customerId) {
+
+
+        Coupon coupon = couponRepository.getById(couponId);
+        Customer customer = customerRepository.getById(customerId);
+        coupon.removeCustomer(customer);
+        customer.removeCoupon(coupon);
+        customerRepository.save(customer);
+
+
+    }
+
 
 }
 
