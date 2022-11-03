@@ -41,6 +41,7 @@ public class CustomerController {
     @PostMapping("/addCustomerPurchase/{couponId}")
     public void addPurchaseByCustomer(@PathVariable int couponId, @RequestHeader String token) {  //http://localhost:8080/customers/addCustomerPurchase/{couponId}
         System.out.println("is working!");
+        int customerId = 12;
         customerService.addPurchase(couponId);
     }
 

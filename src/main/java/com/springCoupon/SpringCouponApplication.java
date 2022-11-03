@@ -30,8 +30,7 @@ public class SpringCouponApplication {
         AdminService adminService = ctx.getBean(AdminService.class);
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
-        customerService.setCustomerId(26);
-        adminService.deleteCoupon(994,27);
+
 
 
        dailyJob.startDailyJob();
@@ -59,10 +58,7 @@ public class SpringCouponApplication {
     }
 
 
-//        for (int i=1;i<=30;i++){
-//            Company company = getCompany(i);
-//            adminService.addCompany(company);
-//        }
+
 
 
     public static Company getCompany(String i) {
