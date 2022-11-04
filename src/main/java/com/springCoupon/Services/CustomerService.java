@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerService extends MainService {
 
-    int customerId = 7;
+    int customerId = 284;
 
     public boolean loginCustomer(String email, String password) throws CouponSystemException {
 
@@ -56,21 +56,24 @@ public class CustomerService extends MainService {
         return couponRepository.findById(couponId);
     }
 
-    public List<Coupon> getAllCustomersCoupons() {
+    public List<Integer> getAllCustomersCoupons() {
 
         return couponRepository.findPurchasesOfCustomer(customerId);
     }
 
-    public List<Coupon> getAllCustomersCouponsByCategory(int categoryId) {
-        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
-        return couponList.stream().filter(c -> c.getCategoryId() == categoryId).collect(Collectors.toList());
-    }
+//    public List<Coupon> getAllCustomersCouponsByCategory(int categoryId) {
+//        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
+//        return couponList.stream().filter(c -> c.getCategoryId() == categoryId).collect(Collectors.toList());
+//    }
+//
+//    public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice) {
+//        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
+//        return couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
+//    }
 
-    public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice) {
-        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
-        return couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
+    public void deleteCustomerPurchases(){
+        couponRepository.deletePurchasesOfCustomer(101);
     }
-
     public String getCustomerDetails() {
 
         String customerDetails = "";

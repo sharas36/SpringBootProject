@@ -15,6 +15,7 @@ import javax.transaction.SystemException;
 import javax.transaction.Transactional;
 import java.awt.print.Pageable;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -129,6 +130,7 @@ public class AdminService extends MainService {
     public boolean isEmailExist(String email) {
         return !companyRepository.findByEmail(email).isEmpty();
     }
+
 
 }
 

@@ -55,6 +55,26 @@ public class SpringCouponApplication {
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
         TokensList tokensList = ctx.getBean(TokensList.class);
+
+        dailyJob.startDailyJob();
+//        for (int i=0;i<=30;i++){
+//            Company company = getCompany(i);
+//            Customer customer = getCustomer(i);
+//            adminService.addCustomer(customer);
+//            adminService.addCompany(company);
+//        }
+//        for (int i=0;i<=30;i++){
+//           Company company = new Company();
+//           company.setCompanyId(new Random().nextInt(30) + 1);
+//            Coupon coupon = getCoupon(i+31, company);
+//            companyService.addCoupon(coupon);
+//        }
+//
+//        for (int i = 0; i<= 100; i++){
+//            customerService.setCustomerId(new Random().nextInt(30) + 1);
+//            customerService.addPurchase(new Random().nextInt(32) + 60);
+//        }
+
 //        String algorithm = "HmacSHA256AA";
 //        algorithm = SignatureAlgorithm.HS256.getJcaName();
 //        byte[] secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();

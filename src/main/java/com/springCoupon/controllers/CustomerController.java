@@ -56,26 +56,26 @@ public class CustomerController {
 
     @SneakyThrows
     @GetMapping("/getAllCustomerCoupon")
-    public ResponseEntity<?> getAllCustomersCoupons(@RequestHeader String token) {  //http://localhost:8080/customers/getAllCustomerCoupon
-        customerService.tokenCheck(token, clientType);
-        List<Coupon> coupons = customerService.getAllCustomersCoupons();
+    public ResponseEntity<?> getAllCustomersCoupons() {  //http://localhost:8080/customers/getAllCustomerCoupon
+//        customerService.tokenCheck(token, clientType);
+        List<Integer> coupons = customerService.getAllCustomersCoupons();
 
         return new ResponseEntity<>(coupons, HttpStatus.OK);
     }
 
-    @SneakyThrows
-    @GetMapping("/getCustomerCouponByCategory/{categoryId}")
-    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
-        customerService.tokenCheck(token, clientType);
-        return customerService.getAllCustomersCouponsByCategory(categoryId);
-    }
-
-    @SneakyThrows
-    @GetMapping("/getCustomerCouponByMaxPrice/{maxPrice}")
-    public List<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
-        customerService.tokenCheck(token, clientType);
-        return customerService.getAllCustomersCouponsByMaxPrice(maxPrice);
-    }
+//    @SneakyThrows
+//    @GetMapping("/getCustomerCouponByCategory/{categoryId}")
+//    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
+//        customerService.tokenCheck(token, clientType);
+//        return customerService.getAllCustomersCouponsByCategory(categoryId);
+//    }
+//
+//    @SneakyThrows
+//    @GetMapping("/getCustomerCouponByMaxPrice/{maxPrice}")
+//    public List<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
+//        customerService.tokenCheck(token, clientType);
+//        return customerService.getAllCustomersCouponsByMaxPrice(maxPrice);
+//    }
 
     @SneakyThrows
     @PostMapping("addCouponPurchase/{couponId}")
