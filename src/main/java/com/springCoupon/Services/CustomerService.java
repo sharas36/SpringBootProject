@@ -3,6 +3,7 @@ package com.springCoupon.Services;
 import com.springCoupon.Entities.Coupon;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.exception.CouponSystemException;
+import com.springCoupon.utilities.ClientType;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -55,20 +56,20 @@ public class CustomerService extends MainService {
         return couponRepository.findById(couponId);
     }
 
-//    public List<Coupon> getAllCustomersCoupons() {
-//
-//        return couponRepository.findPurchasesOfCustomer(customerId);
-//    }
-//
-//    public List<Coupon> getAllCustomersCouponsByCategory(int categoryId) {
-//        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
-//        return couponList.stream().filter(c -> c.getCategoryId() == categoryId).collect(Collectors.toList());
-//    }
-//
-//    public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice) {
-//        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
-//        return couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
-//    }
+    public List<Coupon> getAllCustomersCoupons() {
+
+        return couponRepository.findPurchasesOfCustomer(customerId);
+    }
+
+    public List<Coupon> getAllCustomersCouponsByCategory(int categoryId) {
+        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
+        return couponList.stream().filter(c -> c.getCategoryId() == categoryId).collect(Collectors.toList());
+    }
+
+    public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice) {
+        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
+        return couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
+    }
 
     public String getCustomerDetails() {
 
@@ -92,5 +93,5 @@ public class CustomerService extends MainService {
         this.customerId = customerId;
     }
 
-
+//
 }

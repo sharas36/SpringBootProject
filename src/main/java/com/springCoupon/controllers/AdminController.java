@@ -42,21 +42,13 @@ public class AdminController {
     public String loginAdmin(@RequestBody String email, @RequestBody String password) { //http://localhost:8080/admin/loginAdmin
         adminService.adminLogin(email, password);
 
-        Token token = new Token(email, password, ClientType.ADMINISTRATOR);
-        System.out.println(token.getToken());
-        tokensList.addToken(token);
-        return token.getToken();
+        return adminService.loginToken(email, password, clientType);
     }
 
     @PostMapping("/addCompany")
     @SneakyThrows
     public void addCompany(@RequestBody Company company, @RequestHeader String token) { // http://localhost:8080/admin/addCompany
-        if(!tokensList.isThisTokenExist(token)){
-            throw new CouponSystemException("your time is expired");
-        }
-        if(!tokensList.getToken(token).getClientType().equals(clientType)){
-            throw new CouponSystemException("you cant get this page");
-        }
+        adminService.tokenCheck(token, clientType);
         System.out.println("your token is:" + token);
         System.out.println("Got: " + company);
         adminService.addCompany(company);
@@ -67,12 +59,7 @@ public class AdminController {
     @GetMapping("/getAllCompanies") // http://localhost:8080/admin/getAllCompanies
     @SneakyThrows
     public ResponseEntity<?> getAllCompanies(@RequestHeader String token) {
-        if(tokensList.isThisTokenExist(token)){
-            throw new CouponSystemException("your time is expired");
-        }
-        if(!tokensList.getToken(token).getClientType().equals(clientType)){
-            throw new CouponSystemException("you cant get this page");
-        }
+        adminService.tokenCheck(token, clientType);
         List<Company> res = adminService.getAllCompany();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -80,12 +67,7 @@ public class AdminController {
     @SneakyThrows
     @PostMapping("/updateCompany") //http://localhost:8080/admin/updateCompany
     public void updateCompany(@RequestBody Company company, @RequestHeader String token) {
-        if(tokensList.isThisTokenExist(token)){
-            throw new CouponSystemException("your time is expired");
-        }
-        if(!tokensList.getToken(token).getClientType().equals(clientType)){
-            throw new CouponSystemException("you cant get this page");
-        }
+        adminService.tokenCheck(token, clientType);
         System.out.println(company);
         adminService.updateCompanyDetails(company);
     }
@@ -94,12 +76,7 @@ public class AdminController {
     @ResponseBody
     @SneakyThrows
     public void deleteCompany(@PathVariable int id, @RequestHeader String token) {
-        if(tokensList.isThisTokenExist(token)){
-            throw new CouponSystemException("your time is expired");
-        }
-        if(!tokensList.getToken(token).getClientType().equals(clientType)){
-            throw new CouponSystemException("you cant get this page");
-        }
+        adminService.tokenCheck(token, clientType);
         adminService.deleteCompany(id);
         System.out.println("deleteCompany: " + id);
     }
@@ -108,12 +85,7 @@ public class AdminController {
     @ResponseBody
     @SneakyThrows
     public ResponseEntity<?> getOneCompany(@PathVariable int id, @RequestHeader String token) {
-        if(tokensList.isThisTokenExist(token)){
-            throw new CouponSystemException("your time is expired");
-        }
-        if(!tokensList.getToken(token).getClientType().equals(clientType)){
-            throw new CouponSystemException("you cant get this page");
-        }
+        adminService.tokenCheck(token, clientType);
         Company res = adminService.getOneCompany(id);
         ResponseEntity<Company> responseWrapper = new ResponseEntity<>(res, HttpStatus.OK);
         return responseWrapper;
@@ -124,12 +96,7 @@ public class AdminController {
     @ResponseBody
     @SneakyThrows
     public void addCustomer(@RequestBody Customer customer, @RequestHeader String token) { // http://localhost:8080/admin/addCustomer
-        if(tokensList.isThisTokenExist(token)){
-            throw new CouponSystemException("your time is expired");
-        }
-        if(!tokensList.getToken(token).getClientType().equals(clientType)){
-            throw new CouponSystemException("you cant get this page");
-        }
+        adminService.tokenCheck(token, clientType);
         System.out.println(" i am here");
         adminService.addCustomer(customer);
     }
@@ -137,12 +104,7 @@ public class AdminController {
     @GetMapping("/getAllCustomers")
     @SneakyThrows
     public ResponseEntity<?> getAllCustomers(@RequestHeader String token) {   // http://localhost:8080/admin/getAllCustomers
-        if(tokensList.isThisTokenExist(token)){
-            throw new CouponSystemException("your time is expired");
-        }
-        if(!tokensList.getToken(token).getClientType().equals(clientType)){
-            throw new CouponSystemException("you cant get this page");
-        }
+        adminService.tokenCheck(token, clientType);
         List<Customer> res = adminService.getAllCustomer();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -150,12 +112,7 @@ public class AdminController {
     @PostMapping("/updateCustomer") //http://localhost:8080/admin/updateCustomer
     @SneakyThrows
     public void updateCustomer(@RequestBody Customer customer, @RequestHeader String token) {
-        if(tokensList.isThisTokenExist(token)){
-            throw new CouponSystemException("your time is expired");
-        }
-        if(!tokensList.getToken(token).getClientType().equals(clientType)){
-            throw new CouponSystemException("you cant get this page");
-        }
+        adminService.tokenCheck(token, clientType);
         System.out.println(customer.getCustomerId());
         adminService.updateCustomerDetails(customer);
     }
@@ -164,9 +121,7 @@ public class AdminController {
     @ResponseBody
     @SneakyThrows
     public void deleteCustomer(@PathVariable int id, @RequestHeader String token) {
-    if(tokensList.isThisTokenExist(token)){
-        throw new CouponSystemException("your time is expired");
-    }
+        adminService.tokenCheck(token, clientType);
 
         adminService.deleteCustomer(id);
 
