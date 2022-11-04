@@ -38,9 +38,12 @@ public class AdminController {
     @PostMapping("/addCompany")
     @SneakyThrows
     public void addCompany(@RequestBody Company company, @RequestHeader String token) { // http://localhost:8080/admin/addCompany
-        System.out.println("your token is:" + token);
-        System.out.println("Got: " + company);
+
+       // if tokrv is valid {
         adminService.addCompany(company);
+        // }
+
+
 
 
     }

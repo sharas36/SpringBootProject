@@ -1,5 +1,5 @@
 package com.springCoupon.utilities;
-
+    
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springCoupon.Entities.Coupon;
 import lombok.*;

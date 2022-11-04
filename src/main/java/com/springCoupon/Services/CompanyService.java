@@ -21,6 +21,7 @@ public class CompanyService extends MainService {
 
     public boolean loginCheck(String email, String password) throws CouponSystemException {
 
+
         if (!companyRepository.findByEmailAndPassword(email, password).isEmpty()) {
             companyId = companyRepository.findByEmailAndPassword(email, password).get(0).getCompanyId();
             return true;

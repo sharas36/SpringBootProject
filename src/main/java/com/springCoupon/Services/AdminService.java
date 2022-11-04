@@ -36,6 +36,8 @@ public class AdminService extends MainService {
 
     public void addCompany(Company company) throws SQLException, CouponSystemException {
 
+
+
         if (isEmailExist(company.getEmail())) {
             throw new CouponSystemException("This company already exist");
         } else if (!companyRepository.findByCompanyName(company.getCompanyName()).isEmpty()) {
