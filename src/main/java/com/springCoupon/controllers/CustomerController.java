@@ -62,19 +62,19 @@ public class CustomerController {
         return new ResponseEntity<>(coupons, HttpStatus.OK);
     }
 
-//    @SneakyThrows
-//    @GetMapping("/getCustomerCouponByCategory/{categoryId}")
-//    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
-//        customerService.tokenCheck(token, clientType);
-//        return customerService.getAllCustomersCouponsByCategory(categoryId);
-//    }
+    @SneakyThrows
+    @GetMapping("/getCustomerCouponByCategory/{categoryId}")
+    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
+        customerService.tokenCheck(token, clientType);
+        return customerService.getAllCustomersCouponsByCategory(categoryId, token);
+    }
 //
-//    @SneakyThrows
-//    @GetMapping("/getCustomerCouponByMaxPrice/{maxPrice}")
-//    public List<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
-//        customerService.tokenCheck(token, clientType);
-//        return customerService.getAllCustomersCouponsByMaxPrice(maxPrice);
-//    }
+    @SneakyThrows
+    @GetMapping("/getCustomerCouponByMaxPrice/{maxPrice}")
+    public List<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
+        customerService.tokenCheck(token, clientType);
+        return customerService.getAllCustomersCouponsByMaxPrice(maxPrice, token);
+    }
 
     @SneakyThrows
     @PostMapping("addCouponPurchase/{couponId}")

@@ -18,27 +18,6 @@ import java.util.Optional;
 
 public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
-//
-//    @Query(value = "select * from employee p where date  :startDate AND :endDate",nativeQuery = true)
-//    public List<Person> findAllWithCreationDateTimeBefore(@Param("startDate") LocalDate startDate, @Param("endDate")LocalDate endDate);
-
-//    @Query(value = "select * from coupons c where end_date between :start and :end and company_id = :companyId ",nativeQuery = true)
-//    List<Coupon> GetCouponBetweenByDate(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end,int companyId);
-//
-//    @Query(value = "select  * from coupons c  where c.company_id = :company_id", nativeQuery = true)
-//    List<Coupon> findByCompany_id(@Param("company_id") int company_id);
-//
-//    List<Coupon> findByCouponName(String couponName);
-//
-//    @Query(value = "select * from coupons c where c.category_id = :categoryId and c.company_id = :companyId", nativeQuery = true)
-//    List<Coupon> findByCompanyIdAndCategoryId(@Param("categoryId") int categoryId, @Param("companyId") int companyId);
-//
-//
-//    @Query(value = "select * from coupons c where c.price <= :price and company_id = :companyId ", nativeQuery = true)
-//    List<Coupon> getCouponByMaxPrice(@Param("price") int price, @Param("companyId") int company_id);
-
-
-//    void deleteCoupon(@Param("coupon_id") Integer coupon_id);
 
     List<Coupon> findAll();
 
@@ -64,11 +43,6 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
     @Modifying
     @Query(value = "delete from customers_coupons where coupons_couponid =:coupon_id", nativeQuery = true)
     void deletePurchasesOfCustomer(@Param("coupon_id") int coupon_id);
-//
-//    @Transactional
-//    @Modifying
-//    @Query( value = "select from customers_coupons where customerId =: customer_id AND coupon_id =: coupon_id ")
-//    List<Coupon> findPurchasesOfCustomerByCategoryId(@Param("customer_id") int customer_id, @Param("category_id") int category_id, @Param("coupon_id") int coupon_id);
 
     @Transactional
     @Modifying
@@ -77,7 +51,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
 
 
-//    @Query(value = "select * from coupons c where c.companyId = :companyId and c.price <= :price", nativeQuery = true)
-//    List<Company> getCompanyCouponsByMaxPrice(@Param("companyId") int couponId, @Param("price") String password);
+    @Query(value = "select from coupons where companyId = :companyId and price <= :price", nativeQuery = true)
+    List<Coupon> getCompanyCouponsByMaxPrice(@Param("companyId") int couponId, @Param("price") String password);
 
 }

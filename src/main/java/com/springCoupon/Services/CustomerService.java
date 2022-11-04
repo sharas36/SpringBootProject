@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,15 +63,25 @@ public class CustomerService extends MainService {
         return couponRepository.findPurchasesOfCustomer(customerId);
     }
 
-//    public List<Coupon> getAllCustomersCouponsByCategory(int categoryId) {
-//        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
-//        return couponList.stream().filter(c -> c.getCategoryId() == categoryId).collect(Collectors.toList());
-//    }
-//
-//    public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice) {
-//        List<Coupon> couponList = couponRepository.findPurchasesOfCustomer(customerId);
-//        return couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
-//    }
+    public List<Coupon> getAllCustomersCouponsByCategory(int categoryId, String token) {
+        int customerId = getIdFromToken(token);
+        List<Integer> couponListInt = couponRepository.findPurchasesOfCustomer(customerId);
+        List<Coupon> couponList = new ArrayList<>();
+        for (Integer i: couponListInt) {
+            couponList.add(couponRepository.getById(i));
+        }
+        return couponList.stream().filter(coupon -> coupon.getCategoryId() == categoryId).collect(Collectors.toList());
+    }
+
+    public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice, String token) {
+        int customerId = getIdFromToken(token);
+        List<Integer> couponListInt = couponRepository.findPurchasesOfCustomer(customerId);
+        List<Coupon> couponList = new ArrayList<>();
+        for (Integer i: couponListInt) {
+            couponList.add(couponRepository.getById(i));
+        }
+        return couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
+    }
 
     public String getCustomerDetails(String token) {
 
