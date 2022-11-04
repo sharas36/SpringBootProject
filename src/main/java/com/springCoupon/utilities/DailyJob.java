@@ -21,7 +21,7 @@ public class DailyJob {
     CouponRepository couponRepository;
 
     public void startDailyJob() {
-        System.out.println("dailyJob");
+
         dailyJob();
     }
 
@@ -29,7 +29,7 @@ public class DailyJob {
     public void dailyJob() {
 
         List<Coupon> couponsToDelete = couponRepository.findByEndDateLessThan(LocalDateTime.now());
-        System.out.println(couponsToDelete.toString());
+
         couponsToDelete.forEach(coupon -> {
             couponRepository.deletePurchasesOfCustomer(coupon.getCouponId());
             couponRepository.deleteCoupon(coupon.getCouponId());
