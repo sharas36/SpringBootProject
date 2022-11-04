@@ -25,8 +25,8 @@ public abstract class MainService {
     @Autowired
     private TokensList tokensList;
 
-    public String loginToken(String email,String password,ClientType clientType) throws CouponSystemException{
-        Token token = new Token(email, password, clientType);
+    public String loginToken(String email,String password,ClientType clientType, int id) throws CouponSystemException{
+        Token token = new Token(email, password, clientType, id);
         System.out.println(token.getToken());
         tokensList.addToken(token);
         return token.getToken();
@@ -39,5 +39,9 @@ public abstract class MainService {
         if(!tokensList.getToken(token).getClientType().equals(clientType)){
             throw new CouponSystemException("you cant get this page");
         }
+    }
+
+    public Integer getIdFromToken(String token){
+        return Integer.valueOf(tokensList.getToken(token).getExpandedJwt().getBody().getId());
     }
 }

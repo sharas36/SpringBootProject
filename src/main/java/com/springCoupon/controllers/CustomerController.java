@@ -42,23 +42,22 @@ public class CustomerController {
     @SneakyThrows
     @PostMapping("/loginCustomer")
     public String loginCustomer(@RequestBody String email, @RequestBody String password) { //http://localhost:8080/customers/loginCustomer
-        customerService.loginCustomer(email, password);
-
-        return customerService.loginToken(email, password, clientType);
+        int id = customerService.loginCustomer(email, password);
+        return customerService.loginToken(email, password, clientType, id);
     }
 
     @SneakyThrows
     @PostMapping("/addCustomerPurchase/{couponId}")
     public void addPurchaseByCustomer(@PathVariable int couponId, @RequestHeader String token) {  //http://localhost:8080/customers/addCustomerPurchase/{couponId}
         customerService.tokenCheck(token, clientType);
-        customerService.addPurchase(couponId);
+        customerService.addPurchase(couponId, token);
     }
 
     @SneakyThrows
     @GetMapping("/getAllCustomerCoupon")
-    public ResponseEntity<?> getAllCustomersCoupons() {  //http://localhost:8080/customers/getAllCustomerCoupon
+    public ResponseEntity<?> getAllCustomersCoupons(@RequestHeader String token) {  //http://localhost:8080/customers/getAllCustomerCoupon
 //        customerService.tokenCheck(token, clientType);
-        List<Integer> coupons = customerService.getAllCustomersCoupons();
+        List<Integer> coupons = customerService.getAllCustomersCoupons(token);
 
         return new ResponseEntity<>(coupons, HttpStatus.OK);
     }
@@ -81,14 +80,14 @@ public class CustomerController {
     @PostMapping("addCouponPurchase/{couponId}")
     public void saveByCoupon(@PathVariable int couponId, @RequestHeader String token) {  //http://localhost:8080/customers/aaddCouponPurchase/{couponId}
         customerService.tokenCheck(token, clientType);
-        customerService.saveByCoupon(couponId);
+        customerService.saveByCoupon(couponId, token);
     }
 
     @SneakyThrows
     @GetMapping("/getCustomerDetails")
     public ResponseEntity<?> getCustomerDetails(@RequestHeader String token) {  //http://localhost:8080/customers/getCustomerDetails
         customerService.tokenCheck(token, clientType);
-        return new ResponseEntity<>(customerService.getCustomerDetails(), HttpStatus.OK);
+        return new ResponseEntity<>(customerService.getCustomerDetails(token), HttpStatus.OK);
     }
 
     @SneakyThrows

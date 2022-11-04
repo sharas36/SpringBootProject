@@ -37,9 +37,9 @@ public class CompanyController {
     @SneakyThrows
     @PostMapping("/loginCompany")
     public String loginCustomer(@RequestBody String email, @RequestBody String password) { //http://localhost:8080/company/loginCompany
-        companyService.loginCheck(email, password);
+        int id = companyService.loginCheck(email, password);
 
-        return companyService.loginToken(email, password, clientType);
+        return companyService.loginToken(email, password, clientType, id);
     }
 
     @PostMapping("/addCoupon")
@@ -47,7 +47,7 @@ public class CompanyController {
     @SneakyThrows
     public void addCoupon(@RequestBody Coupon coupon, @RequestHeader String token) { // http://localhost:8080/admin/addCoupon
         companyService.tokenCheck(token, clientType);
-        companyService.addCoupon(coupon);
+        companyService.addCoupon(coupon, token);
     }
 
     @PostMapping("/updateCoupon") //http://localhost:8080/admin/updateCoupon
@@ -70,7 +70,7 @@ public class CompanyController {
     @GetMapping("/getAllCoupons") // http://localhost:8080/company/getAllCoupons
     public ResponseEntity<?> getAllCoupons(@RequestHeader String token) {
         companyService.tokenCheck(token, clientType);
-        List<Coupon> res = companyService.getCouponsOfCompany();
+        List<Coupon> res = companyService.getCouponsOfCompany(token);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -78,20 +78,20 @@ public class CompanyController {
     @GetMapping("/getCompanyCouponByCategory/{categoryId}")
     public List<Coupon> getAllCompanyCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
         companyService.tokenCheck(token, clientType);
-        return companyService.findByCompanyIdAndCategoryId(categoryId);
+        return companyService.findByCompanyIdAndCategoryId(categoryId, token);
     }
 
     @SneakyThrows
     @GetMapping("/getCompanyCouponByMaxPrice/{maxPrice}")
     public List<Coupon> getAllCompanyCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token) {  //http://localhost:8080/customers//getCompanyCouponByMaxPrice/{maxPrice}
         companyService.tokenCheck(token, clientType);
-        return companyService.getByMaxPrice(maxPrice);
+        return companyService.getByMaxPrice(maxPrice, token);
     }
     @SneakyThrows
     @GetMapping("/getCompanyDetails")
     public ResponseEntity<?> getCompanyDetails(@RequestHeader String token) {  //http://localhost:8080/company/getCompanyDetails
         companyService.tokenCheck(token, clientType);
-        return new ResponseEntity<>(companyService.getCompanyDetails(), HttpStatus.OK);
+        return new ResponseEntity<>(companyService.getCompanyDetails(token), HttpStatus.OK);
     }
 
     @SneakyThrows

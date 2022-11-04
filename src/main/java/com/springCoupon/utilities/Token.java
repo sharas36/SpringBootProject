@@ -34,7 +34,7 @@ public class Token {
 
     }
 
-    public Token(String email, String password, ClientType clientType) {
+    public Token(String email, String password, ClientType clientType, int id) {
         this.clientType = clientType;
         this.secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();
         this.secretKeyDecoded = Base64.getDecoder().decode(secretKeyEncoded);
@@ -46,7 +46,7 @@ public class Token {
                 .signWith(key)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plus(30, ChronoUnit.SECONDS)))
-                .setId("1")
+                .setId(Integer.toString(id))
                 .setSubject(email)
                 .claim("clientType", clientType.name())
                 .claim("clientPassword", password)

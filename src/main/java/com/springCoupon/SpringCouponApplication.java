@@ -13,7 +13,7 @@ import com.springCoupon.menus.CompanyMenu;
 import com.springCoupon.menus.CustomerMenu;
 import com.springCoupon.utilities.ClientType;
 import com.springCoupon.utilities.DailyJob;
-import com.springCoupon.utilities.LoginManager;
+//import com.springCoupon.utilities.LoginManager;
 import com.springCoupon.utilities.TokensList;
 import io.jsonwebtoken.*;
 import lombok.Data;

@@ -42,7 +42,7 @@ public class AdminController {
     public String loginAdmin(@RequestBody String email, @RequestBody String password) { //http://localhost:8080/admin/loginAdmin
         adminService.adminLogin(email, password);
 
-        return adminService.loginToken(email, password, clientType);
+        return adminService.loginToken(email, password, clientType, 1);
     }
 
     @PostMapping("/addCompany")
@@ -113,7 +113,6 @@ public class AdminController {
     @SneakyThrows
     public void updateCustomer(@RequestBody Customer customer, @RequestHeader String token) {
         adminService.tokenCheck(token, clientType);
-        System.out.println(customer.getCustomerId());
         adminService.updateCustomerDetails(customer);
     }
 
