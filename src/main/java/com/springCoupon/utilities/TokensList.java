@@ -3,6 +3,10 @@ package com.springCoupon.utilities;
 
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -14,12 +18,19 @@ import java.util.stream.Collectors;
 
 @Component
 @Scope("singleton")
+@EnableScheduling
 public class TokensList {
 
     private final ArrayList<Token> tokenList = new ArrayList<>();
 
-    public TokensList() {
 
+    public TokensList() {
+        tokensWork();
+
+    }
+
+    @Scheduled(fixedDelay = 60*1000)
+    public void tokensWork(){
         Thread tokensWork = new Thread(() -> {
             while (true) {
                 ArrayList<Token> existTokens = this.tokenList;
@@ -29,11 +40,6 @@ public class TokensList {
                             tokenList.remove(token);
                         }
                     });
-                }
-                try {
-                    Thread.sleep(60*1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         });
