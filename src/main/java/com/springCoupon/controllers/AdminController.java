@@ -4,12 +4,10 @@ import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.exception.CouponSystemException;
-import com.springCoupon.utilities.Admin;
-import com.springCoupon.utilities.ClientType;
-import com.springCoupon.utilities.Token;
-import com.springCoupon.utilities.TokensList;
+import com.springCoupon.utilities.*;
 import io.jsonwebtoken.Jwts;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +37,9 @@ public class AdminController {
 
     @SneakyThrows
     @PostMapping("/loginAdmin")
-    public String loginAdmin(@RequestBody String email, @RequestBody String password) { //http://localhost:8080/admin/loginAdmin
+    public String loginAdmin(@RequestBody LoginInfo loginDetails) { //http://localhost:8080/admin/loginAdmin
+        String email = loginDetails.getEmail();
+        String password = loginDetails.getPassword();
         adminService.adminLogin(email, password);
 
         return adminService.loginToken(email, password, clientType, 1);

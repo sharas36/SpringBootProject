@@ -21,7 +21,7 @@ public class DailyJob {
     CouponRepository couponRepository;
 
     public void startDailyJob() {
-
+        System.out.println("hello");
         dailyJob();
     }
 

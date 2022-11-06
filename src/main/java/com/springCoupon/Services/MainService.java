@@ -25,7 +25,7 @@ public abstract class MainService {
     @Autowired
     private TokensList tokensList;
 
-    public String loginToken(String email,String password,ClientType clientType, int id) throws CouponSystemException{
+    public String loginToken(String email, String password, ClientType clientType, int id) throws CouponSystemException {
         Token token = new Token(email, password, clientType, id);
         System.out.println(token.getToken());
         tokensList.addToken(token);
@@ -33,15 +33,15 @@ public abstract class MainService {
     }
 
     public void tokenCheck(String token, ClientType clientType) throws CouponSystemException {
-        if(!tokensList.isThisTokenExist(token)){
+        if (!tokensList.isThisTokenExist(token)) {
             throw new CouponSystemException("your time is expired");
         }
-        if(!tokensList.getToken(token).getClientType().equals(clientType)){
+        if (!tokensList.getToken(token).getExpandedJwt().getBody().get(clientType).equals(clientType)) {
             throw new CouponSystemException("you cant get this page");
         }
     }
 
-    public Integer getIdFromToken(String token){
+    public Integer getIdFromToken(String token) {
         return Integer.valueOf(tokensList.getToken(token).getExpandedJwt().getBody().getId());
     }
 }

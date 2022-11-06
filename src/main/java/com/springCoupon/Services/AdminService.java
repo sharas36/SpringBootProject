@@ -28,7 +28,7 @@ public class AdminService extends MainService {
         if (!(email.equals("admin@admin.com"))) {
             throw new CouponSystemException("This email is wrong");
 
-        } else if (!(password.equals("admin"))) {
+        } else if (!(password.equals("admin12345"))) {
             throw new CouponSystemException("This password is wrong");
         }
         return true;

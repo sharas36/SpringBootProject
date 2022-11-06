@@ -41,7 +41,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class SpringCouponApplication {
 
     public static void main(String[] args) throws CouponSystemException, SQLException, InterruptedException {
@@ -75,31 +75,33 @@ public class SpringCouponApplication {
 //            customerService.addPurchase(new Random().nextInt(32) + 60);
 //        }
 
-//        String algorithm = "HmacSHA256AA";
-//        algorithm = SignatureAlgorithm.HS256.getJcaName();
-//        byte[] secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();
-//        byte[] secretKeyDecoded = Base64.getDecoder().decode(secretKeyEncoded);
-//        Key key = new SecretKeySpec(secretKeyDecoded, algorithm);
-//        Instant now = Instant.now();
-//        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
-//        String token = Jwts.builder()
-//                .signWith(key)
-//                .setIssuedAt(Date.from(now))
-//                .setExpiration(Date.from(now.plus(30, ChronoUnit.SECONDS)))
-//                .setId("101")
-//                .setSubject("vfv")
-//                .claim("clientType", "admin")
-//                .claim("clientPassword", "vfvd")
-//        .compact();
-//        Jws<Claims> expandedJwt = jwtParser.parseClaimsJws(token);
-//        System.out.println(expandedJwt);
-//        System.out.println("header");
-//        System.out.println(expandedJwt.getHeader());
-//        System.out.println("body");
-//        System.out.println(expandedJwt.getBody());
-//        System.out.println("signature");
-//        System.out.println(expandedJwt.getSignature());
+        String algorithm = "HmacSHA256AA";
+        algorithm = SignatureAlgorithm.HS256.getJcaName();
+        byte[] secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();
+        byte[] secretKeyDecoded = Base64.getDecoder().decode(secretKeyEncoded);
+        Key key = new SecretKeySpec(secretKeyDecoded, algorithm);
+        Instant now = Instant.now();
+        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
 
+        String token = Jwts.builder()
+                .signWith(key)
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(now.plus(30, ChronoUnit.SECONDS)))
+                .setId("101")
+                .setSubject("vfv")
+                .claim("clientType", "admin")
+                .claim("clientPassword", "vfvd")
+                .compact();
+        System.out.println(token +" i am  the token ");
+        Jws<Claims> expandedJwt = jwtParser.parseClaimsJws(token);
+        System.out.println(expandedJwt);
+        System.out.println("header");
+        System.out.println(expandedJwt.getHeader());
+        System.out.println("body");
+        System.out.println(expandedJwt.getBody());
+        System.out.println("signature");
+        System.out.println(expandedJwt.getSignature());
+        System.out.println(expandedJwt.getBody().getId());
 
 
 //        for (int i=1;i<=30;i++){
