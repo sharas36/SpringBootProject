@@ -6,6 +6,7 @@ import com.springCoupon.Entities.Coupon;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.exception.CouponSystemException;
 import com.springCoupon.Repositories.CouponRepository;
+import com.springCoupon.utilities.TokensManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class AdminService extends MainService {
     public void addCompany(Company company) throws SQLException, CouponSystemException {
 
         if (isEmailExist(company.getEmail())) {
-            throw new CouponSystemException("This company already exist");
+            throw new CouponSystemException("This company email already exist");
         } else if (!companyRepository.findByCompanyName(company.getCompanyName()).isEmpty()) {
             throw new CouponSystemException("This company name already exist");
         }
@@ -72,11 +73,17 @@ public class AdminService extends MainService {
         return companyRepository.save(company);
     }
 
-    public void deleteCompany(int companyId) throws SQLException, CouponSystemException {
+    public boolean deleteCompany(int companyId) throws SQLException, CouponSystemException {
         if (companyRepository.findById(companyId).isEmpty()) {
             throw new CouponSystemException("This company isn't exist");
         }
+        List<Coupon> couponList = companyRepository.findById(companyId).get().getCoupons();
+        for (Coupon coupon : couponList) {
+            couponRepository.deletePurchasesOfCustomer(coupon.getCouponId());
+        }
+
         companyRepository.deleteById(companyId);
+        return companyRepository.findById(companyId).isPresent();
     }
 
     public List<Company> getAllCompany() {
@@ -109,11 +116,11 @@ public class AdminService extends MainService {
         customerRepository.save(customer);
     }
 
-    public void deleteCustomer(int customerId) throws CouponSystemException {
+    public boolean deleteCustomer(int customerId) throws CouponSystemException {
 
-        Customer customer = customerRepository.getById(customerId);
+
         customerRepository.deleteCustomer(customerId);
-
+        return customerRepository.findById(customerId).isPresent();
     }
 
     public List<Customer> getAllCustomer() {
@@ -131,7 +138,40 @@ public class AdminService extends MainService {
         return !companyRepository.findByEmail(email).isEmpty();
     }
 
+    public void addPurchase(int couponId, int customerId) throws CouponSystemException {
 
+//        int customerId = TokensManager.getIdFromToken(token);
+        if (!customerRepository.findById(customerId).isPresent() || !couponRepository.findById(couponId).isPresent()) {
+            try {
+                throw new CouponSystemException("coupon or customer are not exist");
+            } catch (CouponSystemException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Customer customer = customerRepository.getById(customerId);
+        Coupon coupon = couponRepository.getById(couponId);
+
+        if (coupon.getAmount() <= 0) {
+
+            throw new CouponSystemException("this coupon is sold out");
+        }
+        ;
+
+        customer.addCoupon(coupon);
+        couponRepository.findById(couponId).get().setAmount(couponRepository.findById(couponId).get().getAmount() - 1);
+        couponRepository.save(couponRepository.getById(couponId));
+        customerRepository.save(customer);
+    }
+
+    public Coupon addCoupon(Coupon coupon,int companyId) throws CouponSystemException {
+
+        if (!couponRepository.findByCouponNameAndCompany(coupon.getCouponName(), companyRepository.getById(companyId)).isEmpty()) {
+            throw new CouponSystemException("the same name belongs to the same company");
+        }
+        coupon.setCompany(companyRepository.getById(companyId));
+        return couponRepository.save(coupon);
+    }
 }
 
 

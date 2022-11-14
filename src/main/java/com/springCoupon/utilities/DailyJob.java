@@ -13,7 +13,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Component
-@EnableScheduling
+//@EnableScheduling
 public class DailyJob {
     // annotation @scheduler - spring boot to check
 
@@ -21,19 +21,20 @@ public class DailyJob {
     CouponRepository couponRepository;
 
     public void startDailyJob() {
-        System.out.println("hello");
         dailyJob();
     }
 
-    @Scheduled(fixedDelay = 24 * 60 * 60)
+//    @Scheduled(fixedDelay = 24 * 60 * 60)
     public void dailyJob() {
 
         List<Coupon> couponsToDelete = couponRepository.findByEndDateLessThan(LocalDateTime.now());
+        if (!couponsToDelete.isEmpty()) {
+            couponsToDelete.forEach(coupon -> {
+                couponRepository.deletePurchasesOfCustomer(coupon.getCouponId());
+                couponRepository.deleteCoupon(coupon.getCouponId());
 
-        couponsToDelete.forEach(coupon -> {
-            couponRepository.deletePurchasesOfCustomer(coupon.getCouponId());
-            couponRepository.deleteCoupon(coupon.getCouponId());
+            });
+        }
 
-        });
     }
 }

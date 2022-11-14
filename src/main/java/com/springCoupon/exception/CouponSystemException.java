@@ -10,7 +10,7 @@ public class CouponSystemException extends Exception {
 
 
     public String getException() {
-        return "your exception is: " + exception;
+        return exception;
     }
 }
 

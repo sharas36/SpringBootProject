@@ -50,58 +50,62 @@ public class SpringCouponApplication {
 
         ConfigurableApplicationContext ctx = SpringApplication.run(SpringCouponApplication.class, args);
 
-        DailyJob dailyJob = ctx.getBean(DailyJob.class);
+//        DailyJob dailyJob = ctx.getBean(DailyJob.class);
         AdminService adminService = ctx.getBean(AdminService.class);
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
-        TokensList tokensList = ctx.getBean(TokensList.class);
+        companyService.getCouponBetweenByDate(LocalDateTime.of(2019, 03, 28, 14, 33, 48, 640000), LocalDateTime.now(),4);
 
-        dailyJob.startDailyJob();
-//        for (int i=0;i<=30;i++){
+//        for (int i =1; i<=30;i++){
+//            adminService.addPurchase(new Random().nextInt(10)+2,new Random().nextInt(10 )+2);
+//        }
+
+
+        //   for (int i=0;i<=30;i++){
 //            Company company = getCompany(i);
 //            Customer customer = getCustomer(i);
 //            adminService.addCustomer(customer);
 //            adminService.addCompany(company);
+//        // }
+//        for (int i = 0; i <= 30; i++) {
+//            Company company = new Company();
+//            company.setCompanyId(new Random().nextInt(30) + 1);
+//            Coupon coupon = getCoupon(i, company);
+//            adminService.addCoupon(coupon, new Random().nextInt(29) + 1);
 //        }
-//        for (int i=0;i<=30;i++){
-//           Company company = new Company();
-//           company.setCompanyId(new Random().nextInt(30) + 1);
-//            Coupon coupon = getCoupon(i+31, company);
-//            companyService.addCoupon(coupon);
-//        }
-//
+////
 //        for (int i = 0; i<= 100; i++){
 //            customerService.setCustomerId(new Random().nextInt(30) + 1);
 //            customerService.addPurchase(new Random().nextInt(32) + 60);
 //        }
 
-        String algorithm = "HmacSHA256AA";
-        algorithm = SignatureAlgorithm.HS256.getJcaName();
-        byte[] secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();
-        byte[] secretKeyDecoded = Base64.getDecoder().decode(secretKeyEncoded);
-        Key key = new SecretKeySpec(secretKeyDecoded, algorithm);
-        Instant now = Instant.now();
-        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
-
-        String token = Jwts.builder()
-                .signWith(key)
-                .setIssuedAt(Date.from(now))
-                .setExpiration(Date.from(now.plus(30, ChronoUnit.SECONDS)))
-                .setId("101")
-                .setSubject("vfv")
-                .claim("clientType", "admin")
-                .claim("clientPassword", "vfvd")
-                .compact();
-        System.out.println(token +" i am  the token ");
-        Jws<Claims> expandedJwt = jwtParser.parseClaimsJws(token);
-        System.out.println(expandedJwt);
-        System.out.println("header");
-        System.out.println(expandedJwt.getHeader());
-        System.out.println("body");
-        System.out.println(expandedJwt.getBody());
-        System.out.println("signature");
-        System.out.println(expandedJwt.getSignature());
-        System.out.println(expandedJwt.getBody().getId());
+//        String algorithm = "HmacSHA256AA";
+//        algorithm = SignatureAlgorithm.HS256.getJcaName();
+//        byte[] secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();
+//        byte[] secretKeyDecoded = Base64.getDecoder().decode(secretKeyEncoded);
+//        Key key = new SecretKeySpec(secretKeyDecoded, algorithm);
+//        Instant now = Instant.now();
+//        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
+//
+//        String token = Jwts.builder()
+//                .signWith(key)
+//                .setIssuedAt(Date.from(now))
+//                .setExpiration(Date.from(now.plus(30, ChronoUnit.SECONDS)))
+//                .setId("101")
+//                .setSubject("vfv")
+//                .claim("clientType", "admin")
+//                .claim("clientPassword", "vfvd")
+//                .compact();
+//        System.out.println(token +" i am  the token ");
+//        Jws<Claims> expandedJwt = jwtParser.parseClaimsJws(token);
+//        System.out.println(expandedJwt);
+//        System.out.println("header");
+//        System.out.println(expandedJwt.getHeader());
+//        System.out.println("body");
+//        System.out.println(expandedJwt.getBody());
+//        System.out.println("signature");
+//        System.out.println(expandedJwt.getSignature());
+//        System.out.println(expandedJwt.getBody().getId());
 
 
 //        for (int i=1;i<=30;i++){
@@ -135,7 +139,7 @@ public class SpringCouponApplication {
 
     public static Coupon getCoupon(int i, Company company) {
 
-        int year = new Random().nextInt(22) + 2000;
+        int year = new Random().nextInt(23) + 2000;
         int month = new Random().nextInt(11) + 1;
         int day = new Random().nextInt(27) + 1;
         int hour = new Random().nextInt(23) + 1;
@@ -144,13 +148,14 @@ public class SpringCouponApplication {
         int categoryId = new Random().nextInt(9) + 1;
         int amount = new Random().nextInt(499) + 1;
 
-
+        LocalDateTime endLocalDateTime = LocalDateTime.of(year, month, day, hour, minute);
+        LocalDateTime startDateTime = LocalDateTime.of(year - 1, month, day, hour, minute);
         Coupon coupon = Coupon.builder().couponName("couponName " + i).amount(amount)
                 .categoryId(categoryId).description("description" + i)
-                .price(price).imageURL("imageUrl" + i).startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.of(year, month, day, hour, minute)).company(company).build();
+                .price(price).imageURL("imageUrl" + i).startDate(startDateTime)
+                .endDate(endLocalDateTime).company(company).build();
 
-        //  coupon.getCompany().addCoupon(coupon);
+
         return coupon;
     }
 

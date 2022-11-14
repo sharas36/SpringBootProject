@@ -32,9 +32,9 @@ public class Coupon {
     private String couponName;
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     @JoinColumn(name = "company_Id")
-    @JsonIgnoreProperties("coupons")
+    @JsonIgnoreProperties({"coupons","hibernateLazyInitializer", "handler"})
     private Company company;
 
 

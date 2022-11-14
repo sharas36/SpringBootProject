@@ -4,6 +4,7 @@ import com.springCoupon.Entities.Coupon;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.exception.CouponSystemException;
 import com.springCoupon.utilities.ClientType;
+import com.springCoupon.utilities.TokensManager;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class CustomerService extends MainService {
 
     public void addPurchase(int couponId, String token) throws CouponSystemException {
 
-        int customerId = getIdFromToken(token);
+        int customerId = TokensManager.getIdFromToken(token);
         if (!customerRepository.findById(customerId).isPresent() || !couponRepository.findById(couponId).isPresent()) {
             try {
                 throw new CouponSystemException("coupon or customer are not exist");
@@ -53,31 +54,31 @@ public class CustomerService extends MainService {
         customerRepository.save(customer);
     }
 
-    public Optional<Coupon> getCouponById(int couponId){
+    public Optional<Coupon> getCouponById(int couponId) {
         return couponRepository.findById(couponId);
     }
 
     public List<Integer> getAllCustomersCoupons(String token) {
 
-        int customerId = getIdFromToken(token);
+        int customerId = TokensManager.getIdFromToken(token);
         return couponRepository.findPurchasesOfCustomer(customerId);
     }
 
     public List<Coupon> getAllCustomersCouponsByCategory(int categoryId, String token) {
-        int customerId = getIdFromToken(token);
+        int customerId = TokensManager.getIdFromToken(token);
         List<Integer> couponListInt = couponRepository.findPurchasesOfCustomer(customerId);
         List<Coupon> couponList = new ArrayList<>();
-        for (Integer i: couponListInt) {
+        for (Integer i : couponListInt) {
             couponList.add(couponRepository.getById(i));
         }
         return couponList.stream().filter(coupon -> coupon.getCategoryId() == categoryId).collect(Collectors.toList());
     }
 
     public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice, String token) {
-        int customerId = getIdFromToken(token);
+        int customerId = TokensManager.getIdFromToken(token);
         List<Integer> couponListInt = couponRepository.findPurchasesOfCustomer(customerId);
         List<Coupon> couponList = new ArrayList<>();
-        for (Integer i: couponListInt) {
+        for (Integer i : couponListInt) {
             couponList.add(couponRepository.getById(i));
         }
         return couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
@@ -85,7 +86,7 @@ public class CustomerService extends MainService {
 
     public String getCustomerDetails(String token) {
 
-        int customerId = getIdFromToken(token);
+        int customerId = TokensManager.getIdFromToken(token);
         String customerDetails = "";
         Customer customer = customerRepository.findById(customerId).get();
 
@@ -95,12 +96,48 @@ public class CustomerService extends MainService {
         return customerDetails;
     }
 
+    public String getFirstAndLastName(String token) {
+
+        int customerId = TokensManager.getIdFromToken(token);
+        String customerDetails = "";
+        Customer customer = customerRepository.findById(customerId).get();
+
+        customerDetails =  customer.getFirstName() +" " +customer.getLastName();
+
+        return customerDetails;
+    }
+
     public void saveByCoupon(int couponId, String token) {
-        int customerId = getIdFromToken(token);
+        int customerId = TokensManager.getIdFromToken(token);
         Coupon coupon = couponRepository.getById(couponId);
         coupon.addCustomer(customerRepository.getById(customerId));
         couponRepository.save(coupon);
 
+    }
+    public void addPurchase(int couponId, int customerId) throws CouponSystemException {
+
+
+        if (!customerRepository.findById(customerId).isPresent() || !couponRepository.findById(couponId).isPresent()) {
+            try {
+                throw new CouponSystemException("coupon or customer are not exist");
+            } catch (CouponSystemException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Customer customer = customerRepository.getById(customerId);
+        Coupon coupon = couponRepository.getById(couponId);
+
+        if (coupon.getAmount() <= 0) {
+
+            throw new CouponSystemException("this coupon is sold out");
+        }
+        ;
+
+        customer.addCoupon(coupon);
+        couponRepository.findById(couponId).get().setAmount(couponRepository.findById(couponId).get().getAmount() - 1);
+        couponRepository.save(couponRepository.getById(couponId));
+        customerRepository.save(customer);
     }
 
 

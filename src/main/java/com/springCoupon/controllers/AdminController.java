@@ -30,8 +30,6 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @Autowired
-    private TokensList tokensList;
 
     private final ClientType clientType = ClientType.ADMINISTRATOR;
 
@@ -42,15 +40,13 @@ public class AdminController {
         String password = loginDetails.getPassword();
         adminService.adminLogin(email, password);
 
-        return adminService.loginToken(email, password, clientType, 1);
+        return TokensManager.loginToken(email, password, clientType, 1);
     }
 
     @PostMapping("/addCompany")
     @SneakyThrows
     public void addCompany(@RequestBody Company company, @RequestHeader String token) { // http://localhost:8080/admin/addCompany
-        adminService.tokenCheck(token, clientType);
-        System.out.println("your token is:" + token);
-        System.out.println("Got: " + company);
+        TokensManager.tokenCheck(token, clientType);
         adminService.addCompany(company);
 
 
@@ -59,7 +55,8 @@ public class AdminController {
     @GetMapping("/getAllCompanies") // http://localhost:8080/admin/getAllCompanies
     @SneakyThrows
     public ResponseEntity<?> getAllCompanies(@RequestHeader String token) {
-        adminService.tokenCheck(token, clientType);
+
+        TokensManager.tokenCheck(token, clientType);
         List<Company> res = adminService.getAllCompany();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -67,7 +64,8 @@ public class AdminController {
     @SneakyThrows
     @PostMapping("/updateCompany") //http://localhost:8080/admin/updateCompany
     public void updateCompany(@RequestBody Company company, @RequestHeader String token) {
-        adminService.tokenCheck(token, clientType);
+        TokensManager.tokenCheck(token, clientType);
+        System.out.println(company);
         System.out.println(company);
         adminService.updateCompanyDetails(company);
     }
@@ -75,19 +73,29 @@ public class AdminController {
     @DeleteMapping("/deleteCompany/{id}") // http://localhost:8080/admin/deleteCompany/{id}
     @ResponseBody
     @SneakyThrows
-    public void deleteCompany(@PathVariable int id, @RequestHeader String token) {
-        adminService.tokenCheck(token, clientType);
-        adminService.deleteCompany(id);
-        System.out.println("deleteCompany: " + id);
+    public boolean deleteCompany(@PathVariable int id, @RequestHeader String token) {
+        TokensManager.tokenCheck(token, clientType);
+        return adminService.deleteCompany(id);
+
     }
 
     @GetMapping("/getOneCompany/{id}") // http://localhost:8080/admin/getOneCompany/{id}
-    @ResponseBody
     @SneakyThrows
     public ResponseEntity<?> getOneCompany(@PathVariable int id, @RequestHeader String token) {
-        adminService.tokenCheck(token, clientType);
+        TokensManager.tokenCheck(token, clientType);
         Company res = adminService.getOneCompany(id);
         ResponseEntity<Company> responseWrapper = new ResponseEntity<>(res, HttpStatus.OK);
+        return responseWrapper;
+
+    }
+
+    @GetMapping("/getOneCustomer/{id}") // http://localhost:8080/admin/getOneCompany/{id}
+
+    @SneakyThrows
+    public ResponseEntity<?> getOneCustomer(@PathVariable int id, @RequestHeader String token) {
+        TokensManager.tokenCheck(token, clientType);
+        Customer res = adminService.getOneCustomer(id);
+        ResponseEntity<Customer> responseWrapper = new ResponseEntity<>(res, HttpStatus.OK);
         return responseWrapper;
 
     }
@@ -96,7 +104,7 @@ public class AdminController {
     @ResponseBody
     @SneakyThrows
     public void addCustomer(@RequestBody Customer customer, @RequestHeader String token) { // http://localhost:8080/admin/addCustomer
-        adminService.tokenCheck(token, clientType);
+        TokensManager.tokenCheck(token, clientType);
         System.out.println(" i am here");
         adminService.addCustomer(customer);
     }
@@ -104,7 +112,9 @@ public class AdminController {
     @GetMapping("/getAllCustomers")
     @SneakyThrows
     public ResponseEntity<?> getAllCustomers(@RequestHeader String token) {   // http://localhost:8080/admin/getAllCustomers
-        adminService.tokenCheck(token, clientType);
+
+        TokensManager.tokenCheck(token, clientType);
+
         List<Customer> res = adminService.getAllCustomer();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -112,17 +122,17 @@ public class AdminController {
     @PostMapping("/updateCustomer") //http://localhost:8080/admin/updateCustomer
     @SneakyThrows
     public void updateCustomer(@RequestBody Customer customer, @RequestHeader String token) {
-        adminService.tokenCheck(token, clientType);
+        TokensManager.tokenCheck(token, clientType);
         adminService.updateCustomerDetails(customer);
     }
 
     @DeleteMapping("/deleteCustomer/{id}") // http://localhost:8080/admin/deleteCustomer/{id}
     @ResponseBody
     @SneakyThrows
-    public void deleteCustomer(@PathVariable int id, @RequestHeader String token) {
-        adminService.tokenCheck(token, clientType);
+    public boolean deleteCustomer(@PathVariable int id, @RequestHeader String token) {
+        TokensManager.tokenCheck(token, clientType);
 
-        adminService.deleteCustomer(id);
+        return adminService.deleteCustomer(id);
 
     }
 

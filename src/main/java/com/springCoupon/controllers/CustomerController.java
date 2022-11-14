@@ -4,9 +4,7 @@ import com.springCoupon.Entities.Coupon;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.CustomerService;
 import com.springCoupon.exception.CouponSystemException;
-import com.springCoupon.utilities.ClientType;
-import com.springCoupon.utilities.Token;
-import com.springCoupon.utilities.TokensList;
+import com.springCoupon.utilities.*;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -41,22 +39,24 @@ public class CustomerController {
 
     @SneakyThrows
     @PostMapping("/loginCustomer")
-    public String loginCustomer(@RequestBody String email, @RequestBody String password) { //http://localhost:8080/customers/loginCustomer
+    public String loginCustomer(@RequestBody LoginInfo loginInfo) { //http://localhost:8080/customers/loginCustomer
+        String email = loginInfo.getEmail();
+        String password = loginInfo.getPassword();
         int id = customerService.loginCustomer(email, password);
-        return customerService.loginToken(email, password, clientType, id);
+        return TokensManager.loginToken(email, password, clientType, id);
     }
 
     @SneakyThrows
     @PostMapping("/addCustomerPurchase/{couponId}")
     public void addPurchaseByCustomer(@PathVariable int couponId, @RequestHeader String token) {  //http://localhost:8080/customers/addCustomerPurchase/{couponId}
-        customerService.tokenCheck(token, clientType);
+        TokensManager.tokenCheck(token, clientType);
         customerService.addPurchase(couponId, token);
     }
 
     @SneakyThrows
     @GetMapping("/getAllCustomerCoupon")
     public ResponseEntity<?> getAllCustomersCoupons(@RequestHeader String token) {  //http://localhost:8080/customers/getAllCustomerCoupon
-//        customerService.tokenCheck(token, clientType);
+//      TokensManager.tokenCheck();(token, clientType);
         List<Integer> coupons = customerService.getAllCustomersCoupons(token);
 
         return new ResponseEntity<>(coupons, HttpStatus.OK);
@@ -65,36 +65,42 @@ public class CustomerController {
     @SneakyThrows
     @GetMapping("/getCustomerCouponByCategory/{categoryId}")
     public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
-        customerService.tokenCheck(token, clientType);
+        TokensManager.tokenCheck(token, clientType);
         return customerService.getAllCustomersCouponsByCategory(categoryId, token);
     }
-//
+
+
     @SneakyThrows
     @GetMapping("/getCustomerCouponByMaxPrice/{maxPrice}")
     public List<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
-        customerService.tokenCheck(token, clientType);
+        TokensManager.tokenCheck(token, clientType);
         return customerService.getAllCustomersCouponsByMaxPrice(maxPrice, token);
     }
 
     @SneakyThrows
     @PostMapping("addCouponPurchase/{couponId}")
     public void saveByCoupon(@PathVariable int couponId, @RequestHeader String token) {  //http://localhost:8080/customers/aaddCouponPurchase/{couponId}
-        customerService.tokenCheck(token, clientType);
+        TokensManager.tokenCheck(token, clientType);
         customerService.saveByCoupon(couponId, token);
     }
 
     @SneakyThrows
     @GetMapping("/getCustomerDetails")
     public ResponseEntity<?> getCustomerDetails(@RequestHeader String token) {  //http://localhost:8080/customers/getCustomerDetails
-        customerService.tokenCheck(token, clientType);
+        TokensManager.tokenCheck(token, clientType);
         return new ResponseEntity<>(customerService.getCustomerDetails(token), HttpStatus.OK);
     }
 
     @SneakyThrows
     @GetMapping("/getCouponById/{couponId}")
-    public ResponseEntity<?> getCouponById(@PathVariable int couponId, @RequestHeader String token){
-        customerService.tokenCheck(token, clientType);
+    public ResponseEntity<?> getCouponById(@PathVariable int couponId, @RequestHeader String token) {
+        TokensManager.tokenCheck(token, clientType);
         return new ResponseEntity<>(customerService.getCouponById(couponId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getFirstAndLastName")
+    public String getFirstAndLastName(@RequestHeader String token) {
+        return customerService.getFirstAndLastName(token);
     }
 }
 
