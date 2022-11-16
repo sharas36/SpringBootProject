@@ -29,8 +29,8 @@ public class CustomerService extends MainService {
     }
 
     public void addPurchase(int couponId, String token) throws CouponSystemException {
-
         int customerId = TokensManager.getIdFromToken(token);
+        Customer customer = customerRepository.getById(customerId);
         if (!customerRepository.findById(customerId).isPresent() || !couponRepository.findById(couponId).isPresent()) {
             try {
                 throw new CouponSystemException("coupon or customer are not exist");
@@ -39,18 +39,21 @@ public class CustomerService extends MainService {
             }
         }
 
-        Customer customer = customerRepository.getById(customerId);
         Coupon coupon = couponRepository.getById(couponId);
+        if (customer.getCoupons().contains(coupon)) {
+            throw new CouponSystemException("this coupon already benn purchased please buy another coupon");
+        }
+
 
         if (coupon.getAmount() <= 0) {
 
             throw new CouponSystemException("this coupon is sold out");
         }
-        ;
+
 
         customer.addCoupon(coupon);
-        couponRepository.findById(couponId).get().setAmount(couponRepository.findById(couponId).get().getAmount() - 1);
-        couponRepository.save(couponRepository.getById(couponId));
+        coupon.setAmount(coupon.getAmount() - 1);
+        couponRepository.save(coupon);
         customerRepository.save(customer);
     }
 
@@ -58,30 +61,22 @@ public class CustomerService extends MainService {
         return couponRepository.findById(couponId);
     }
 
-    public List<Integer> getAllCustomersCoupons(String token) {
+    public List<Coupon> getAllCustomersCoupons(String token) {
 
         int customerId = TokensManager.getIdFromToken(token);
-        return couponRepository.findPurchasesOfCustomer(customerId);
+        return customerRepository.findById(customerId).get().getCoupons();
     }
 
     public List<Coupon> getAllCustomersCouponsByCategory(int categoryId, String token) {
         int customerId = TokensManager.getIdFromToken(token);
-        List<Integer> couponListInt = couponRepository.findPurchasesOfCustomer(customerId);
-        List<Coupon> couponList = new ArrayList<>();
-        for (Integer i : couponListInt) {
-            couponList.add(couponRepository.getById(i));
-        }
-        return couponList.stream().filter(coupon -> coupon.getCategoryId() == categoryId).collect(Collectors.toList());
+        return customerRepository.findById(customerId).get().getCoupons().stream()
+                .filter(c -> c.getCategoryId() == categoryId).collect(Collectors.toList());
     }
 
     public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice, String token) {
         int customerId = TokensManager.getIdFromToken(token);
-        List<Integer> couponListInt = couponRepository.findPurchasesOfCustomer(customerId);
-        List<Coupon> couponList = new ArrayList<>();
-        for (Integer i : couponListInt) {
-            couponList.add(couponRepository.getById(i));
-        }
-        return couponList.stream().filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
+        return customerRepository.findById(customerId).get().getCoupons().stream()
+                .filter(c -> c.getPrice() <= maxPrice).collect(Collectors.toList());
     }
 
     public String getCustomerDetails(String token) {
@@ -102,7 +97,7 @@ public class CustomerService extends MainService {
         String customerDetails = "";
         Customer customer = customerRepository.findById(customerId).get();
 
-        customerDetails =  customer.getFirstName() +" " +customer.getLastName();
+        customerDetails = customer.getFirstName() + " " + customer.getLastName();
 
         return customerDetails;
     }
@@ -110,10 +105,16 @@ public class CustomerService extends MainService {
     public void saveByCoupon(int couponId, String token) {
         int customerId = TokensManager.getIdFromToken(token);
         Coupon coupon = couponRepository.getById(couponId);
-        coupon.addCustomer(customerRepository.getById(customerId));
-        couponRepository.save(coupon);
+        Customer customer = customerRepository.findById(customerId).get();
+        customer.addCoupon(coupon);
+        customerRepository.save(customer);
 
     }
+
+    public List<Coupon> getAllCoupon() {
+        return couponRepository.findAll();
+    }
+
     public void addPurchase(int couponId, int customerId) throws CouponSystemException {
 
 
@@ -132,15 +133,12 @@ public class CustomerService extends MainService {
 
             throw new CouponSystemException("this coupon is sold out");
         }
-        ;
 
         customer.addCoupon(coupon);
         couponRepository.findById(couponId).get().setAmount(couponRepository.findById(couponId).get().getAmount() - 1);
         couponRepository.save(couponRepository.getById(couponId));
         customerRepository.save(customer);
+
     }
 
-
-
-//
 }

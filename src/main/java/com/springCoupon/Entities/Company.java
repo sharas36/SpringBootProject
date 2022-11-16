@@ -30,7 +30,7 @@ public class Company {
     private String password;
     private LocalDateTime dateCreated;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "company", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToMany(orphanRemoval = true, mappedBy = "company", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JsonIgnoreProperties("company")
     private List<Coupon> coupons = new ArrayList<Coupon>();
 

@@ -54,29 +54,33 @@ public class SpringCouponApplication {
         AdminService adminService = ctx.getBean(AdminService.class);
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
-        companyService.getCouponBetweenByDate(LocalDateTime.of(2019, 03, 28, 14, 33, 48, 640000), LocalDateTime.now(),4);
+
+        adminService.deleteCustomer(9);
+
+
+//        companyService.getCouponBetweenByDate(LocalDateTime.of(2019, 03, 28, 14, 33, 48, 640000), LocalDateTime.now(),4);
+
 
 //        for (int i =1; i<=30;i++){
 //            adminService.addPurchase(new Random().nextInt(10)+2,new Random().nextInt(10 )+2);
 //        }
 
 
-        //   for (int i=0;i<=30;i++){
+//          for (int i=1;i<=50;i++){
 //            Company company = getCompany(i);
 //            Customer customer = getCustomer(i);
 //            adminService.addCustomer(customer);
 //            adminService.addCompany(company);
-//        // }
-//        for (int i = 0; i <= 30; i++) {
+//         }
+//        for (int i = 1; i <= 100; i++) {
 //            Company company = new Company();
-//            company.setCompanyId(new Random().nextInt(30) + 1);
+//            company.setCompanyId(new Random().nextInt(49) + 1);
 //            Coupon coupon = getCoupon(i, company);
-//            adminService.addCoupon(coupon, new Random().nextInt(29) + 1);
+//            adminService.addCoupon(coupon, new Random().nextInt(49) + 1);
 //        }
-////
+//
 //        for (int i = 0; i<= 100; i++){
-//            customerService.setCustomerId(new Random().nextInt(30) + 1);
-//            customerService.addPurchase(new Random().nextInt(32) + 60);
+//          customerService.addPurchase(new Random().nextInt(99) + 1,new Random().nextInt(49) + 1);
 //        }
 
 //        String algorithm = "HmacSHA256AA";
@@ -117,7 +121,7 @@ public class SpringCouponApplication {
 
     public static Company getCompany(int i) {
 
-        int year = new Random().nextInt(22) + 2000;
+        int year = new Random().nextInt(3) + 2022;
         int month = new Random().nextInt(11) + 1;
         int day = new Random().nextInt(27) + 1;
         int hour = new Random().nextInt(23) + 1;
@@ -127,13 +131,13 @@ public class SpringCouponApplication {
         int amount = new Random().nextInt(499) + 1;
 
 
-        Company company = Company.builder().companyName("company" + i).password("password" + i).email("email" + i)
+        Company company = Company.builder().companyName("company" + i).password("password" + i).email("email" + i + "@gmail.com")
                 .dateCreated(LocalDateTime.of(year, month, day, hour, minute)).build();
         return company;
     }
 
     public static Customer getCustomer(int i) {
-        return Customer.builder().email("email" + i).password("password" + i).firstName("firstName" + i).lastName("lastName" + i).build();
+        return Customer.builder().email("email" + i +"@gmail.com").password("password" + i).firstName("firstName" + i).lastName("lastName" + i).build();
 
     }
 

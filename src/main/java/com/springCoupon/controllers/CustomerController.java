@@ -57,7 +57,7 @@ public class CustomerController {
     @GetMapping("/getAllCustomerCoupon")
     public ResponseEntity<?> getAllCustomersCoupons(@RequestHeader String token) {  //http://localhost:8080/customers/getAllCustomerCoupon
 //      TokensManager.tokenCheck();(token, clientType);
-        List<Integer> coupons = customerService.getAllCustomersCoupons(token);
+        List<Coupon> coupons = customerService.getAllCustomersCoupons(token);
 
         return new ResponseEntity<>(coupons, HttpStatus.OK);
     }
@@ -81,7 +81,7 @@ public class CustomerController {
     @PostMapping("addCouponPurchase/{couponId}")
     public void saveByCoupon(@PathVariable int couponId, @RequestHeader String token) {  //http://localhost:8080/customers/aaddCouponPurchase/{couponId}
         TokensManager.tokenCheck(token, clientType);
-        customerService.saveByCoupon(couponId, token);
+        customerService.addPurchase(couponId, token);
     }
 
     @SneakyThrows
@@ -98,9 +98,18 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.getCouponById(couponId), HttpStatus.OK);
     }
 
+    @SneakyThrows
     @GetMapping("/getFirstAndLastName")
     public String getFirstAndLastName(@RequestHeader String token) {
+        TokensManager.tokenCheck(token, clientType);
         return customerService.getFirstAndLastName(token);
+    }
+
+    @SneakyThrows
+    @GetMapping("/getAllCoupons")
+    public List<Coupon> getAllCoupon(@RequestHeader String token) {
+        TokensManager.tokenCheck(token, clientType);
+        return customerService.getAllCoupon();
     }
 }
 

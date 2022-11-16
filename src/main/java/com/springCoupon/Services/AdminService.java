@@ -35,7 +35,7 @@ public class AdminService extends MainService {
         return true;
     }
 
-    public void addCompany(Company company) throws SQLException, CouponSystemException {
+    public void addCompany(Company company) throws CouponSystemException {
 
         if (isEmailExist(company.getEmail())) {
             throw new CouponSystemException("This company email already exist");
@@ -62,27 +62,23 @@ public class AdminService extends MainService {
 
     }
 
-    public Company updateCompanyInfo(String email, String password, int companyId) throws CouponSystemException {
-
-        if (companyRepository.findByEmail(email).isPresent()) {
-            throw new CouponSystemException("this email already in use in our system");
-        }
-
-        Company company = companyRepository.getById(companyId);
-        company.setEmail(email);
-        return companyRepository.save(company);
-    }
-
     public boolean deleteCompany(int companyId) throws SQLException, CouponSystemException {
         if (companyRepository.findById(companyId).isEmpty()) {
             throw new CouponSystemException("This company isn't exist");
         }
-        List<Coupon> couponList = companyRepository.findById(companyId).get().getCoupons();
+        Company company = companyRepository.findById(companyId).get();
+        List<Coupon> couponList = couponRepository.findByCompany(company);
+        System.out.println(couponList.toString());
+        companyRepository.deleteById(companyId);
         for (Coupon coupon : couponList) {
+            couponRepository.deleteCoupon(coupon.getCouponId());
+
+        }
+        for (Coupon coupon : couponList) {
+
             couponRepository.deletePurchasesOfCustomer(coupon.getCouponId());
         }
 
-        companyRepository.deleteById(companyId);
         return companyRepository.findById(companyId).isPresent();
     }
 
@@ -117,8 +113,7 @@ public class AdminService extends MainService {
     }
 
     public boolean deleteCustomer(int customerId) throws CouponSystemException {
-
-
+        couponRepository.deleteCustomerPurchaseByCustomerId(customerId);
         customerRepository.deleteCustomer(customerId);
         return customerRepository.findById(customerId).isPresent();
     }
@@ -164,7 +159,7 @@ public class AdminService extends MainService {
         customerRepository.save(customer);
     }
 
-    public Coupon addCoupon(Coupon coupon,int companyId) throws CouponSystemException {
+    public Coupon addCoupon(Coupon coupon, int companyId) throws CouponSystemException {
 
         if (!couponRepository.findByCouponNameAndCompany(coupon.getCouponName(), companyRepository.getById(companyId)).isEmpty()) {
             throw new CouponSystemException("the same name belongs to the same company");
