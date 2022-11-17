@@ -14,6 +14,7 @@ import com.springCoupon.menus.CustomerMenu;
 import com.springCoupon.utilities.ClientType;
 import com.springCoupon.utilities.DailyJob;
 //import com.springCoupon.utilities.LoginManager;
+import com.springCoupon.utilities.Token;
 import com.springCoupon.utilities.TokensList;
 import io.jsonwebtoken.*;
 import lombok.Data;
@@ -40,6 +41,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
 public class SpringCouponApplication {
@@ -57,6 +59,10 @@ public class SpringCouponApplication {
         TokensList tokensList = ctx.getBean(TokensList.class);
 
         dailyJob.startDailyJob();
+
+
+
+
 //        for (int i=0;i<=30;i++){
 //            Company company = getCompany(i);
 //            Customer customer = getCustomer(i);
@@ -67,12 +73,11 @@ public class SpringCouponApplication {
 //           Company company = new Company();
 //           company.setCompanyId(new Random().nextInt(30) + 1);
 //            Coupon coupon = getCoupon(i+31, company);
-//            companyService.addCoupon(coupon);
+//            companyService.addCoupon(coupon, new Random().nextInt(29) + 1);
 //        }
 //
 //        for (int i = 0; i<= 100; i++){
-//            customerService.setCustomerId(new Random().nextInt(30) + 1);
-//            customerService.addPurchase(new Random().nextInt(32) + 60);
+//            customerService.addPurchase(new Random().nextInt(29) + 1, new Random().nextInt(29) + 1);
 //        }
 
 //        String algorithm = "HmacSHA256AA";
@@ -133,7 +138,7 @@ public class SpringCouponApplication {
 
     public static Coupon getCoupon(int i, Company company) {
 
-        int year = new Random().nextInt(22) + 2000;
+        int year = new Random().nextInt(10) + 2022;
         int month = new Random().nextInt(11) + 1;
         int day = new Random().nextInt(27) + 1;
         int hour = new Random().nextInt(23) + 1;

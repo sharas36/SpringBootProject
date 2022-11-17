@@ -39,6 +39,8 @@ public class CustomerController {
 
     private final ClientType clientType = ClientType.CUSTOMER;
 
+    private final int pageSize = 10;
+
     @SneakyThrows
     @PostMapping("/loginCustomer")
     public String loginCustomer(@RequestBody String email, @RequestBody String password) { //http://localhost:8080/customers/loginCustomer
@@ -55,25 +57,28 @@ public class CustomerController {
 
     @SneakyThrows
     @GetMapping("/getAllCustomerCoupon")
-    public ResponseEntity<?> getAllCustomersCoupons(@RequestHeader String token) {  //http://localhost:8080/customers/getAllCustomerCoupon
-//        customerService.tokenCheck(token, clientType);
-        List<Integer> coupons = customerService.getAllCustomersCoupons(token);
+    public ResponseEntity<?> getAllCustomersCoupons(@RequestHeader String token, @RequestParam int pageNum) {  //http://localhost:8080/customers/getAllCustomerCoupon
+        customerService.tokenCheck(token, clientType);
+        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
+        Page<Integer> coupons = customerService.getAllCustomersCoupons(token, pageable);
 
         return new ResponseEntity<>(coupons, HttpStatus.OK);
     }
 
     @SneakyThrows
     @GetMapping("/getCustomerCouponByCategory/{categoryId}")
-    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
+    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token, @RequestParam int pageNum) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
+        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
         customerService.tokenCheck(token, clientType);
-        return customerService.getAllCustomersCouponsByCategory(categoryId, token);
+        return customerService.getAllCustomersCouponsByCategory(categoryId, token, pageable);
     }
 //
     @SneakyThrows
     @GetMapping("/getCustomerCouponByMaxPrice/{maxPrice}")
-    public List<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
+    public List<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token, @RequestParam int pageNum) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
+        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
         customerService.tokenCheck(token, clientType);
-        return customerService.getAllCustomersCouponsByMaxPrice(maxPrice, token);
+        return customerService.getAllCustomersCouponsByMaxPrice(maxPrice, token, pageable);
     }
 
     @SneakyThrows

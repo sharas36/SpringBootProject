@@ -57,15 +57,15 @@ public class CustomerService extends MainService {
         return couponRepository.findById(couponId);
     }
 
-    public List<Integer> getAllCustomersCoupons(String token) {
+    public Page<Integer> getAllCustomersCoupons(String token, org.springframework.data.domain.Pageable pageable) {
 
         int customerId = getIdFromToken(token);
-        return couponRepository.findPurchasesOfCustomer(customerId);
+        return couponRepository.findPurchasesOfCustomer(customerId, pageable);
     }
 
-    public List<Coupon> getAllCustomersCouponsByCategory(int categoryId, String token) {
+    public List<Coupon> getAllCustomersCouponsByCategory(int categoryId, String token, org.springframework.data.domain.Pageable pageable) {
         int customerId = getIdFromToken(token);
-        List<Integer> couponListInt = couponRepository.findPurchasesOfCustomer(customerId);
+        Page<Integer> couponListInt = couponRepository.findPurchasesOfCustomer(customerId, pageable);
         List<Coupon> couponList = new ArrayList<>();
         for (Integer i: couponListInt) {
             couponList.add(couponRepository.getById(i));
@@ -73,9 +73,9 @@ public class CustomerService extends MainService {
         return couponList.stream().filter(coupon -> coupon.getCategoryId() == categoryId).collect(Collectors.toList());
     }
 
-    public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice, String token) {
+    public List<Coupon> getAllCustomersCouponsByMaxPrice(int maxPrice, String token, org.springframework.data.domain.Pageable pageable) {
         int customerId = getIdFromToken(token);
-        List<Integer> couponListInt = couponRepository.findPurchasesOfCustomer(customerId);
+        Page<Integer> couponListInt = couponRepository.findPurchasesOfCustomer(customerId, pageable);
         List<Coupon> couponList = new ArrayList<>();
         for (Integer i: couponListInt) {
             couponList.add(couponRepository.getById(i));
@@ -103,6 +103,30 @@ public class CustomerService extends MainService {
 
     }
 
+    public void addPurchase(int couponId, int customerId) throws CouponSystemException {
+
+        if (!customerRepository.findById(customerId).isPresent() || !couponRepository.findById(couponId).isPresent()) {
+            try {
+                throw new CouponSystemException("coupon or customer are not exist");
+            } catch (CouponSystemException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Customer customer = customerRepository.getById(customerId);
+        Coupon coupon = couponRepository.getById(couponId);
+
+        if (coupon.getAmount() <= 0) {
+
+            throw new CouponSystemException("this coupon is sold out");
+        }
+        ;
+
+        customer.addCoupon(coupon);
+        couponRepository.findById(couponId).get().setAmount(couponRepository.findById(couponId).get().getAmount() - 1);
+        couponRepository.save(couponRepository.getById(couponId));
+        customerRepository.save(customer);
+    }
 
 
 //

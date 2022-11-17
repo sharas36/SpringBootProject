@@ -35,13 +35,10 @@ public class TokensList {
             while (true) {
                 ArrayList<Token> existTokens = this.tokenList;
                 if(!existTokens.isEmpty()) {
-                    existTokens.forEach(token -> {
-                        if(token.getExpirationTime().before(Date.from(Instant.now()))){
-                            tokenList.remove(token);
-                        }
-                    });
+                    List<Token> tokensToRemove = existTokens.stream().filter(token -> token.getExpirationTime().before(Date.from(Instant.now()))).collect(Collectors.toList());
+                    existTokens.removeAll(tokensToRemove);
+                    };
                 }
-            }
         });
         tokensWork.start();
     }

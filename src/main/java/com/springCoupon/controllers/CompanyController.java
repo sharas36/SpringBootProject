@@ -33,6 +33,7 @@ public class CompanyController {
     private TokensList tokensList;
 
     private final ClientType clientType = ClientType.COMPANY;
+    private final int pageSize = 10;
 
     @SneakyThrows
     @PostMapping("/loginCompany")
@@ -68,24 +69,27 @@ public class CompanyController {
 
     @SneakyThrows
     @GetMapping("/getAllCoupons") // http://localhost:8080/company/getAllCoupons
-    public ResponseEntity<?> getAllCoupons(@RequestHeader String token) {
+    public ResponseEntity<?> getAllCoupons(@RequestHeader String token, @RequestParam int pageNum) {
+        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
         companyService.tokenCheck(token, clientType);
-        List<Coupon> res = companyService.getCouponsOfCompany(token);
+        Page<Coupon> res = companyService.getCouponsOfCompany(token, pageable);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @SneakyThrows
     @GetMapping("/getCompanyCouponByCategory/{categoryId}")
-    public List<Coupon> getAllCompanyCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
+    public Page<Coupon> getAllCompanyCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token, @RequestParam int pageNum) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
+        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
         companyService.tokenCheck(token, clientType);
-        return companyService.findByCompanyIdAndCategoryId(categoryId, token);
+        return companyService.findByCompanyIdAndCategoryId(categoryId, token, pageable);
     }
 
     @SneakyThrows
     @GetMapping("/getCompanyCouponByMaxPrice/{maxPrice}")
-    public List<Coupon> getAllCompanyCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token) {  //http://localhost:8080/customers//getCompanyCouponByMaxPrice/{maxPrice}
+    public List<Coupon> getAllCompanyCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token, @RequestParam int pageNum) {  //http://localhost:8080/company//getCompanyCouponByMaxPrice/{maxPrice}
+        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
         companyService.tokenCheck(token, clientType);
-        return companyService.getByMaxPrice(maxPrice, token);
+        return companyService.getByMaxPrice(maxPrice, token, pageable);
     }
     @SneakyThrows
     @GetMapping("/getCompanyDetails")
@@ -101,4 +105,11 @@ public class CompanyController {
         System.out.println(token);
         return new Customer();
     } //http://localhost:8080/company/hello
+
+    @SneakyThrows
+    @GetMapping("/countCouponsByCategory/{categoryId}")
+    public int countCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token) {  //http://localhost:8080/company/countCouponsByCategory/{categoryId}
+        companyService.tokenCheck(token, clientType);
+        return companyService.countCouponsByCategory(categoryId, 8);
+    }
 }

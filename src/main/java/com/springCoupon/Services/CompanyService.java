@@ -23,14 +23,14 @@ public class CompanyService extends MainService {
         throw new CouponSystemException("Something wrong. Please try again");
     }
 
-    public List<Coupon> getCouponsOfCompany(String token) {
+    public Page<Coupon> getCouponsOfCompany(String token, org.springframework.data.domain.Pageable pageable) {
         int id = getIdFromToken(token);
-        return couponRepository.findByCompany(companyRepository.getById(id));
+        return couponRepository.findByCompany(companyRepository.getById(id), pageable);
     }
 
-    public List<Coupon> findByCompanyIdAndCategoryId(int categoryId, String token) {
+    public Page<Coupon> findByCompanyIdAndCategoryId(int categoryId, String token, org.springframework.data.domain.Pageable pageable) {
         int id = getIdFromToken(token);
-        return couponRepository.findByCompanyAndCategoryId(companyRepository.getById(id), categoryId);
+        return couponRepository.findByCompanyIdAndCategoryId(id, categoryId, pageable);
     }
 
     public Coupon addCoupon(Coupon coupon, String token) throws CouponSystemException {
@@ -66,15 +66,27 @@ public class CompanyService extends MainService {
         return companyRepository.findById(id).toString();
     }
 
-    public List<Coupon> getByMaxPrice(int price, String token) {
+    public List<Coupon> getByMaxPrice(int price, String token, org.springframework.data.domain.Pageable pageable) {
         int id = getIdFromToken(token);
-        return couponRepository.findByCompany(companyRepository.getById(id)).stream().filter(coupon -> coupon.getPrice() <= price).collect(Collectors.toList());
+        return couponRepository.findByCompany(companyRepository.getById(id), pageable).stream().filter(coupon -> coupon.getPrice() <= price).collect(Collectors.toList());
     }
 
-    public List<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end, String token) {
+    public List<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end, String token, org.springframework.data.domain.Pageable pageable) {
         int id = getIdFromToken(token);
-        return couponRepository.findByCompany(companyRepository.getById(id)).stream().filter(coupon -> coupon.getEndDate().isBefore(end) && coupon.getStartDate().isAfter(start)).collect(Collectors.toList());
+        return couponRepository.findByCompany(companyRepository.getById(id), pageable)
+                .stream().filter(coupon -> coupon.getEndDate().isBefore(end) && coupon.getStartDate().isAfter(start)).collect(Collectors.toList());
     }
 
+    public Coupon addCoupon(Coupon coupon, int companyId) throws CouponSystemException {
+        if (!couponRepository.findByCouponNameAndCompany(coupon.getCouponName(), companyRepository.getById(companyId)).isEmpty()) {
+            throw new CouponSystemException("the same name belongs to the same company");
+        }
+        coupon.setCompany(companyRepository.getById(companyId));
+        return couponRepository.save(coupon);
+    }
 
+    public int countCouponsByCategory(int categoryId, int id){
+//        int id = getIdFromToken(token);
+        return couponRepository.countByCategoryId(categoryId, id);
+    }
 }

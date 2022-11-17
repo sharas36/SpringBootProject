@@ -36,6 +36,7 @@ public class AdminController {
     private TokensList tokensList;
 
     private final ClientType clientType = ClientType.ADMINISTRATOR;
+    private final int pageSize = 10;
 
     @SneakyThrows
     @PostMapping("/loginAdmin")
@@ -58,9 +59,10 @@ public class AdminController {
 
     @GetMapping("/getAllCompanies") // http://localhost:8080/admin/getAllCompanies
     @SneakyThrows
-    public ResponseEntity<?> getAllCompanies(@RequestHeader String token) {
+    public ResponseEntity<?> getAllCompanies(@RequestHeader String token, @RequestParam int pageNum) {
+        org.springframework.data.domain.Pageable pageRequest = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
         adminService.tokenCheck(token, clientType);
-        List<Company> res = adminService.getAllCompany();
+        Page<Company> res = adminService.getAllCompany(pageRequest);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -103,9 +105,10 @@ public class AdminController {
 
     @GetMapping("/getAllCustomers")
     @SneakyThrows
-    public ResponseEntity<?> getAllCustomers(@RequestHeader String token) {   // http://localhost:8080/admin/getAllCustomers
+    public ResponseEntity<?> getAllCustomers(@RequestHeader String token, @RequestParam int pageNum) {   // http://localhost:8080/admin/getAllCustomers
+        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
         adminService.tokenCheck(token, clientType);
-        List<Customer> res = adminService.getAllCustomer();
+        Page<Customer> res = adminService.getAllCustomer(pageable);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
