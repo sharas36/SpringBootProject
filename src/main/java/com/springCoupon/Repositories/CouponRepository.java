@@ -60,5 +60,10 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
     @Query(value = "select from coupons where companyId = :companyId and price <= :price", nativeQuery = true)
     List<Coupon> getCompanyCouponsByMaxPrice(@Param("companyId") int couponId, @Param("price") String password);
 
+    @Transactional
+    @Modifying
+    @Query(value = "delete from customers_coupons where coupons_coupon_id =:coupon_id", nativeQuery = true)
+    Integer rowOfCoupon(@Param("coupon_id") int coupon_id);
+
 
 }

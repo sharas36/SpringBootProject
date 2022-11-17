@@ -61,11 +61,6 @@ public class SpringCouponApplication {
 //        companyService.getCouponBetweenByDate(LocalDateTime.of(2019, 03, 28, 14, 33, 48, 640000), LocalDateTime.now(),4);
 
 
-//        for (int i =1; i<=30;i++){
-//            adminService.addPurchase(new Random().nextInt(10)+2,new Random().nextInt(10 )+2);
-//        }
-
-
 //          for (int i=1;i<=50;i++){
 //            Company company = getCompany(i);
 //            Customer customer = getCustomer(i);
@@ -81,40 +76,6 @@ public class SpringCouponApplication {
 //
 //        for (int i = 0; i<= 100; i++){
 //          customerService.addPurchase(new Random().nextInt(99) + 1,new Random().nextInt(49) + 1);
-//        }
-
-//        String algorithm = "HmacSHA256AA";
-//        algorithm = SignatureAlgorithm.HS256.getJcaName();
-//        byte[] secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();
-//        byte[] secretKeyDecoded = Base64.getDecoder().decode(secretKeyEncoded);
-//        Key key = new SecretKeySpec(secretKeyDecoded, algorithm);
-//        Instant now = Instant.now();
-//        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
-//
-//        String token = Jwts.builder()
-//                .signWith(key)
-//                .setIssuedAt(Date.from(now))
-//                .setExpiration(Date.from(now.plus(30, ChronoUnit.SECONDS)))
-//                .setId("101")
-//                .setSubject("vfv")
-//                .claim("clientType", "admin")
-//                .claim("clientPassword", "vfvd")
-//                .compact();
-//        System.out.println(token +" i am  the token ");
-//        Jws<Claims> expandedJwt = jwtParser.parseClaimsJws(token);
-//        System.out.println(expandedJwt);
-//        System.out.println("header");
-//        System.out.println(expandedJwt.getHeader());
-//        System.out.println("body");
-//        System.out.println(expandedJwt.getBody());
-//        System.out.println("signature");
-//        System.out.println(expandedJwt.getSignature());
-//        System.out.println(expandedJwt.getBody().getId());
-
-
-//        for (int i=1;i<=30;i++){
-//            Company company = getCompany(i);
-//            adminService.addCompany(company);
 //        }
 
     }
@@ -137,7 +98,7 @@ public class SpringCouponApplication {
     }
 
     public static Customer getCustomer(int i) {
-        return Customer.builder().email("email" + i +"@gmail.com").password("password" + i).firstName("firstName" + i).lastName("lastName" + i).build();
+        return Customer.builder().email("email" + i + "@gmail.com").password("password" + i).firstName("firstName" + i).lastName("lastName" + i).build();
 
     }
 
