@@ -9,12 +9,14 @@ import com.springCoupon.Repositories.CouponRepository;
 import com.springCoupon.utilities.TokensManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.SystemException;
 import javax.transaction.Transactional;
-import java.awt.print.Pageable;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -166,6 +168,10 @@ public class AdminService extends MainService {
         }
         coupon.setCompany(companyRepository.getById(companyId));
         return couponRepository.save(coupon);
+    }
+
+    public Page<Customer> getByPage (int pageNum){
+       return customerRepository.findAll(PageRequest.of(pageNum,10));
     }
 }
 

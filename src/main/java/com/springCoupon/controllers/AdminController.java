@@ -137,6 +137,14 @@ public class AdminController {
     }
 
 
+    @GetMapping("/getAllCustomer") // http://localhost:8080/admin/getAllCompanies
+    @SneakyThrows
+    public ResponseEntity<?> getAllCustomer(@RequestParam("pageNum") int pageNum){
+
+        Page<Customer> res = adminService.getByPage(pageNum);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 }
 
 
