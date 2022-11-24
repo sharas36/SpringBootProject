@@ -1,6 +1,8 @@
 package com.springCoupon.Services;
 
 
+import com.springCoupon.Repositories.CompanyRepository;
+import com.springCoupon.Repositories.CouponRepository;
 import com.springCoupon.Repositories.CustomerRepository;
 import com.springCoupon.exception.CouponSystemException;
 import com.springCoupon.utilities.ClientType;
@@ -14,13 +16,13 @@ public abstract class MainService {
 
 
     @Autowired
-    com.springCoupon.Repositories.CouponRepository couponRepository;
+    CouponRepository couponRepository;
 
     @Autowired
     CustomerRepository customerRepository;
 
     @Autowired
-    com.springCoupon.Repositories.CompanyRepository companyRepository;
+    CompanyRepository companyRepository;
 
     @Autowired
     private TokensList tokensList;

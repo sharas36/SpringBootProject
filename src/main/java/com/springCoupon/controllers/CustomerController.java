@@ -4,9 +4,6 @@ import com.springCoupon.Entities.Coupon;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.CustomerService;
 import com.springCoupon.exception.CouponSystemException;
-import com.springCoupon.utilities.ClientType;
-import com.springCoupon.utilities.Token;
-import com.springCoupon.utilities.TokensList;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,71 +31,49 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    @Autowired
-    private TokensList tokensList;
-
-    private final ClientType clientType = ClientType.CUSTOMER;
-
-    private final int pageSize = 10;
-
     @SneakyThrows
     @PostMapping("/loginCustomer")
-    public String loginCustomer(@RequestBody String email, @RequestBody String password) { //http://localhost:8080/customers/loginCustomer
-        int id = customerService.loginCustomer(email, password);
-        return customerService.loginToken(email, password, clientType, id);
+    public boolean loginCustomer(@RequestBody Customer customer) { //http://localhost:8080/customers/loginCustomer
+        return customerService.loginCustomer(customer.getEmail(), customer.getPassword());
     }
 
     @SneakyThrows
     @PostMapping("/addCustomerPurchase/{couponId}")
     public void addPurchaseByCustomer(@PathVariable int couponId, @RequestHeader String token) {  //http://localhost:8080/customers/addCustomerPurchase/{couponId}
-        customerService.tokenCheck(token, clientType);
-        customerService.addPurchase(couponId, token);
+        System.out.println("is working!");
+        int customerId = 12;
+        customerService.addPurchase(couponId);
     }
 
-    @SneakyThrows
     @GetMapping("/getAllCustomerCoupon")
-    public ResponseEntity<?> getAllCustomersCoupons(@RequestHeader String token, @RequestParam int pageNum) {  //http://localhost:8080/customers/getAllCustomerCoupon
-        customerService.tokenCheck(token, clientType);
-        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
-        Page<Integer> coupons = customerService.getAllCustomersCoupons(token, pageable);
+    public ResponseEntity<?> getAllCustomersCoupons(@RequestHeader String token, @RequestParam int page, @RequestParam int size) {  //http://localhost:8080/customers/getAllCustomerCoupon
+        List<Coupon> coupons = customerService.getAllCustomersCoupons();
 
         return new ResponseEntity<>(coupons, HttpStatus.OK);
     }
 
-    @SneakyThrows
     @GetMapping("/getCustomerCouponByCategory/{categoryId}")
-    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token, @RequestParam int pageNum) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
-        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
-        customerService.tokenCheck(token, clientType);
-        return customerService.getAllCustomersCouponsByCategory(categoryId, token, pageable);
+    public List<Coupon> getAllCustomersCouponsByCategory(@PathVariable int categoryId) {  //http://localhost:8080/customers//getCustomerCouponByCategory/{categoryId}=
+        return customerService.getAllCustomersCouponsByCategory(categoryId);
     }
-//
-    @SneakyThrows
+
     @GetMapping("/getCustomerCouponByMaxPrice/{maxPrice}")
-    public List<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token, @RequestParam int pageNum) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
-        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize);
-        customerService.tokenCheck(token, clientType);
-        return customerService.getAllCustomersCouponsByMaxPrice(maxPrice, token, pageable);
+    public List<Coupon> getAllCustomersCouponsByMaxPrice(@PathVariable int maxPrice, @RequestParam int page, @RequestParam int size) {  //http://localhost:8080/customers//getCustomerCouponByMaxPrice/{maxPrice}
+        return customerService.getAllCustomersCouponsByMaxPrice(maxPrice);
     }
 
-    @SneakyThrows
     @PostMapping("addCouponPurchase/{couponId}")
-    public void saveByCoupon(@PathVariable int couponId, @RequestHeader String token) {  //http://localhost:8080/customers/aaddCouponPurchase/{couponId}
-        customerService.tokenCheck(token, clientType);
-        customerService.saveByCoupon(couponId, token);
+    public void saveByCoupon(@PathVariable int couponId) {  //http://localhost:8080/customers/aaddCouponPurchase/{couponId}
+        customerService.saveByCoupon(couponId);
     }
 
-    @SneakyThrows
     @GetMapping("/getCustomerDetails")
-    public ResponseEntity<?> getCustomerDetails(@RequestHeader String token) {  //http://localhost:8080/customers/getCustomerDetails
-        customerService.tokenCheck(token, clientType);
-        return new ResponseEntity<>(customerService.getCustomerDetails(token), HttpStatus.OK);
+    public ResponseEntity<?> getCustomerDetails() {  //http://localhost:8080/customers/getCustomerDetails
+        return new ResponseEntity<>(customerService.getCustomerDetails(), HttpStatus.OK);
     }
 
-    @SneakyThrows
     @GetMapping("/getCouponById/{couponId}")
-    public ResponseEntity<?> getCouponById(@PathVariable int couponId, @RequestHeader String token){
-        customerService.tokenCheck(token, clientType);
+    public ResponseEntity<?> getCouponById(@PathVariable int couponId){
         return new ResponseEntity<>(customerService.getCouponById(couponId), HttpStatus.OK);
     }
 }

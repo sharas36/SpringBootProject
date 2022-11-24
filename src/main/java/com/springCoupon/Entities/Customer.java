@@ -43,6 +43,10 @@ public class Customer {
         coupons.add(coupon);
     }
 
+    public void removeCoupon(Coupon coupon) {
+        coupons.remove(coupon);
+    }
+
 
 }
 

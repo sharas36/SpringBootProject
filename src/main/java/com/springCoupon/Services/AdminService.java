@@ -15,7 +15,6 @@ import javax.transaction.SystemException;
 import javax.transaction.Transactional;
 import java.awt.print.Pageable;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,8 +78,8 @@ public class AdminService extends MainService {
         companyRepository.deleteById(companyId);
     }
 
-    public Page<Company> getAllCompany(org.springframework.data.domain.Pageable pageable) {
-        return companyRepository.findAll(pageable);
+    public List<Company> getAllCompany() {
+        return companyRepository.findAll();
     }
 
     public Company getOneCompany(int companyId) throws CouponSystemException {
@@ -116,8 +115,8 @@ public class AdminService extends MainService {
 
     }
 
-    public Page<Customer> getAllCustomer(org.springframework.data.domain.Pageable pageable) {
-        return customerRepository.findAll(pageable);
+    public List<Customer> getAllCustomer() {
+        return customerRepository.findAll();
     }
 
     public Customer getOneCustomer(int customerId) throws CouponSystemException {
@@ -130,7 +129,6 @@ public class AdminService extends MainService {
     public boolean isEmailExist(String email) {
         return !companyRepository.findByEmail(email).isEmpty();
     }
-
 
 }
 

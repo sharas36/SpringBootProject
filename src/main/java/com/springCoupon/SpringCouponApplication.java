@@ -6,44 +6,18 @@ import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.Services.CompanyService;
 import com.springCoupon.Services.CustomerService;
-import com.springCoupon.controllers.AdminController;
 import com.springCoupon.exception.CouponSystemException;
-import com.springCoupon.menus.AdminMenu;
-import com.springCoupon.menus.CompanyMenu;
-import com.springCoupon.menus.CustomerMenu;
-import com.springCoupon.utilities.ClientType;
 import com.springCoupon.utilities.DailyJob;
-//import com.springCoupon.utilities.LoginManager;
-import com.springCoupon.utilities.Token;
-import com.springCoupon.utilities.TokensList;
-import io.jsonwebtoken.*;
-import lombok.Data;
-import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.scheduling.annotation.Schedules;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.security.Key;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Random;
+import java.util.Scanner;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
+@SpringBootApplication
 public class SpringCouponApplication {
 
     public static void main(String[] args) throws CouponSystemException, SQLException, InterruptedException {
@@ -56,65 +30,38 @@ public class SpringCouponApplication {
         AdminService adminService = ctx.getBean(AdminService.class);
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
-        TokensList tokensList = ctx.getBean(TokensList.class);
-
-        dailyJob.startDailyJob();
 
 
 
+       dailyJob.startDailyJob();
 
-//        for (int i=0;i<=30;i++){
-//            Company company = getCompany(i);
-//            Customer customer = getCustomer(i);
-//            adminService.addCustomer(customer);
-//            adminService.addCompany(company);
-//        }
-//        for (int i=0;i<=30;i++){
-//           Company company = new Company();
-//           company.setCompanyId(new Random().nextInt(30) + 1);
-//            Coupon coupon = getCoupon(i+31, company);
-//            companyService.addCoupon(coupon, new Random().nextInt(29) + 1);
-//        }
+//        for (int i = 10; i <= 30; i++) {
 //
-//        for (int i = 0; i<= 100; i++){
-//            customerService.addPurchase(new Random().nextInt(29) + 1, new Random().nextInt(29) + 1);
+//            customerService.setCustomerId(i);
+//
+//            for (int y = 11; y <= 15; y++) {
+//
+//             customerService.addPurchase(y);
+//            }
+//
 //        }
 
-//        String algorithm = "HmacSHA256AA";
-//        algorithm = SignatureAlgorithm.HS256.getJcaName();
-//        byte[] secretKeyEncoded = "this+is+my+key+and+it+must+be+at+least+256+bits+long".getBytes();
-//        byte[] secretKeyDecoded = Base64.getDecoder().decode(secretKeyEncoded);
-//        Key key = new SecretKeySpec(secretKeyDecoded, algorithm);
-//        Instant now = Instant.now();
-//        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
-//        String token = Jwts.builder()
-//                .signWith(key)
-//                .setIssuedAt(Date.from(now))
-//                .setExpiration(Date.from(now.plus(30, ChronoUnit.SECONDS)))
-//                .setId("101")
-//                .setSubject("vfv")
-//                .claim("clientType", "admin")
-//                .claim("clientPassword", "vfvd")
-//        .compact();
-//        Jws<Claims> expandedJwt = jwtParser.parseClaimsJws(token);
-//        System.out.println(expandedJwt);
-//        System.out.println("header");
-//        System.out.println(expandedJwt.getHeader());
-//        System.out.println("body");
-//        System.out.println(expandedJwt.getBody());
-//        System.out.println("signature");
-//        System.out.println(expandedJwt.getSignature());
-
-
-
-//        for (int i=1;i<=30;i++){
-//            Company company = getCompany(i);
-//            adminService.addCompany(company);
-//        }
+//        for (int i = 1; i <= 200; i++) {
+//            for (int y = 1; y <= 5; y++) {
+//                Company company = new Company();
+//                company.setCompanyId(i);
+//                companyService.setCompanyId(i);
+//                companyService.addCoupon(getCoupon(i +"" +y,company));
+//
+//            }
 
     }
 
-    public static Company getCompany(int i) {
+
+
+
+
+    public static Company getCompany(String i) {
 
         int year = new Random().nextInt(22) + 2000;
         int month = new Random().nextInt(11) + 1;
@@ -131,14 +78,14 @@ public class SpringCouponApplication {
         return company;
     }
 
-    public static Customer getCustomer(int i) {
+    public static Customer getCustomer(String i) {
         return Customer.builder().email("email" + i).password("password" + i).firstName("firstName" + i).lastName("lastName" + i).build();
 
     }
 
-    public static Coupon getCoupon(int i, Company company) {
+    public static Coupon getCoupon(String i, Company company) {
 
-        int year = new Random().nextInt(10) + 2022;
+        int year = new Random().nextInt(22) + 2000;
         int month = new Random().nextInt(11) + 1;
         int day = new Random().nextInt(27) + 1;
         int hour = new Random().nextInt(23) + 1;

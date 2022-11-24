@@ -1,4 +1,4 @@
-package com.springCoupon.utilities;
+package com.springCoupon.menus;
 
 public enum ClientType {
 
