@@ -6,64 +6,82 @@ import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.Services.CompanyService;
 import com.springCoupon.Services.CustomerService;
+import com.springCoupon.controllers.AdminController;
 import com.springCoupon.exception.CouponSystemException;
+import com.springCoupon.menus.AdminMenu;
+import com.springCoupon.menus.CompanyMenu;
+import com.springCoupon.menus.CustomerMenu;
+import com.springCoupon.utilities.ClientType;
 import com.springCoupon.utilities.DailyJob;
+//import com.springCoupon.utilities.LoginManager;
+import com.springCoupon.utilities.TokensList;
+import io.jsonwebtoken.*;
+import lombok.Data;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Schedules;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.security.Key;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Random;
-import java.util.Scanner;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class SpringCouponApplication {
 
-    public static void main(String[] args) throws CouponSystemException, SQLException, InterruptedException {
+    public static void main(String[] args) throws CouponSystemException {
 
         Scanner scanner = new Scanner(System.in);
 
         ConfigurableApplicationContext ctx = SpringApplication.run(SpringCouponApplication.class, args);
 
-        DailyJob dailyJob = ctx.getBean(DailyJob.class);
+//        DailyJob dailyJob = ctx.getBean(DailyJob.class);
         AdminService adminService = ctx.getBean(AdminService.class);
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
 
 
 
-       dailyJob.startDailyJob();
+//        companyService.getCouponBetweenByDate(LocalDateTime.of(2019, 03, 28, 14, 33, 48, 640000), LocalDateTime.now(),4);
 
-//        for (int i = 10; i <= 30; i++) {
-//
-//            customerService.setCustomerId(i);
-//
-//            for (int y = 11; y <= 15; y++) {
-//
-//             customerService.addPurchase(y);
-//            }
-//
+
+//          for (int i=1;i<=50;i++){
+//            Company company = getCompany(i);
+//            Customer customer = getCustomer(i);
+//            adminService.addCustomer(customer);
+//            adminService.addCompany(company);
+//         }
+//        for (int i = 1; i <= 100; i++) {
+//            Company company = new Company();
+//            company.setCompanyId(new Random().nextInt(49) + 1);
+//            Coupon coupon = getCoupon(i, company);
+//            adminService.addCoupon(coupon, new Random().nextInt(49) + 1);
 //        }
 
-//        for (int i = 1; i <= 200; i++) {
-//            for (int y = 1; y <= 5; y++) {
-//                Company company = new Company();
-//                company.setCompanyId(i);
-//                companyService.setCompanyId(i);
-//                companyService.addCoupon(getCoupon(i +"" +y,company));
-//
-//            }
+//        for (int i = 0; i<= 100; i++){
+//          customerService.addPurchase(new Random().nextInt(30) + 50,new Random().nextInt(49) + 1);
+//        }
 
     }
 
+    public static Company getCompany(int i) {
 
-
-
-
-    public static Company getCompany(String i) {
-
-        int year = new Random().nextInt(22) + 2000;
+        int year = new Random().nextInt(3) + 2022;
         int month = new Random().nextInt(11) + 1;
         int day = new Random().nextInt(27) + 1;
         int hour = new Random().nextInt(23) + 1;
@@ -73,19 +91,19 @@ public class SpringCouponApplication {
         int amount = new Random().nextInt(499) + 1;
 
 
-        Company company = Company.builder().companyName("company" + i).password("password" + i).email("email" + i)
+        Company company = Company.builder().companyName("company" + i).password("password" + i).email("email" + i + "@gmail.com")
                 .dateCreated(LocalDateTime.of(year, month, day, hour, minute)).build();
         return company;
     }
 
-    public static Customer getCustomer(String i) {
-        return Customer.builder().email("email" + i).password("password" + i).firstName("firstName" + i).lastName("lastName" + i).build();
+    public static Customer getCustomer(int i) {
+        return Customer.builder().email("email" + i + "@gmail.com").password("password" + i).firstName("firstName" + i).lastName("lastName" + i).build();
 
     }
 
-    public static Coupon getCoupon(String i, Company company) {
+    public static Coupon getCoupon(int i, Company company) {
 
-        int year = new Random().nextInt(22) + 2000;
+        int year = new Random().nextInt(3) + 2022;
         int month = new Random().nextInt(11) + 1;
         int day = new Random().nextInt(27) + 1;
         int hour = new Random().nextInt(23) + 1;
@@ -94,13 +112,14 @@ public class SpringCouponApplication {
         int categoryId = new Random().nextInt(9) + 1;
         int amount = new Random().nextInt(499) + 1;
 
-
+        LocalDateTime endLocalDateTime = LocalDateTime.of(year, month, day, hour, minute);
+        LocalDateTime startDateTime = LocalDateTime.of(year - 1, month, day, hour, minute);
         Coupon coupon = Coupon.builder().couponName("couponName " + i).amount(amount)
                 .categoryId(categoryId).description("description" + i)
-                .price(price).imageURL("imageUrl" + i).startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.of(year, month, day, hour, minute)).company(company).build();
+                .price(price).imageURL("imageUrl" + i).startDate(startDateTime)
+                .endDate(endLocalDateTime).company(company).build();
 
-        //  coupon.getCompany().addCoupon(coupon);
+
         return coupon;
     }
 

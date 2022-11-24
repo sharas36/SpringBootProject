@@ -1,68 +1,75 @@
 package com.springCoupon.Repositories;
 
+import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateTimeKeyDeserializer;
 import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Coupon;
+import org.apache.tomcat.jni.Local;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
-//
-//    @Query(value = "select * from employee p where date  :startDate AND :endDate",nativeQuery = true)
-//    public List<Person> findAllWithCreationDateTimeBefore(@Param("startDate") LocalDate startDate, @Param("endDate")LocalDate endDate);
-
-//    @Query(value = "select * from coupons c where end_date between :start and :end and company_id = :companyId ",nativeQuery = true)
-//    List<Coupon> GetCouponBetweenByDate(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end,int companyId);
-//
-//    @Query(value = "select  * from coupons c  where c.company_id = :company_id", nativeQuery = true)
-//    List<Coupon> findByCompany_id(@Param("company_id") int company_id);
-//
-//    List<Coupon> findByCouponName(String couponName);
-//
-//    @Query(value = "select * from coupons c where c.category_id = :categoryId and c.company_id = :companyId", nativeQuery = true)
-//    List<Coupon> findByCompanyIdAndCategoryId(@Param("categoryId") int categoryId, @Param("companyId") int companyId);
-//
-//
-//    @Query(value = "select * from coupons c where c.price <= :price and company_id = :companyId ", nativeQuery = true)
-//    List<Coupon> getCouponByMaxPrice(@Param("price") int price, @Param("companyId") int company_id);
-
-
-//    void deleteCoupon(@Param("coupon_id") Integer coupon_id);
 
     List<Coupon> findAll();
 
     List<Coupon> findByEndDateLessThan(LocalDateTime localDateTime);
 
-    List<Coupon> findByEndDateGreaterThan(LocalDateTime localDateTime);
+    Page<Coupon> findByCategoryId(int categoryId, org.springframework.data.domain.Pageable pageable);
 
-    List<Coupon> findByCategoryId(int categoryId);
+    Page<Coupon> findByCompany(Company company, org.springframework.data.domain.Pageable pageable);
 
     List<Coupon> findByCompany(Company company);
 
-    List<Coupon> findByCompanyAndCategoryId(Company company, int categoryId);
+    Page<Coupon> findByCompanyAndCategoryId(Company company, int categoryId, Pageable pageable);
 
     List<Coupon> findByCouponNameAndCompany(String couponName, Company company);
 
-    @Query(value = "select from customers_coupons where customerId =:customer_id", nativeQuery = true)
-    List<Coupon> findPurchasesOfCustomer(@Param("customer_id") int customer_id);
+    Page<Coupon> findByEndDateBetween(LocalDateTime localDateTime, LocalDateTime localDateTime2, org.springframework.data.domain.Pageable pageable);
 
-    @Query(value = "select  from customers_coupons where customerId =: customer_id AND coupon_id = ", nativeQuery = true)
-    List<Coupon> findPurchasesOfCustomerByCategoryId(@Param("customer_id") int customer_id, @Param("category_id") int category_id);
+    Page<Coupon> findByEndDateBetweenAndCompany(LocalDateTime localDateTime, LocalDateTime localDateTime2, Company company,
+                                                org.springframework.data.domain.Pageable pageable);
+
+    Page<Coupon> findByPriceLessThanAndCompany(double price, Company company, org.springframework.data.domain.Pageable pageable);
+
+    @Transactional
+    @Modifying
+    @Query(value = "select coupons_coupon_id from customers_coupons where customer_customer_Id =:customer_id", nativeQuery = true)
+    List<Integer> findPurchasesOfCustomer(@Param("customer_id") int customer_id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from customers_coupons where coupons_coupon_id =:coupon_id", nativeQuery = true)
+    void deletePurchasesOfCustomer(@Param("coupon_id") int coupon_id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from customers_coupons where customers_customer_id =:customer_id", nativeQuery = true)
+    void deleteCustomerPurchaseByCustomerId(@Param("customer_id") int customer_id);
 
     @Transactional
     @Modifying
     @Query(value = "delete from coupons where coupon_id =:coupon_id", nativeQuery = true)
     void deleteCoupon(@Param("coupon_id") int coupon_id);
 
+    @Transactional
+    @Modifying
+    @Query(value = "select from coupons where companyId = :companyId and price <= :price", nativeQuery = true)
+    List<Coupon> getCompanyCouponsByMaxPrice(@Param("companyId") int couponId, @Param("price") String password);
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from customers_coupons where coupons_coupon_id =:coupon_id", nativeQuery = true)
+    Integer rowOfCoupon(@Param("coupon_id") int coupon_id);
 
 
 }

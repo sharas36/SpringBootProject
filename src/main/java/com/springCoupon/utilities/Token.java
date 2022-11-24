@@ -30,7 +30,7 @@ public class Token {
     private Jws<Claims> expandedJwt;
     private ClientType clientType;
 
-    public Token(){
+    public Token() {
 
     }
 
@@ -45,7 +45,7 @@ public class Token {
         token = Jwts.builder()
                 .signWith(key)
                 .setIssuedAt(Date.from(now))
-                .setExpiration(Date.from(now.plus(30, ChronoUnit.SECONDS)))
+                .setExpiration(expirationTime)
                 .setId(Integer.toString(id))
                 .setSubject(email)
                 .claim("clientType", clientType.name())

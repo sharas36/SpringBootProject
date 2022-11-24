@@ -2,47 +2,48 @@ package com.springCoupon.Services;
 
 import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Coupon;
-import com.springCoupon.Entities.Customer;
 import com.springCoupon.exception.CouponSystemException;
+import com.springCoupon.utilities.TokensManager;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class CompanyService extends MainService {
+    private static final int pageSize = 8;
 
+    public Integer loginCheck(String email, String password) throws CouponSystemException {
 
-    private int companyId = 2;
-
-    public boolean loginCheck(String email, String password) throws CouponSystemException {
-
-
-        if (!companyRepository.findByEmailAndPassword(email, password).isEmpty()) {
-            companyId = companyRepository.findByEmailAndPassword(email, password).get(0).getCompanyId();
-            return true;
+        if (companyRepository.findByEmailAndPassword(email, password).isPresent()) {
+            return companyRepository.findByEmailAndPassword(email, password).get().getCompanyId();
         }
-        throw new CouponSystemException("Something wrong. Please try again");
+        throw new CouponSystemException("your email or password is wrong");
     }
 
-    public List<Coupon> getCouponsOfCompany() {
-        return couponRepository.findByCompany(companyRepository.getById(companyId));
+    public Page<Coupon> getCouponsOfCompany(String token, int pageNum) {
+        int id = TokensManager.getIdFromToken(token);
+        Page<Coupon> couponList = couponRepository.findByCompany(companyRepository.getById(id),
+                (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize));
+        return couponList;
     }
 
-    public List<Coupon> findByCompanyIdAndCategoryId(int categoryId) {
-
-        return couponRepository.findById(this.companyId).stream().filter(coupon -> coupon.getCategoryId() == categoryId).collect(Collectors.toList());
+    public Page<Coupon> findByCompanyIdAndCategoryId(int categoryId, String token,int pageNum) {
+        int id = TokensManager.getIdFromToken(token);
+        return couponRepository.findByCompanyAndCategoryId(companyRepository.getById(id), categoryId,PageRequest.of(pageNum,pageSize));
     }
 
-    public Coupon addCoupon(Coupon coupon) throws CouponSystemException {
-        if (!couponRepository.findByCouponNameAndCompany(coupon.getCouponName(), companyRepository.getById(companyId)).isEmpty()) {
+    public Coupon addCoupon(Coupon coupon, String token) throws CouponSystemException {
+        System.out.println("i got here company");
+        int id = TokensManager.getIdFromToken(token);
+        if (!couponRepository.findByCouponNameAndCompany(coupon.getCouponName(), companyRepository.getById(id)).isEmpty()) {
             throw new CouponSystemException("the same name belongs to the same company");
         }
-        coupon.setCompany(companyRepository.getById(companyId));
+        coupon.setCompany(companyRepository.getById(id));
         return couponRepository.save(coupon);
     }
 
@@ -51,46 +52,56 @@ public class CompanyService extends MainService {
         if (couponRepository.findById(couponId).isEmpty()) {
             throw new CouponSystemException("this coupons is not exist");
         } else {
-//            Company company = companyRepository.getById(this.companyId);
-//            company.getCoupons().remove(couponRepository.findById(couponId).get());
-//            companyRepository.save(company);
+            couponRepository.deletePurchasesOfCustomer(couponId);
             couponRepository.deleteCoupon(couponId);
-
         }
     }
 
-    public void updateCoupon(Coupon coupon) throws CouponSystemException {
-
+    public void updateCoupon(Coupon coupon, String token) throws CouponSystemException {
+        int id = TokensManager.getIdFromToken(token);
         if (couponRepository.findById(coupon.getCouponId()).isEmpty()) {
             throw new CouponSystemException("this coupons is not exist");
         }
 
+        Company company = companyRepository.getById(id);
+        coupon.setCompany(company);
+        company.addCoupon(coupon);
         couponRepository.save(coupon);
 
     }
 
-    public String getCompanyDetails() {
-        return companyRepository.findById(companyId).toString();
+    public String getCompanyDetails(String token) {
+        int id = TokensManager.getIdFromToken(token);
+        return companyRepository.findById(id).toString();
     }
 
-    public List<Coupon> getByMaxPrice(int price) {
-        return new ArrayList<>();
-    }
+    public Page<Coupon> getByMaxPrice(double price, String token, int pageNum) {
+        int id = TokensManager.getIdFromToken(token);
 
-    public List<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end) {
-        return couponRepository.findByCompany(companyRepository.getById(companyId)).stream().filter
-                (coupon -> coupon.getEndDate().isBefore(end) && coupon.getStartDate().isAfter(start)).collect(Collectors.toList());
-    }
-
-    public void setCompanyId(int company_Id) {
-        companyId = company_Id;
-    }
-
-    public int getCompanyId() {
-        return this.companyId;
+        return couponRepository.findByPriceLessThanAndCompany(price, companyRepository.findById(id).get(), PageRequest.of(pageNum,
+                pageSize));
     }
 
 
+    public Page<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end, String token, int pageNum) {
+        System.out.println("i got here");
+        int id = TokensManager.getIdFromToken(token);
+
+        Page<Coupon> couponList = couponRepository.findByEndDateBetweenAndCompany(start, end,
+                companyRepository.findById(id).get(), PageRequest.of(pageNum, pageSize));
+
+        return couponList;
+    }
+
+    public String getCompanyName(String token) {
+        int id = TokensManager.getIdFromToken(token);
+        return companyRepository.findById(id).get().getCompanyName();
+    }
+
+    public Coupon getOneCoupon(String token, int couponId) {
+        int id = TokensManager.getIdFromToken(token);
+        return couponRepository.findById(couponId).get();
+    }
 
 
 }
