@@ -1,6 +1,7 @@
 package com.springCoupon.controllers;
 
 import com.springCoupon.Entities.Company;
+import com.springCoupon.Entities.Coupon;
 import com.springCoupon.Entities.Customer;
 import com.springCoupon.Services.AdminService;
 import com.springCoupon.exception.CouponSystemException;
@@ -54,10 +55,10 @@ public class AdminController {
 
     @GetMapping("/getAllCompanies") // http://localhost:8080/admin/getAllCompanies
     @SneakyThrows
-    public ResponseEntity<?> getAllCompanies(@RequestHeader String token) {
+    public ResponseEntity<?> getAllCompanies(@RequestHeader String token,@RequestParam int pageNum) {
 
         TokensManager.tokenCheck(token, clientType);
-        List<Company> res = adminService.getAllCompany();
+        Page<Company> res = adminService.getAllCompany(pageNum);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -89,7 +90,7 @@ public class AdminController {
 
     }
 
-    @GetMapping("/getOneCustomer/{id}") // http://localhost:8080/admin/getOneCompany/{id}
+    @GetMapping("/getOneCustomer/{id}") // http://localhost:8080/admin/getOneCustomer/{id}
 
     @SneakyThrows
     public ResponseEntity<?> getOneCustomer(@PathVariable int id, @RequestHeader String token) {
@@ -111,11 +112,11 @@ public class AdminController {
 
     @GetMapping("/getAllCustomers")
     @SneakyThrows
-    public ResponseEntity<?> getAllCustomers(@RequestHeader String token) {   // http://localhost:8080/admin/getAllCustomers
+    public ResponseEntity<?> getAllCustomers(@RequestHeader String token,@RequestParam int pageNum) {   // http://localhost:8080/admin/getAllCustomers
 
         TokensManager.tokenCheck(token, clientType);
 
-        List<Customer> res = adminService.getAllCustomer();
+        Page<Customer> res = adminService.getAllCustomer(pageNum);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -134,15 +135,6 @@ public class AdminController {
 
         return adminService.deleteCustomer(id);
 
-    }
-
-
-    @GetMapping("/getAllCustomer") // http://localhost:8080/admin/getAllCompanies
-    @SneakyThrows
-    public ResponseEntity<?> getAllCustomer(@RequestParam("pageNum") int pageNum){
-
-        Page<Customer> res = adminService.getByPage(pageNum);
-        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 }

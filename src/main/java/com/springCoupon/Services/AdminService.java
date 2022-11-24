@@ -22,10 +22,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 
 @Service
 public class AdminService extends MainService {
+    private static final int pageSize = 8;
 
     public boolean adminLogin(String email, String password) throws CouponSystemException {
         if (!(email.equals("admin@admin.com"))) {
@@ -84,8 +86,8 @@ public class AdminService extends MainService {
         return companyRepository.findById(companyId).isPresent();
     }
 
-    public List<Company> getAllCompany() {
-        return companyRepository.findAll();
+    public Page<Company> getAllCompany(int pageNum) {
+        return companyRepository.findAll(PageRequest.of(pageNum,pageSize));
     }
 
     public Company getOneCompany(int companyId) throws CouponSystemException {
@@ -120,8 +122,8 @@ public class AdminService extends MainService {
         return customerRepository.findById(customerId).isPresent();
     }
 
-    public List<Customer> getAllCustomer() {
-        return customerRepository.findAll();
+    public Page<Customer> getAllCustomer(int pageNum) {
+        return customerRepository.findAll(PageRequest.of(pageNum,pageSize));
     }
 
     public Customer getOneCustomer(int customerId) throws CouponSystemException {
@@ -170,9 +172,15 @@ public class AdminService extends MainService {
         return couponRepository.save(coupon);
     }
 
-    public Page<Customer> getByPage (int pageNum){
-       return customerRepository.findAll(PageRequest.of(pageNum,10));
+    public Page<Customer> getByPage(int pageNum) {
+        return customerRepository.findAll(PageRequest.of(pageNum, 10));
     }
+
+    public Page<Coupon> getByCategory(int categoryId, int pageNum) {
+        return couponRepository.findByCategoryId(categoryId, PageRequest.of(pageNum, 10));
+    }
+
+
 }
 
 

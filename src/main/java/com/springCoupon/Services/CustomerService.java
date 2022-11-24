@@ -6,6 +6,7 @@ import com.springCoupon.exception.CouponSystemException;
 import com.springCoupon.utilities.ClientType;
 import com.springCoupon.utilities.TokensManager;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
@@ -111,8 +112,8 @@ public class CustomerService extends MainService {
 
     }
 
-    public List<Coupon> getAllCoupon() {
-        return couponRepository.findAll();
+    public Page<Coupon> getAllCoupon(int pageNum) {
+        return couponRepository.findAll(PageRequest.of(pageNum,8));
     }
 
     public void addPurchase(int couponId, int customerId) throws CouponSystemException {

@@ -107,9 +107,9 @@ public class CustomerController {
 
     @SneakyThrows
     @GetMapping("/getAllCoupons")
-    public List<Coupon> getAllCoupon(@RequestHeader String token) {
+    public Page<Coupon> getAllCoupon(@RequestHeader String token,@RequestParam int pageNum) {
         TokensManager.tokenCheck(token, clientType);
-        return customerService.getAllCoupon();
+        return customerService.getAllCoupon(pageNum);
     }
 }
 

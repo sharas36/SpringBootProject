@@ -44,7 +44,7 @@ import java.util.*;
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class SpringCouponApplication {
 
-    public static void main(String[] args) throws CouponSystemException, SQLException, InterruptedException {
+    public static void main(String[] args) throws CouponSystemException {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -55,7 +55,6 @@ public class SpringCouponApplication {
         CompanyService companyService = ctx.getBean(CompanyService.class);
         CustomerService customerService = ctx.getBean(CustomerService.class);
 
-        adminService.deleteCustomer(9);
 
 
 //        companyService.getCouponBetweenByDate(LocalDateTime.of(2019, 03, 28, 14, 33, 48, 640000), LocalDateTime.now(),4);
@@ -73,9 +72,9 @@ public class SpringCouponApplication {
 //            Coupon coupon = getCoupon(i, company);
 //            adminService.addCoupon(coupon, new Random().nextInt(49) + 1);
 //        }
-//
+
 //        for (int i = 0; i<= 100; i++){
-//          customerService.addPurchase(new Random().nextInt(99) + 1,new Random().nextInt(49) + 1);
+//          customerService.addPurchase(new Random().nextInt(30) + 50,new Random().nextInt(49) + 1);
 //        }
 
     }
@@ -104,7 +103,7 @@ public class SpringCouponApplication {
 
     public static Coupon getCoupon(int i, Company company) {
 
-        int year = new Random().nextInt(23) + 2000;
+        int year = new Random().nextInt(3) + 2022;
         int month = new Random().nextInt(11) + 1;
         int day = new Random().nextInt(27) + 1;
         int hour = new Random().nextInt(23) + 1;

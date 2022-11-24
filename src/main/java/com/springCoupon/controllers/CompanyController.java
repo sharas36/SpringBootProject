@@ -69,32 +69,33 @@ public class CompanyController {
 
     @SneakyThrows
     @GetMapping("/getAllCoupons") // http://localhost:8080/company/getAllCoupons
-    public ResponseEntity<?> getAllCoupons(@RequestHeader String token) {
+    public ResponseEntity<?> getAllCoupons(@RequestHeader String token, @RequestParam int pageNum) {
         TokensManager.tokenCheck(token, clientType);
-        List<Coupon> res = companyService.getCouponsOfCompany(token);
+        Page<Coupon> res = companyService.getCouponsOfCompany(token, pageNum);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @SneakyThrows
     @GetMapping("/getCompanyCouponByCategory/{categoryId}")
-    public List<Coupon> getAllCompanyCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
+    public Page<Coupon> getAllCompanyCouponsByCategory(@PathVariable int categoryId, @RequestHeader String token, @RequestParam int pageNum) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
         TokensManager.tokenCheck(token, clientType);
-        return companyService.findByCompanyIdAndCategoryId(categoryId, token);
+        return companyService.findByCompanyIdAndCategoryId(categoryId, token, pageNum);
     }
 
     @SneakyThrows
     @PostMapping("/getCouponsBetweenDates")
-    public List<Coupon> getAllCompanyCouponsBetweenDates(@RequestBody DateSelection dateSelection, @RequestHeader String token) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
-        System.out.println(dateSelection.getDate1()+" " +dateSelection.getDate2());
+    public Page<Coupon> getAllCompanyCouponsBetweenDates(@RequestBody DateSelection dateSelection, @RequestHeader String token,
+                                                         @RequestParam int pageNum) {  //http://localhost:8080/customers//getCompanyCouponByCategory/{categoryId}
+        System.out.println(dateSelection.getDate1() + " " + dateSelection.getDate2());
         TokensManager.tokenCheck(token, clientType);
-        return companyService.getCouponBetweenByDate(dateSelection.getDate1(), dateSelection.getDate2(), token);
+        return companyService.getCouponBetweenByDate(dateSelection.getDate1(), dateSelection.getDate2(), token, pageNum);
     }
 
     @SneakyThrows
     @GetMapping("/getCompanyCouponByMaxPrice/{maxPrice}")
-    public List<Coupon> getAllCompanyCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token) {  //http://localhost:8080/customers//getCompanyCouponByMaxPrice/{maxPrice}
+    public Page<Coupon> getAllCompanyCouponsByMaxPrice(@PathVariable int maxPrice, @RequestHeader String token, @RequestParam int pageNum) {  //http://localhost:8080/customers//getCompanyCouponByMaxPrice/{maxPrice}
         TokensManager.tokenCheck(token, clientType);
-        return companyService.getByMaxPrice(maxPrice, token);
+        return companyService.getByMaxPrice(maxPrice, token, pageNum);
     }
 
     @SneakyThrows

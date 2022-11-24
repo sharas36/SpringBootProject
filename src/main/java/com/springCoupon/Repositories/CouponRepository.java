@@ -5,13 +5,14 @@ import com.springCoupon.Entities.Company;
 import com.springCoupon.Entities.Coupon;
 import org.apache.tomcat.jni.Local;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,19 +22,24 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
     List<Coupon> findAll();
 
-    List<Coupon> findByCategoryId(int categoryId);
+    List<Coupon> findByEndDateLessThan(LocalDateTime localDateTime);
 
-    List<Coupon> findByPriceLessThan(int maxPrice);
+    Page<Coupon> findByCategoryId(int categoryId, org.springframework.data.domain.Pageable pageable);
 
-    List<Coupon> findByPriceLessThanAndCompany(int maxPrice, Company company);
+    Page<Coupon> findByCompany(Company company, org.springframework.data.domain.Pageable pageable);
 
     List<Coupon> findByCompany(Company company);
 
-    List<Coupon> findByCompanyAndCategoryId(Company company, int categoryId);
+    Page<Coupon> findByCompanyAndCategoryId(Company company, int categoryId, Pageable pageable);
 
     List<Coupon> findByCouponNameAndCompany(String couponName, Company company);
 
-    List<Coupon> findByEndDateLessThan(LocalDateTime localDateTime);
+    Page<Coupon> findByEndDateBetween(LocalDateTime localDateTime, LocalDateTime localDateTime2, org.springframework.data.domain.Pageable pageable);
+
+    Page<Coupon> findByEndDateBetweenAndCompany(LocalDateTime localDateTime, LocalDateTime localDateTime2, Company company,
+                                                org.springframework.data.domain.Pageable pageable);
+
+    Page<Coupon> findByPriceLessThanAndCompany(double price, Company company, org.springframework.data.domain.Pageable pageable);
 
     @Transactional
     @Modifying

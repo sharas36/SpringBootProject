@@ -5,34 +5,36 @@ import com.springCoupon.Entities.Coupon;
 import com.springCoupon.exception.CouponSystemException;
 import com.springCoupon.utilities.TokensManager;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class CompanyService extends MainService {
-
+    private static final int pageSize = 8;
 
     public Integer loginCheck(String email, String password) throws CouponSystemException {
 
-        if (!companyRepository.findByEmailAndPassword(email, password).isEmpty()) {
-            return companyRepository.findByEmailAndPassword(email, password).get(0).getCompanyId();
+        if (companyRepository.findByEmailAndPassword(email, password).isPresent()) {
+            return companyRepository.findByEmailAndPassword(email, password).get().getCompanyId();
         }
         throw new CouponSystemException("your email or password is wrong");
     }
 
-    public List<Coupon> getCouponsOfCompany(String token) {
+    public Page<Coupon> getCouponsOfCompany(String token, int pageNum) {
         int id = TokensManager.getIdFromToken(token);
-        List<Coupon> couponList = couponRepository.findByCompany(companyRepository.getById(id));
+        Page<Coupon> couponList = couponRepository.findByCompany(companyRepository.getById(id),
+                (org.springframework.data.domain.Pageable) PageRequest.of(pageNum, pageSize));
         return couponList;
     }
 
-    public List<Coupon> findByCompanyIdAndCategoryId(int categoryId, String token) {
+    public Page<Coupon> findByCompanyIdAndCategoryId(int categoryId, String token,int pageNum) {
         int id = TokensManager.getIdFromToken(token);
-        return couponRepository.findByCompanyAndCategoryId(companyRepository.getById(id), categoryId);
+        return couponRepository.findByCompanyAndCategoryId(companyRepository.getById(id), categoryId,PageRequest.of(pageNum,pageSize));
     }
 
     public Coupon addCoupon(Coupon coupon, String token) throws CouponSystemException {
@@ -73,18 +75,20 @@ public class CompanyService extends MainService {
         return companyRepository.findById(id).toString();
     }
 
-    public List<Coupon> getByMaxPrice(int price, String token) {
+    public Page<Coupon> getByMaxPrice(double price, String token, int pageNum) {
         int id = TokensManager.getIdFromToken(token);
-        return couponRepository.findByCompany(companyRepository.getById(id)).stream().filter(coupon -> coupon.getPrice() <= price).collect(Collectors.toList());
+
+        return couponRepository.findByPriceLessThanAndCompany(price, companyRepository.findById(id).get(), PageRequest.of(pageNum,
+                pageSize));
     }
 
-    public List<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end, String token) {
+
+    public Page<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end, String token, int pageNum) {
         System.out.println("i got here");
         int id = TokensManager.getIdFromToken(token);
 
-        List<Coupon> couponList = couponRepository.findByCompany(companyRepository.getById(id)).stream().filter(
-                c -> c.getEndDate().isAfter(start) && c.getEndDate().isBefore(end)
-        ).collect(Collectors.toList());
+        Page<Coupon> couponList = couponRepository.findByEndDateBetweenAndCompany(start, end,
+                companyRepository.findById(id).get(), PageRequest.of(pageNum, pageSize));
 
         return couponList;
     }
@@ -97,17 +101,6 @@ public class CompanyService extends MainService {
     public Coupon getOneCoupon(String token, int couponId) {
         int id = TokensManager.getIdFromToken(token);
         return couponRepository.findById(couponId).get();
-    }
-
-    public List<Coupon> getCouponBetweenByDate(LocalDateTime start, LocalDateTime end, int id) {
-        System.out.println("i got here");
-//         id = TokensManager.getIdFromToken(token);
-
-        List<Coupon> couponList = couponRepository.findByCompany(companyRepository.getById(id)).stream().filter(
-                c -> c.getEndDate().isAfter(start) && c.getEndDate().isBefore(end)
-        ).collect(Collectors.toList());
-
-        return couponList;
     }
 
 

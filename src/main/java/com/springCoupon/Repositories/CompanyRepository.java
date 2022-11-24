@@ -1,6 +1,7 @@
 package com.springCoupon.Repositories;
 
 import com.springCoupon.Entities.Company;
+import com.springCoupon.Entities.Coupon;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,9 +22,11 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
     List<Company> findAll();
 
-    List<Company> findByEmailAndPassword(String email, String password);
+    Optional<Company> findByEmailAndPassword(String email, String password);
 
     Optional<Company> findByEmail(String email);
+
+
 
 
 
