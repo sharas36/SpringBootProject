@@ -2,22 +2,17 @@ package com.springCoupon.utilities;
 
 
 import com.springCoupon.exception.CouponSystemException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
+
 import org.springframework.context.annotation.Scope;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.time.Instant;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 @Component
 @Scope("singleton")
-@EnableScheduling
 public class TokensManager {
 
     private static final HashMap<String, Token> tokenList = new HashMap<>();

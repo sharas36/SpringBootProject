@@ -1,0 +1,66 @@
+//        companyService.getCouponBetweenByDate(LocalDateTime.of(2019, 03, 28, 14, 33, 48, 640000), LocalDateTime.now(),4);
+        AdminService adminService = ctx.getBean(AdminService.class);
+        CustomerService customerService = ctx.getBean(CustomerService.class);
+        CompanyService companyService = ctx.getBean(CompanyService.class);
+
+          for (int i=1;i<=50;i++){
+            Company company = getCompany(i);
+             Customer customer = getCustomer(i);
+            adminService.addCustomer(customer);
+            adminService.addCompany(company);
+         }
+
+          for (int i = 1; i <= 100; i++) {
+            Company company = new Company();
+            company.setCompanyId(new Random().nextInt(49) + 1);
+            Coupon coupon = getCoupon(i, company);
+            adminService.addCoupon(coupon, new Random().nextInt(49) + 1);
+        }
+
+         for (int i = 0; i<= 100; i++){
+          customerService.addPurchase(new Random().nextInt(30) + 50,new Random().nextInt(49) + 1);
+        }
+
+           public static Company getCompany(int i) {
+
+                int year = new Random().nextInt(3) + 2022;
+                int month = new Random().nextInt(11) + 1;
+                int day = new Random().nextInt(27) + 1;
+                int hour = new Random().nextInt(23) + 1;
+                int minute = new Random().nextInt(58) + 1;
+                int price = new Random().nextInt(239) + 1;
+                int categoryId = new Random().nextInt(9) + 1;
+                int amount = new Random().nextInt(499) + 1;
+
+
+                Company company = Company.builder().companyName("company" + i).password("password" + i).email("email" + i + "@gmail.com")
+                        .dateCreated(LocalDateTime.of(year, month, day, hour, minute)).build();
+                return company;
+            }
+
+            public static Customer getCustomer(int i) {
+                return Customer.builder().email("email" + i + "@gmail.com").password("password" + i).firstName("firstName" + i).lastName("lastName" + i).build();
+
+            }
+
+            public static Coupon getCoupon(int i, Company company) {
+
+                int year = new Random().nextInt(3) + 2022;
+                int month = new Random().nextInt(11) + 1;
+                int day = new Random().nextInt(27) + 1;
+                int hour = new Random().nextInt(23) + 1;
+                int minute = new Random().nextInt(58) + 1;
+                int price = new Random().nextInt(239) + 1;
+                int categoryId = new Random().nextInt(9) + 1;
+                int amount = new Random().nextInt(499) + 1;
+
+                LocalDateTime endLocalDateTime = LocalDateTime.of(year, month, day, hour, minute);
+                LocalDateTime startDateTime = LocalDateTime.of(year - 1, month, day, hour, minute);
+                Coupon coupon = Coupon.builder().couponName("couponName " + i).amount(amount)
+                        .categoryId(categoryId).description("description" + i)
+                        .price(price).imageURL("imageUrl" + i).startDate(startDateTime)
+                        .endDate(endLocalDateTime).company(company).build();
+
+
+                return coupon;
+            }

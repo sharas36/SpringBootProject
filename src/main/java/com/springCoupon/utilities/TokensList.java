@@ -19,46 +19,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@EnableScheduling
 public class TokensList {
 
-
+    @Scheduled(fixedDelay = 5000)
     private void tokensWork() {
 
-        Thread tokensList = new Thread(() -> {
-            int i = 0;
-            while (true) {
+        System.out.println("thread is starting");
 
-                System.out.println("thread is starting" + ++i);
+        ArrayList<Token> expiredTokens = (ArrayList<Token>) TokensManager.getTokenList()
+                .stream()
+                .filter(token -> {
+                    return token.getExpirationTime().before(Date.from(Instant.now()));
+                })
+                .collect(Collectors.toList());
 
-                ArrayList<Token> expiredTokens = (ArrayList<Token>) TokensManager.getTokenList()
-                        .stream()
-                        .filter(token -> {
-                            return token.getExpirationTime().before(Date.from(Instant.now()));
-                        })
-                        .collect(Collectors.toList());
-
-                if (!expiredTokens.isEmpty()) {
-                    expiredTokens.forEach(token -> {
-                        TokensManager.removeToken(token);
-                    });
-                }
-
-                try {
-                    Thread.sleep(1000 * 10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+        if (!expiredTokens.isEmpty()) {
+            expiredTokens.forEach(token -> {
+                TokensManager.removeToken(token);
+            });
+        }
 
 
-        });
-        tokensList.start();
-
-    }
-
-    @PostConstruct
-    public void startTokenListJob() {
-        tokensWork();
     }
 
 
